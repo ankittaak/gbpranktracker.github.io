@@ -1,27 +1,28 @@
-# GBP Tracker by Trexivo
+# GBP Tracker by Trexivo — Redesign
 
-A responsive GitHub Pages dashboard demo for local Google Business Profile ranking. It runs as a single static page, with no server setup required.
+This version uses the Trexivo logo image in the dashboard and keeps the live SerpApi Google Maps scan on Vercel. Keep the logo at `assets/trexivo-logo.png` so it appears on the page.
 
-## Publish with GitHub Pages
+## Upload it to the existing GitHub repository
 
-1. Download and extract `GBP-Tracker-by-Trexivo-GitHub-Pages.zip`.
-2. On GitHub, create a new **public** repository named `gbp-tracker-by-trexivo`.
-3. In the repository, choose **Add file → Upload files**. Upload `index.html` and `README.md` from the extracted folder, then commit the files to the `main` branch.
-4. Open **Settings → Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**. Select branch `main` and folder `/(root)`, then choose **Save**.
-6. After GitHub finishes publishing, open:
+1. Download and unzip this package.
+2. Open your repository: https://github.com/ankittaak/gbpranktracker.github.io
+3. Replace the existing `index.html` in the repository root with this package's `index.html`.
+4. Upload the `assets` folder with `assets/trexivo-logo.png` to the repository root.
+5. Keep the API file at exactly `api/check-rank.js`. If your repository already has this file, replace it with the included version. Do not move it into another folder.
+6. Commit the changes to the `main` branch.
+7. Vercel should start a deployment from the new GitHub commit. Wait until the deployment says **Ready**, then open your Vercel site and refresh it.
 
-   `https://YOUR-GITHUB-USERNAME.github.io/gbp-tracker-by-trexivo/`
+## Keep your SerpApi key private
 
-GitHub's guide: [Creating a GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site).
+In Vercel, open **Project Settings → Environment Variables**. Keep the variable name exactly:
 
-## What works in this demo
+`RANK_API_KEY`
 
-- Choose a sample location in Chicago, London, Mumbai, Dubai, Singapore, or Sydney.
-- Add any business location worldwide by entering its business name, area, city, and country. The dashboard updates its location labels, sample metrics, grid, and keyword table.
-- Add keywords, show each keyword in the grid, change the sample period, and refresh the sample grid.
-- Your custom locations, selected location, and added keywords are saved in your browser only.
+Paste your SerpApi key into its **Value**, select **Production** (and **Preview** if you use preview deployments), save it, then redeploy. Never paste the key into `index.html` or commit it to GitHub.
 
-The rankings and scans are **sample data**. This demo does not look up real Google results or connect to a ranking provider. To add live ranking checks later, connect the page to a backend service and keep any provider API key in that backend's environment settings. Never put a secret API key in `index.html` or in a public GitHub repository.
+## Using a scan
 
-The icons load from the pinned Lucide CDN script in `index.html`; the dashboard itself is static and needs no build step.
+Fill in your Google Business Profile name, search keyword, city, and country, then select **Run scan**. Use a city or region such as `Dehradun`, not a full street address. The page calls `/api/check-rank` on your Vercel site; opening the HTML directly or hosting it only on GitHub Pages will not run the private API function.
+
+The results are the listings returned by the Google Maps search for that specific keyword and market. Local rankings can vary by location and time.
+
