@@ -27,7 +27,7 @@ export default {
         );
       }
 
-      const location = [area, city, country].filter(Boolean).join(", ");
+      const location = [city, country].filter(Boolean).join(", ");
       const params = new URLSearchParams({
         engine: "google_maps",
         type: "search",
