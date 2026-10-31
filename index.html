@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="GBP Tracker by Trexivo — a global local-search dashboard demo.">
+  <meta name="theme-color" content="#f4f6fa">
+  <title>GBP Tracker by Trexivo</title>
+  <script src="https://unpkg.com/lucide@1.65.0/dist/umd/lucide.js"></script>
+  <style>
+    :root { color-scheme: light dark; }
+    html, body { margin: 0; min-height: 100%; }
+    body { padding: 24px; background: light-dark(#f4f6fa, #101521); }
+    #trexivo-gbp-dashboard .lucide { width: 16px; height: 16px; flex: 0 0 auto; stroke-width: 1.8; }
+    #trexivo-gbp-dashboard .tx-nav .lucide { width: 17px; height: 17px; }
+    #trexivo-gbp-dashboard .tx-metric-icon .lucide { width: 15px; height: 15px; }
+    #trexivo-gbp-dashboard .tx-select .lucide, #trexivo-gbp-dashboard .tx-location-chip > .lucide { width: 14px; height: 14px; }
+    #trexivo-gbp-dashboard .tx-metric-foot .lucide, #trexivo-gbp-dashboard .tx-position .lucide { width: 13px; height: 13px; }
+    @media (max-width: 560px) { body { padding: 10px; } }
+  </style>
+</head>
+<body><div id="trexivo-gbp-dashboard">
+  <style>
+    #trexivo-gbp-dashboard {
+      color-scheme: light dark;
+      --tx-bg: light-dark(#f4f6fa, #101521);
+      --tx-panel: light-dark(#ffffff, #171d2a);
+      --tx-panel-soft: light-dark(#f8f9fc, #1c2332);
+      --tx-ink: light-dark(#172033, #eef2fb);
+      --tx-muted: light-dark(#778198, #9ba7bd);
+      --tx-line: light-dark(#e7ebf2, #293244);
+      --tx-accent: light-dark(#4d5cf5, #8790ff);
+      --tx-accent-soft: light-dark(#eef0ff, #292e53);
+      --tx-green: light-dark(#16866f, #63d2b7);
+      --tx-green-soft: light-dark(#e7f7f2, #183a35);
+      --tx-orange: light-dark(#c8822c, #f2bd70);
+      --tx-orange-soft: light-dark(#fff4e4, #3b3022);
+      --tx-red: light-dark(#ce5b63, #f08a91);
+      --tx-red-soft: light-dark(#fff0f1, #3b252c);
+      --tx-shadow: 0 18px 54px light-dark(rgb(21 35 65 / 8%), rgb(0 0 0 / 24%));
+      color: var(--tx-ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+      width: 100%;
+    }
+    #trexivo-gbp-dashboard * { box-sizing: border-box; }
+    #trexivo-gbp-dashboard button,
+    #trexivo-gbp-dashboard input,
+    #trexivo-gbp-dashboard select { font: inherit; }
+    #trexivo-gbp-dashboard button { color: inherit; }
+    #trexivo-gbp-dashboard .tx-app {
+      width: 100%;
+      max-width: 1380px;
+      min-height: 780px;
+      margin: 0 auto;
+      background: var(--tx-bg);
+      border: 1px solid var(--tx-line);
+      border-radius: 18px;
+      box-shadow: var(--tx-shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 224px minmax(0, 1fr);
+    }
+    #trexivo-gbp-dashboard .tx-side {
+      background: var(--tx-panel);
+      border-right: 1px solid var(--tx-line);
+      padding: 22px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    #trexivo-gbp-dashboard .tx-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 9px;
+    }
+    #trexivo-gbp-dashboard .tx-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, #6571ff, #414dd8);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      box-shadow: 0 6px 14px rgb(77 92 245 / 24%);
+    }
+    #trexivo-gbp-dashboard .tx-brand-name { font-weight: 650; font-size: 15px; letter-spacing: -.3px; }
+    #trexivo-gbp-dashboard .tx-brand-sub { display: block; color: var(--tx-muted); font-size: 11px; margin-top: 1px; }
+    #trexivo-gbp-dashboard .tx-workspace {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      border: 1px solid var(--tx-line);
+      border-radius: 11px;
+      padding: 9px;
+      background: var(--tx-panel-soft);
+    }
+    #trexivo-gbp-dashboard .tx-avatar {
+      width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+      background: light-dark(#e5e9ff, #30395f); color: var(--tx-accent); font-weight: 650; font-size: 12px; flex: 0 0 auto;
+    }
+    #trexivo-gbp-dashboard .tx-workspace-copy { min-width: 0; flex: 1; }
+    #trexivo-gbp-dashboard .tx-workspace-title { font-size: 12px; font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #trexivo-gbp-dashboard .tx-workspace-sub { font-size: 11px; color: var(--tx-muted); margin-top: 1px; }
+    #trexivo-gbp-dashboard .tx-nav-label { padding: 0 10px; color: var(--tx-muted); text-transform: uppercase; letter-spacing: .09em; font-size: 10px; font-weight: 650; margin-bottom: 7px; }
+    #trexivo-gbp-dashboard .tx-nav { display: grid; gap: 3px; }
+    #trexivo-gbp-dashboard .tx-nav button {
+      appearance: none; width: 100%; border: 0; background: transparent; border-radius: 9px;
+      display: flex; align-items: center; gap: 11px; text-align: left; padding: 10px 11px;
+      color: var(--tx-muted); cursor: pointer; font-size: 13px; transition: background .15s, color .15s;
+    }
+    #trexivo-gbp-dashboard .tx-nav button:hover { background: var(--tx-panel-soft); color: var(--tx-ink); }
+    #trexivo-gbp-dashboard .tx-nav button.is-active { background: var(--tx-accent-soft); color: var(--tx-accent); font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-nav i { width: 17px; height: 17px; display: inline-flex; align-items: center; justify-content: center; }
+    #trexivo-gbp-dashboard .tx-side-bottom { margin-top: auto; display: grid; gap: 17px; }
+    #trexivo-gbp-dashboard .tx-help {
+      background: var(--tx-panel-soft); border-radius: 12px; padding: 13px;
+    }
+    #trexivo-gbp-dashboard .tx-help-title { font-size: 12px; font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-help-copy { color: var(--tx-muted); font-size: 11px; margin-top: 4px; line-height: 1.5; }
+    #trexivo-gbp-dashboard .tx-help-link { border: 0; padding: 0; margin-top: 9px; background: none; color: var(--tx-accent); font-size: 11px; font-weight: 600; cursor: pointer; }
+    #trexivo-gbp-dashboard .tx-user { border-top: 1px solid var(--tx-line); padding: 14px 5px 0; display: flex; align-items: center; gap: 9px; }
+    #trexivo-gbp-dashboard .tx-user .tx-avatar { border-radius: 50%; background: light-dark(#e7f3ee, #23433b); color: var(--tx-green); }
+    #trexivo-gbp-dashboard .tx-user-name { font-size: 12px; font-weight: 550; }
+    #trexivo-gbp-dashboard .tx-user-email { color: var(--tx-muted); font-size: 10px; margin-top: 1px; }
+    #trexivo-gbp-dashboard .tx-main { min-width: 0; }
+    #trexivo-gbp-dashboard .tx-topbar {
+      min-height: 66px; background: var(--tx-panel); border-bottom: 1px solid var(--tx-line);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 30px; gap: 14px;
+    }
+    #trexivo-gbp-dashboard .tx-crumb { color: var(--tx-muted); font-size: 12px; display: flex; align-items: center; gap: 8px; }
+    #trexivo-gbp-dashboard .tx-crumb strong { color: var(--tx-ink); font-weight: 550; }
+    #trexivo-gbp-dashboard .tx-top-actions { display: flex; align-items: center; gap: 9px; }
+    #trexivo-gbp-dashboard .tx-icon-btn {
+      width: 35px; height: 35px; border: 1px solid var(--tx-line); border-radius: 9px; background: var(--tx-panel);
+      display: grid; place-items: center; color: var(--tx-muted); cursor: pointer;
+    }
+    #trexivo-gbp-dashboard .tx-icon-btn:hover { color: var(--tx-ink); background: var(--tx-panel-soft); }
+    #trexivo-gbp-dashboard .tx-content { max-width: 1200px; margin: 0 auto; padding: 28px 30px 34px; }
+    #trexivo-gbp-dashboard .tx-heading-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+    #trexivo-gbp-dashboard .tx-title { margin: 0; font-size: 25px; line-height: 1.2; letter-spacing: -.7px; font-weight: 650; }
+    #trexivo-gbp-dashboard .tx-subtitle { color: var(--tx-muted); font-size: 12px; margin-top: 6px; }
+    #trexivo-gbp-dashboard .tx-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    #trexivo-gbp-dashboard .tx-select,
+    #trexivo-gbp-dashboard .tx-secondary,
+    #trexivo-gbp-dashboard .tx-primary {
+      min-height: 37px; border-radius: 9px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; white-space: nowrap; cursor: pointer; font-size: 12px; font-weight: 550;
+    }
+    #trexivo-gbp-dashboard .tx-select, #trexivo-gbp-dashboard .tx-secondary { background: var(--tx-panel); border: 1px solid var(--tx-line); }
+    #trexivo-gbp-dashboard .tx-select { color: var(--tx-ink); }
+    #trexivo-gbp-dashboard .tx-secondary { color: var(--tx-ink); }
+    #trexivo-gbp-dashboard .tx-secondary:hover, #trexivo-gbp-dashboard .tx-select:hover { background: var(--tx-panel-soft); }
+    #trexivo-gbp-dashboard .tx-primary { background: #4d5cf5; border: 1px solid #4d5cf5; color: #fff; box-shadow: 0 5px 12px rgb(77 92 245 / 17%); }
+    #trexivo-gbp-dashboard .tx-primary:hover { background: #3e4be2; }
+    #trexivo-gbp-dashboard .tx-location-chip { display: flex; align-items: center; gap: 7px; margin-top: 20px; color: var(--tx-muted); font-size: 12px; }
+    #trexivo-gbp-dashboard .tx-location-chip strong { color: var(--tx-ink); font-weight: 550; }
+    #trexivo-gbp-dashboard .tx-demo { margin-left: 2px; border-radius: 5px; padding: 3px 6px; background: var(--tx-orange-soft); color: var(--tx-orange); font-size: 10px; font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-top: 18px; }
+    #trexivo-gbp-dashboard .tx-metric { background: var(--tx-panel); border: 1px solid var(--tx-line); border-radius: 13px; padding: 16px 17px 14px; min-width: 0; }
+    #trexivo-gbp-dashboard .tx-metric-top { display: flex; align-items: center; justify-content: space-between; color: var(--tx-muted); font-size: 11px; }
+    #trexivo-gbp-dashboard .tx-metric-icon { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: var(--tx-accent-soft); color: var(--tx-accent); }
+    #trexivo-gbp-dashboard .tx-metric-icon.green { background: var(--tx-green-soft); color: var(--tx-green); }
+    #trexivo-gbp-dashboard .tx-metric-value { margin-top: 9px; font-size: 26px; letter-spacing: -.8px; line-height: 1.1; font-weight: 650; }
+    #trexivo-gbp-dashboard .tx-metric-foot { display: flex; align-items: center; gap: 5px; margin-top: 7px; color: var(--tx-muted); font-size: 11px; }
+    #trexivo-gbp-dashboard .tx-positive { color: var(--tx-green); font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-panels { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(250px, .95fr); gap: 14px; margin-top: 16px; }
+    #trexivo-gbp-dashboard .tx-panel { background: var(--tx-panel); border: 1px solid var(--tx-line); border-radius: 13px; min-width: 0; }
+    #trexivo-gbp-dashboard .tx-panel-head { min-height: 60px; padding: 14px 17px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--tx-line); }
+    #trexivo-gbp-dashboard .tx-panel-title { font-size: 13px; font-weight: 600; letter-spacing: -.1px; }
+    #trexivo-gbp-dashboard .tx-panel-note { color: var(--tx-muted); font-size: 10px; margin-top: 3px; }
+    #trexivo-gbp-dashboard .tx-period { display: flex; gap: 2px; padding: 3px; border-radius: 8px; background: var(--tx-panel-soft); }
+    #trexivo-gbp-dashboard .tx-period button { border: 0; background: transparent; color: var(--tx-muted); cursor: pointer; border-radius: 6px; padding: 5px 8px; font-size: 10px; }
+    #trexivo-gbp-dashboard .tx-period button[aria-pressed="true"] { background: var(--tx-panel); color: var(--tx-ink); box-shadow: 0 1px 3px rgb(18 28 48 / 12%); font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-grid-wrap { padding: 16px 17px 15px; }
+    #trexivo-gbp-dashboard .tx-grid-meta { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--tx-muted); font-size: 10px; margin-bottom: 12px; }
+    #trexivo-gbp-dashboard .tx-grid-meta strong { color: var(--tx-ink); font-weight: 550; }
+    #trexivo-gbp-dashboard .tx-grid-box { display: flex; gap: 11px; align-items: stretch; }
+    #trexivo-gbp-dashboard .tx-axis { display: grid; grid-template-rows: repeat(5, minmax(0, 1fr)); align-items: center; color: var(--tx-muted); font-size: 9px; padding: 1px 0; }
+    #trexivo-gbp-dashboard .tx-rank-grid { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+    #trexivo-gbp-dashboard .tx-rank-cell { border-radius: 7px; min-height: 40px; display: grid; place-items: center; font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 650; }
+    #trexivo-gbp-dashboard .tx-rank-1 { background: light-dark(#d8f2e9, #244b42); color: light-dark(#14785f, #8be1c6); }
+    #trexivo-gbp-dashboard .tx-rank-2 { background: light-dark(#fff0dc, #4a3829); color: light-dark(#a76d24, #f0bd76); }
+    #trexivo-gbp-dashboard .tx-rank-3 { background: light-dark(#fff0dc, #4a3829); color: light-dark(#a76d24, #f0bd76); }
+    #trexivo-gbp-dashboard .tx-rank-4 { background: light-dark(#ffeaeb, #4b2e36); color: light-dark(#b6565f, #ed929a); }
+    #trexivo-gbp-dashboard .tx-grid-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; color: var(--tx-muted); font-size: 10px; }
+    #trexivo-gbp-dashboard .tx-legend-item { display: inline-flex; align-items: center; gap: 5px; }
+    #trexivo-gbp-dashboard .tx-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    #trexivo-gbp-dashboard .tx-dot.top { background: #36ad8b; }
+    #trexivo-gbp-dashboard .tx-dot.mid { background: #e0a048; }
+    #trexivo-gbp-dashboard .tx-dot.low { background: #d66a74; }
+    #trexivo-gbp-dashboard .tx-trend { padding: 15px 17px 12px; }
+    #trexivo-gbp-dashboard .tx-trend-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    #trexivo-gbp-dashboard .tx-trend-value { font-size: 23px; font-weight: 650; letter-spacing: -.7px; margin-top: 7px; }
+    #trexivo-gbp-dashboard .tx-trend-caption { color: var(--tx-muted); font-size: 10px; margin-top: 3px; }
+    #trexivo-gbp-dashboard .tx-chart { width: 100%; height: 126px; display: block; margin-top: 12px; overflow: visible; }
+    #trexivo-gbp-dashboard .tx-chart text { fill: var(--tx-muted); font: 10px Inter, ui-sans-serif, system-ui, sans-serif; }
+    #trexivo-gbp-dashboard .tx-chart .axis { stroke: var(--tx-line); stroke-width: 1; }
+    #trexivo-gbp-dashboard .tx-chart .trend-area { fill: light-dark(rgb(77 92 245 / 10%), rgb(135 144 255 / 12%)); }
+    #trexivo-gbp-dashboard .tx-chart .trend-line { fill: none; stroke: var(--tx-accent); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    #trexivo-gbp-dashboard .tx-chart .trend-point { fill: var(--tx-panel); stroke: var(--tx-accent); stroke-width: 2; }
+    #trexivo-gbp-dashboard .tx-table-panel { margin-top: 15px; }
+    #trexivo-gbp-dashboard .tx-table-tools { display: flex; align-items: center; gap: 7px; }
+    #trexivo-gbp-dashboard .tx-table-wrap { width: 100%; overflow-x: auto; }
+    #trexivo-gbp-dashboard table { width: 100%; border-collapse: collapse; text-align: left; font-size: 11px; }
+    #trexivo-gbp-dashboard th { color: var(--tx-muted); font-weight: 500; font-size: 10px; padding: 10px 17px; white-space: nowrap; }
+    #trexivo-gbp-dashboard td { border-top: 1px solid var(--tx-line); padding: 11px 17px; white-space: nowrap; }
+    #trexivo-gbp-dashboard .tx-keyword { font-weight: 550; }
+    #trexivo-gbp-dashboard .tx-intent { color: var(--tx-muted); }
+    #trexivo-gbp-dashboard .tx-position { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-position i { width: 13px; height: 13px; color: var(--tx-green); }
+    #trexivo-gbp-dashboard .tx-table-link { border: 0; background: transparent; color: var(--tx-accent); font-size: 11px; font-weight: 600; cursor: pointer; }
+    #trexivo-gbp-dashboard .tx-refresh-note { color: var(--tx-muted); font-size: 10px; }
+    #trexivo-gbp-dashboard .tx-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    #trexivo-gbp-dashboard .tx-toast { position: absolute; left: 50%; bottom: 16px; transform: translate(-50%, 8px); opacity: 0; pointer-events: none; background: var(--tx-ink); color: var(--tx-panel); border-radius: 9px; padding: 9px 13px; font-size: 11px; box-shadow: var(--tx-shadow); transition: opacity .18s, transform .18s; }
+    #trexivo-gbp-dashboard .tx-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    #trexivo-gbp-dashboard .tx-shell { position: relative; }
+    #trexivo-gbp-dashboard dialog.tx-dialog { width: min(560px, calc(100vw - 24px)); max-height: min(88vh, 760px); padding: 0; border: 1px solid var(--tx-line); border-radius: 16px; background: var(--tx-panel); color: var(--tx-ink); box-shadow: var(--tx-shadow); overflow: auto; }
+    #trexivo-gbp-dashboard dialog.tx-dialog::backdrop { background: rgb(12 18 32 / 52%); backdrop-filter: blur(3px); }
+    #trexivo-gbp-dashboard .tx-dialog-content { padding: 20px; }
+    #trexivo-gbp-dashboard .tx-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+    #trexivo-gbp-dashboard .tx-dialog-title { font-size: 17px; font-weight: 650; letter-spacing: -.3px; }
+    #trexivo-gbp-dashboard .tx-dialog-subtitle { color: var(--tx-muted); font-size: 11px; margin-top: 4px; }
+    #trexivo-gbp-dashboard .tx-dialog-section-label { display: block; color: var(--tx-muted); font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; margin: 14px 0 8px; }
+    #trexivo-gbp-dashboard .tx-location-search, #trexivo-gbp-dashboard .tx-field input { width: 100%; min-height: 42px; border: 1px solid var(--tx-line); border-radius: 9px; background: var(--tx-panel); color: var(--tx-ink); padding: 0 12px; outline-color: var(--tx-accent); }
+    #trexivo-gbp-dashboard .tx-location-list { display: grid; gap: 5px; list-style: none; padding: 0; margin: 8px 0 0; max-height: 230px; overflow-y: auto; }
+    #trexivo-gbp-dashboard .tx-location-option { width: 100%; border: 1px solid transparent; border-radius: 10px; background: transparent; color: var(--tx-ink); padding: 10px 11px; display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; cursor: pointer; }
+    #trexivo-gbp-dashboard .tx-location-option:hover, #trexivo-gbp-dashboard .tx-location-option[aria-current="true"] { background: var(--tx-accent-soft); border-color: light-dark(#dfe2ff, #3a416c); }
+    #trexivo-gbp-dashboard .tx-location-option-copy { min-width: 0; }
+    #trexivo-gbp-dashboard .tx-location-option-name { display: block; font-size: 12px; font-weight: 600; }
+    #trexivo-gbp-dashboard .tx-location-option-place { display: block; color: var(--tx-muted); font-size: 10px; margin-top: 2px; }
+    #trexivo-gbp-dashboard .tx-location-option-check { color: var(--tx-accent); font-size: 12px; font-weight: 700; }
+    #trexivo-gbp-dashboard .tx-empty { color: var(--tx-muted); padding: 12px; font-size: 11px; text-align: center; }
+    #trexivo-gbp-dashboard .tx-custom-location { margin-top: 12px; border-top: 1px solid var(--tx-line); padding-top: 13px; }
+    #trexivo-gbp-dashboard .tx-custom-location summary { color: var(--tx-accent); font-size: 11px; font-weight: 600; cursor: pointer; }
+    #trexivo-gbp-dashboard .tx-location-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 13px; }
+    #trexivo-gbp-dashboard .tx-field { display: grid; gap: 5px; min-width: 0; }
+    #trexivo-gbp-dashboard .tx-field.wide { grid-column: 1 / -1; }
+    #trexivo-gbp-dashboard .tx-field label { color: var(--tx-muted); font-size: 10px; }
+    #trexivo-gbp-dashboard .tx-field input { min-height: 40px; font-size: 12px; }
+    #trexivo-gbp-dashboard .tx-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 13px; }
+    #trexivo-gbp-dashboard .tx-dialog-alert { color: var(--tx-red); font-size: 11px; margin-top: 8px; }
+    #trexivo-gbp-dashboard .tx-dialog-footnote { color: var(--tx-muted); font-size: 10px; line-height: 1.5; margin-top: 12px; }
+    @media (max-width: 820px) {
+      #trexivo-gbp-dashboard .tx-app { grid-template-columns: 72px minmax(0, 1fr); }
+      #trexivo-gbp-dashboard .tx-side { padding: 18px 9px 13px; align-items: center; }
+      #trexivo-gbp-dashboard .tx-brand { padding: 0; }
+      #trexivo-gbp-dashboard .tx-brand-copy, #trexivo-gbp-dashboard .tx-workspace-copy, #trexivo-gbp-dashboard .tx-workspace > i,
+      #trexivo-gbp-dashboard .tx-nav-label, #trexivo-gbp-dashboard .tx-nav span, #trexivo-gbp-dashboard .tx-help, #trexivo-gbp-dashboard .tx-user-copy,
+      #trexivo-gbp-dashboard .tx-user > i { display: none; }
+      #trexivo-gbp-dashboard .tx-workspace { justify-content: center; width: 44px; height: 44px; padding: 5px; }
+      #trexivo-gbp-dashboard .tx-nav { width: 100%; }
+      #trexivo-gbp-dashboard .tx-nav button { justify-content: center; padding: 11px 0; }
+      #trexivo-gbp-dashboard .tx-nav i { width: 18px; height: 18px; }
+      #trexivo-gbp-dashboard .tx-user { padding: 14px 0 0; justify-content: center; width: 100%; }
+      #trexivo-gbp-dashboard .tx-user .tx-avatar { width: 31px; height: 31px; }
+      #trexivo-gbp-dashboard .tx-content { padding: 24px 20px 28px; }
+      #trexivo-gbp-dashboard .tx-topbar { padding: 0 20px; }
+      #trexivo-gbp-dashboard .tx-panels { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 560px) {
+      #trexivo-gbp-dashboard .tx-app { display: block; border-radius: 14px; }
+      #trexivo-gbp-dashboard .tx-side { display: none; }
+      #trexivo-gbp-dashboard .tx-topbar { min-height: 55px; padding: 0 15px; }
+      #trexivo-gbp-dashboard .tx-content { padding: 20px 14px 24px; }
+      #trexivo-gbp-dashboard .tx-heading-row { flex-direction: column; }
+      #trexivo-gbp-dashboard .tx-actions { width: 100%; }
+      #trexivo-gbp-dashboard .tx-select { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+      #trexivo-gbp-dashboard .tx-location-chip { margin-top: 14px; flex-wrap: wrap; }
+      #trexivo-gbp-dashboard .tx-metrics { grid-template-columns: 1fr; gap: 9px; margin-top: 13px; }
+      #trexivo-gbp-dashboard .tx-metric { padding: 13px 14px; }
+      #trexivo-gbp-dashboard .tx-metric-value { font-size: 23px; }
+      #trexivo-gbp-dashboard .tx-panel-head { padding: 12px 13px; }
+      #trexivo-gbp-dashboard .tx-grid-wrap, #trexivo-gbp-dashboard .tx-trend { padding: 13px; }
+      #trexivo-gbp-dashboard .tx-rank-cell { min-height: 35px; }
+      #trexivo-gbp-dashboard th, #trexivo-gbp-dashboard td { padding-left: 12px; padding-right: 12px; }
+      #trexivo-gbp-dashboard .tx-period button { padding: 5px 6px; }
+      #trexivo-gbp-dashboard .tx-dialog-content { padding: 16px; }
+      #trexivo-gbp-dashboard .tx-location-form { grid-template-columns: 1fr; }
+      #trexivo-gbp-dashboard .tx-field.wide { grid-column: auto; }
+    }
+  </style>
+  <div class="tx-app">
+    <aside class="tx-side" aria-label="Main navigation">
+      <div class="tx-brand">
+        <div class="tx-mark" aria-hidden="true">T</div>
+        <div class="tx-brand-copy"><div class="tx-brand-name">GBP Tracker</div><span class="tx-brand-sub">by Trexivo</span></div>
+      </div>
+      <div class="tx-workspace" aria-label="Workspace: Northstar Dental Group">
+        <div class="tx-avatar" aria-hidden="true">N</div>
+        <div class="tx-workspace-copy"><div class="tx-workspace-title" id="tx-workspace-title">Northstar Dental</div><div class="tx-workspace-sub" id="tx-location-count">6 global locations</div></div>
+        <i data-lucide="chevron-down" aria-hidden="true"></i>
+      </div>
+      <div>
+        <div class="tx-nav-label">Workspace</div>
+        <nav class="tx-nav" aria-label="Workspace">
+          <button class="is-active" type="button" data-section="Overview"><i data-lucide="layout-dashboard" aria-hidden="true"></i><span>Overview</span></button>
+          <button type="button" data-section="Rank tracker"><i data-lucide="map" aria-hidden="true"></i><span>Rank tracker</span></button>
+          <button type="button" data-section="Keywords"><i data-lucide="search" aria-hidden="true"></i><span>Keywords</span></button>
+          <button type="button" data-section="Locations"><i data-lucide="building-2" aria-hidden="true"></i><span>Locations</span></button>
+          <button type="button" data-section="Reports"><i data-lucide="file-text" aria-hidden="true"></i><span>Reports</span></button>
+        </nav>
+      </div>
+      <div class="tx-side-bottom">
+        <div class="tx-help">
+          <div class="tx-help-title">Need a hand?</div>
+          <div class="tx-help-copy">Learn how local rank tracking works and get more from your reports.</div>
+          <button type="button" class="tx-help-link" data-toast="Help center is coming soon">Visit help center <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="tx-user">
+          <div class="tx-avatar" aria-hidden="true">JD</div>
+          <div class="tx-user-copy"><div class="tx-user-name">Jordan Davis</div><div class="tx-user-email">jordan@northstar.example</div></div>
+          <i data-lucide="ellipsis" aria-hidden="true"></i>
+        </div>
+      </div>
+    </aside>
+    <div class="tx-main">
+      <header class="tx-topbar">
+        <div class="tx-crumb"><span id="tx-business-breadcrumb">Northstar Dental</span><span aria-hidden="true">/</span><strong id="tx-current-section">Overview</strong></div>
+        <div class="tx-top-actions">
+          <button class="tx-icon-btn" type="button" aria-label="Help" data-toast="Help center is coming soon"><i data-lucide="circle-help" aria-hidden="true"></i></button>
+          <button class="tx-icon-btn" type="button" aria-label="Notifications" data-toast="You’re all caught up"><i data-lucide="bell" aria-hidden="true"></i></button>
+        </div>
+      </header>
+      <div class="tx-content">
+        <div class="tx-heading-row">
+          <div>
+            <h1 class="tx-title">Local search overview</h1>
+            <div class="tx-subtitle">See how your business appears across the places your customers search.</div>
+          </div>
+          <div class="tx-actions">
+            <button class="tx-select" id="tx-location-button" type="button" aria-haspopup="dialog" aria-controls="tx-location-dialog"><i data-lucide="map-pin" aria-hidden="true"></i><span id="tx-location-button-label">Northstar Dental · Downtown</span><i data-lucide="chevron-down" aria-hidden="true"></i></button>
+            <button class="tx-secondary" id="tx-run-scan" type="button"><i data-lucide="refresh-cw" aria-hidden="true"></i> Run scan</button>
+            <button class="tx-primary" id="tx-add-keyword" type="button" aria-haspopup="dialog" aria-controls="tx-keyword-dialog"><i data-lucide="plus" aria-hidden="true"></i> Add keyword</button>
+          </div>
+        </div>
+        <div class="tx-location-chip"><i data-lucide="map-pin" aria-hidden="true"></i><strong id="tx-current-location-name">Downtown location</strong><span>·</span><span id="tx-current-location-place">Central District, United States</span><span class="tx-demo">SAMPLE DATA</span></div>
+        <section class="tx-metrics" aria-label="Location ranking summary">
+          <article class="tx-metric">
+            <div class="tx-metric-top"><span>Average local position</span><span class="tx-metric-icon"><i data-lucide="map" aria-hidden="true"></i></span></div>
+            <div class="tx-metric-value" id="tx-average-position">4.2</div>
+            <div class="tx-metric-foot"><span class="tx-positive"><i data-lucide="arrow-up-right" aria-hidden="true"></i> 0.8</span><span>positions higher this month</span></div>
+          </article>
+          <article class="tx-metric">
+            <div class="tx-metric-top"><span>Keywords in top 3</span><span class="tx-metric-icon green"><i data-lucide="target" aria-hidden="true"></i></span></div>
+            <div class="tx-metric-value"><span id="tx-top3-count">12</span> <span style="font-size:14px;color:var(--tx-muted);font-weight:500">/ <span id="tx-keyword-total">18</span></span></div>
+            <div class="tx-metric-foot"><span class="tx-positive">+3 keywords</span><span>since last month</span></div>
+          </article>
+          <article class="tx-metric">
+            <div class="tx-metric-top"><span>Tracked grid points</span><span class="tx-metric-icon"><i data-lucide="scan" aria-hidden="true"></i></span></div>
+            <div class="tx-metric-value">25</div>
+            <div class="tx-metric-foot"><span>Across a 5 × 5 local area</span></div>
+          </article>
+        </section>
+        <section class="tx-panels" aria-label="Local ranking details">
+          <article class="tx-panel">
+            <div class="tx-panel-head">
+              <div><div class="tx-panel-title">Local rank grid</div><div class="tx-panel-note">“<span id="tx-grid-keyword-label">dentist near me</span>” · Position by nearby search point</div></div>
+              <div class="tx-period" aria-label="Grid timeframe">
+                <button type="button" aria-pressed="true" data-period="Today">Today</button>
+                <button type="button" aria-pressed="false" data-period="7 days">7 days</button>
+                <button type="button" aria-pressed="false" data-period="30 days">30 days</button>
+              </div>
+            </div>
+            <div class="tx-grid-wrap">
+              <div class="tx-grid-meta"><span><strong id="tx-grid-location-name">Northstar Dental · Downtown</strong></span><span id="tx-grid-meta-right">Updated 9 min ago · 25 search points</span></div>
+              <div class="tx-grid-box">
+                <div class="tx-axis" aria-hidden="true"><span>North</span><span></span><span></span><span></span><span>South</span></div>
+                <div class="tx-rank-grid" id="tx-rank-grid" role="img" aria-label="Five by five sample local rank grid.">
+                <span class="tx-rank-cell tx-rank-4" aria-label="Position 12">12</span><span class="tx-rank-cell tx-rank-3" aria-label="Position 8">8</span><span class="tx-rank-cell tx-rank-2" aria-label="Position 6">6</span><span class="tx-rank-cell tx-rank-3" aria-label="Position 9">9</span><span class="tx-rank-cell tx-rank-4" aria-label="Position 15">15</span>
+                <span class="tx-rank-cell tx-rank-3" aria-label="Position 9">9</span><span class="tx-rank-cell tx-rank-2" aria-label="Position 5">5</span><span class="tx-rank-cell tx-rank-1" aria-label="Position 3">3</span><span class="tx-rank-cell tx-rank-2" aria-label="Position 6">6</span><span class="tx-rank-cell tx-rank-4" aria-label="Position 14">14</span>
+                <span class="tx-rank-cell tx-rank-2" aria-label="Position 6">6</span><span class="tx-rank-cell tx-rank-1" aria-label="Position 3">3</span><span class="tx-rank-cell tx-rank-1" aria-label="Position 1">1</span><span class="tx-rank-cell tx-rank-1" aria-label="Position 2">2</span><span class="tx-rank-cell tx-rank-3" aria-label="Position 9">9</span>
+                <span class="tx-rank-cell tx-rank-3" aria-label="Position 8">8</span><span class="tx-rank-cell tx-rank-1" aria-label="Position 3">3</span><span class="tx-rank-cell tx-rank-2" aria-label="Position 4">4</span><span class="tx-rank-cell tx-rank-2" aria-label="Position 5">5</span><span class="tx-rank-cell tx-rank-4" aria-label="Position 13">13</span>
+                <span class="tx-rank-cell tx-rank-4" aria-label="Position 11">11</span><span class="tx-rank-cell tx-rank-3" aria-label="Position 9">9</span><span class="tx-rank-cell tx-rank-3" aria-label="Position 7">7</span><span class="tx-rank-cell tx-rank-4" aria-label="Position 12">12</span><span class="tx-rank-cell tx-rank-4" aria-label="Position 18">18</span>
+                </div>
+              </div>
+              <div class="tx-grid-legend" aria-label="Rank legend"><span class="tx-legend-item"><i class="tx-dot top"></i> 1–3</span><span class="tx-legend-item"><i class="tx-dot mid"></i> 4–10</span><span class="tx-legend-item"><i class="tx-dot low"></i> 11+</span><span class="tx-refresh-note">Updated 9 min ago</span></div>
+            </div>
+          </article>
+          <article class="tx-panel">
+            <div class="tx-panel-head"><div><div class="tx-panel-title">Position trend</div><div class="tx-panel-note">Average across tracked keywords</div></div><button class="tx-icon-btn" type="button" aria-label="More chart options" data-toast="Chart options opened"><i data-lucide="ellipsis" aria-hidden="true"></i></button></div>
+            <div class="tx-trend">
+              <div class="tx-trend-head"><div><div class="tx-trend-value" id="tx-trend-value">4.2</div><div class="tx-trend-caption"><span class="tx-positive">↑ 0.8 positions</span> over 30 days</div></div><span class="tx-demo">LOWER IS BETTER</span></div>
+              <svg class="tx-chart" viewBox="0 0 340 126" role="img" aria-label="Average search position improved from 5.8 to 4.2 over the last 30 days; lower position number is better.">
+                <desc>Weekly average rank trend: 5.8, 5.2, 4.9, 4.6, and 4.2.</desc>
+                <line class="axis" x1="31" y1="17" x2="331" y2="17"></line><line class="axis" x1="31" y1="52" x2="331" y2="52"></line><line class="axis" x1="31" y1="87" x2="331" y2="87"></line>
+                <text x="0" y="20">3</text><text x="0" y="55">5</text><text x="0" y="90">7</text>
+                <path class="trend-area" d="M35 66 L105 56 L175 50 L245 45 L315 38 L315 104 L35 104 Z"></path>
+                <path class="trend-line" d="M35 66 L105 56 L175 50 L245 45 L315 38"></path>
+                <circle class="trend-point" cx="35" cy="66" r="3.5"></circle><circle class="trend-point" cx="105" cy="56" r="3.5"></circle><circle class="trend-point" cx="175" cy="50" r="3.5"></circle><circle class="trend-point" cx="245" cy="45" r="3.5"></circle><circle class="trend-point" cx="315" cy="38" r="3.5"></circle>
+                <text x="31" y="121">Oct 1</text><text x="96" y="121">Oct 8</text><text x="163" y="121">Oct 15</text><text x="230" y="121">Oct 22</text><text x="296" y="121">Oct 30</text>
+              </svg>
+            </div>
+          </article>
+        </section>
+        <section class="tx-panel tx-table-panel">
+          <div class="tx-panel-head">
+            <div><div class="tx-panel-title">Top tracked keywords</div><div class="tx-panel-note">Your most important local searches for this location</div></div>
+            <div class="tx-table-tools"><span class="tx-refresh-note" id="tx-table-updated">Updated today · sample</span><button type="button" class="tx-table-link" id="tx-view-keywords">View all <span aria-hidden="true">→</span></button></div>
+          </div>
+          <div class="tx-table-wrap">
+            <table>
+              <thead><tr><th scope="col">Keyword</th><th scope="col">Search area</th><th scope="col">Avg. position</th><th scope="col">Change</th><th scope="col">Grid coverage</th><th scope="col"><span class="tx-sr-only">Actions</span></th></tr></thead>
+              <tbody id="tx-keyword-rows">
+                <tr><td class="tx-keyword">dentist near me</td><td class="tx-intent">Downtown</td><td><span class="tx-position">3.8</span></td><td><span class="tx-position"><i data-lucide="arrow-up-right" aria-hidden="true"></i> 1.2</span></td><td>84%</td><td><button class="tx-table-link" type="button" aria-label="Open dentist near me details" data-toast="Keyword details opened">Details</button></td></tr>
+                <tr><td class="tx-keyword">teeth whitening</td><td class="tx-intent">Downtown</td><td><span class="tx-position">4.6</span></td><td><span class="tx-position"><i data-lucide="arrow-up-right" aria-hidden="true"></i> 0.7</span></td><td>72%</td><td><button class="tx-table-link" type="button" aria-label="Open teeth whitening details" data-toast="Keyword details opened">Details</button></td></tr>
+                <tr><td class="tx-keyword">emergency dentist</td><td class="tx-intent">Downtown</td><td><span class="tx-position">6.1</span></td><td><span style="color:var(--tx-red);font-weight:600">↓ 0.3</span></td><td>56%</td><td><button class="tx-table-link" type="button" aria-label="Open emergency dentist details" data-toast="Keyword details opened">Details</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <dialog class="tx-dialog" id="tx-location-dialog" aria-labelledby="tx-location-dialog-title">
+    <div class="tx-dialog-content">
+      <div class="tx-dialog-head">
+        <div><div class="tx-dialog-title" id="tx-location-dialog-title">Choose a global location</div><div class="tx-dialog-subtitle">Select a sample city or add any business location worldwide.</div></div>
+        <button class="tx-icon-btn" type="button" data-close-dialog="tx-location-dialog" aria-label="Close location picker">×</button>
+      </div>
+      <label class="tx-dialog-section-label" for="tx-location-search">Search saved locations</label>
+      <input class="tx-location-search" id="tx-location-search" type="search" placeholder="Search business, city, or country" autocomplete="off">
+      <ul class="tx-location-list" id="tx-location-list" aria-label="Available global locations"></ul>
+      <details class="tx-custom-location">
+        <summary>Add a custom location anywhere</summary>
+        <form class="tx-location-form" id="tx-location-form">
+          <div class="tx-field wide"><label for="tx-business-input">Business name</label><input id="tx-business-input" name="business" maxlength="80" placeholder="For example, Trexivo Dental" required></div>
+          <div class="tx-field"><label for="tx-area-input">Area or neighborhood</label><input id="tx-area-input" name="area" maxlength="80" placeholder="For example, Bandra West" required></div>
+          <div class="tx-field"><label for="tx-city-input">City</label><input id="tx-city-input" name="city" maxlength="80" placeholder="For example, Mumbai" required></div>
+          <div class="tx-field wide"><label for="tx-country-input">Country or region</label><input id="tx-country-input" name="country" maxlength="80" placeholder="For example, India" required></div>
+          <div class="tx-field wide"><div class="tx-dialog-alert" id="tx-location-error" role="alert" hidden></div></div>
+          <div class="tx-dialog-actions tx-field wide"><button class="tx-secondary" type="button" data-close-dialog="tx-location-dialog">Cancel</button><button class="tx-primary" type="submit">Add location</button></div>
+        </form>
+      </details>
+      <div class="tx-dialog-footnote">Global locations are saved in this browser. These rank values are sample data; adding a place does not run a live Google search.</div>
+    </div>
+  </dialog>
+  <dialog class="tx-dialog" id="tx-keyword-dialog" aria-labelledby="tx-keyword-dialog-title">
+    <div class="tx-dialog-content">
+      <div class="tx-dialog-head">
+        <div><div class="tx-dialog-title" id="tx-keyword-dialog-title">Track a keyword</div><div class="tx-dialog-subtitle">Add a search term to the sample dashboard.</div></div>
+        <button class="tx-icon-btn" type="button" data-close-dialog="tx-keyword-dialog" aria-label="Close keyword form">×</button>
+      </div>
+      <form id="tx-keyword-form">
+        <div class="tx-field"><label for="tx-keyword-input">Keyword</label><input id="tx-keyword-input" name="keyword" maxlength="100" placeholder="For example, family dentist near me" required></div>
+        <div class="tx-dialog-alert" id="tx-keyword-error" role="alert" hidden></div>
+        <div class="tx-dialog-actions"><button class="tx-secondary" type="button" data-close-dialog="tx-keyword-dialog">Cancel</button><button class="tx-primary" type="submit">Add keyword</button></div>
+      </form>
+      <div class="tx-dialog-footnote">The new row is stored in this browser and uses sample ranking values.</div>
+    </div>
+  </dialog>
+  <div class="tx-toast" role="status" aria-live="polite"></div>
+  <script>
+(() => {
+  const root = document.getElementById("trexivo-gbp-dashboard");
+  if (!root) return;
+  const $ = (selector) => root.querySelector(selector);
+  const storageKey = "trexivo-gbp-tracker-v1";
+  const initialGrid = [12, 8, 6, 9, 15, 9, 5, 3, 6, 14, 6, 3, 1, 2, 9, 8, 3, 4, 5, 13, 11, 9, 7, 12, 18];
+  const defaultLocations = [
+    { id: "central-us", business: "Northstar Dental", area: "Downtown", city: "Chicago", country: "United States", average: 4.2, top3: 12, total: 18, ranks: initialGrid },
+    { id: "westminster-uk", business: "Northstar Dental", area: "Westminster", city: "London", country: "United Kingdom", average: 3.9, top3: 10, total: 18, ranks: [9, 7, 5, 8, 12, 7, 4, 3, 5, 11, 5, 2, 1, 3, 8, 7, 3, 4, 6, 10, 10, 8, 6, 11, 15] },
+    { id: "bandra-in", business: "Northstar Dental", area: "Bandra West", city: "Mumbai", country: "India", average: 5.1, top3: 9, total: 18, ranks: [14, 9, 7, 10, 17, 10, 7, 4, 8, 15, 7, 4, 2, 3, 11, 9, 5, 5, 7, 14, 13, 10, 8, 15, 19] },
+    { id: "downtown-ae", business: "Northstar Dental", area: "Downtown Dubai", city: "Dubai", country: "United Arab Emirates", average: 4.6, top3: 11, total: 18, ranks: [11, 8, 6, 9, 14, 8, 5, 3, 6, 13, 6, 3, 1, 3, 9, 8, 4, 4, 6, 12, 12, 9, 7, 13, 17] },
+    { id: "orchard-sg", business: "Northstar Dental", area: "Orchard Road", city: "Singapore", country: "Singapore", average: 3.8, top3: 13, total: 18, ranks: [8, 6, 4, 7, 11, 6, 3, 2, 4, 10, 4, 2, 1, 2, 7, 6, 2, 3, 5, 9, 9, 7, 5, 10, 13] },
+    { id: "sydney-au", business: "Northstar Dental", area: "Central Business District", city: "Sydney", country: "Australia", average: 4.9, top3: 8, total: 18, ranks: [13, 9, 7, 10, 16, 9, 6, 4, 7, 14, 7, 4, 2, 3, 10, 9, 4, 5, 7, 13, 12, 10, 8, 14, 18] }
+  ];
+  const sampleKeywords = [
+    { keyword: "dentist near me", offset: -0.4, change: "+1.2", coverage: "84%" },
+    { keyword: "teeth whitening", offset: 0.4, change: "+0.7", coverage: "72%" },
+    { keyword: "emergency dentist", offset: 1.9, change: "−0.3", coverage: "56%" },
+    { keyword: "family dentist", offset: 2.3, change: "+0.4", coverage: "48%" },
+    { keyword: "dental clinic", offset: 2.8, change: "+0.2", coverage: "40%" },
+    { keyword: "dental implants", offset: 3.1, change: "−0.1", coverage: "36%" }
+  ];
+
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch (error) { saved = {}; }
+  if (!saved || typeof saved !== "object") saved = {};
+  const customLocations = Array.isArray(saved.locations) ? saved.locations.filter((item) => item?.id && item.business && item.area && item.city && item.country) : [];
+  const locations = [...defaultLocations, ...customLocations];
+  const addedKeywords = Array.isArray(saved.keywords) ? saved.keywords.filter((item) => typeof item === "string" && item.trim()) : [];
+  let activeLocation = locations.find((item) => item.id === saved.activeLocationId) || defaultLocations[0];
+  let activeKeyword = typeof saved.activeKeyword === "string" && saved.activeKeyword ? saved.activeKeyword : sampleKeywords[0].keyword;
+  let period = "Today";
+  let showAll = false;
+  let scanRevision = 0;
+  let toastTimer;
+
+  const toast = (message) => {
+    const element = $(".tx-toast");
+    element.textContent = message;
+    element.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => element.classList.remove("show"), 2300);
+  };
+  const hash = (value) => {
+    let result = 2166136261;
+    for (let index = 0; index < value.length; index += 1) {
+      result ^= value.charCodeAt(index);
+      result = Math.imul(result, 16777619);
+    }
+    return result >>> 0;
+  };
+  const makeRanks = (location, variant = "") => {
+    let state = hash(`${location.id}|${activeKeyword}|${period}|${variant}`) || 1;
+    return Array.from({ length: 25 }, (_, index) => {
+      state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+      const row = Math.floor(index / 5);
+      const column = index % 5;
+      const distance = Math.max(Math.abs(row - 2), Math.abs(column - 2));
+      const noise = (state % 7) - 3;
+      return Math.max(1, Math.min(20, Math.round(location.average + distance * 2 + noise)));
+    });
+  };
+  const rankClass = (rank) => rank <= 3 ? "tx-rank-1" : rank <= 10 ? "tx-rank-2" : "tx-rank-4";
+  const areaLabel = (location) => `${location.business} · ${location.area}`;
+  const placeLabel = (location) => `${location.city}, ${location.country}`;
+  const save = () => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ locations: customLocations, keywords: addedKeywords, activeLocationId: activeLocation.id, activeKeyword }));
+    } catch (error) { /* Storage may be disabled; the controls still work for this visit. */ }
+  };
+
+  function renderLocations(filter = "") {
+    const list = $("#tx-location-list");
+    const term = filter.trim().toLowerCase();
+    const results = locations.filter((item) => `${item.business} ${item.area} ${item.city} ${item.country}`.toLowerCase().includes(term));
+    list.replaceChildren();
+    if (!results.length) {
+      const empty = document.createElement("li");
+      empty.className = "tx-empty";
+      empty.textContent = "No saved locations match. Add a custom place below.";
+      list.append(empty);
+      return;
+    }
+    results.forEach((location) => {
+      const li = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tx-location-option";
+      button.dataset.locationId = location.id;
+      button.setAttribute("aria-current", String(location.id === activeLocation.id));
+      const copy = document.createElement("span");
+      copy.className = "tx-location-option-copy";
+      const name = document.createElement("span");
+      name.className = "tx-location-option-name";
+      name.textContent = areaLabel(location);
+      const place = document.createElement("span");
+      place.className = "tx-location-option-place";
+      place.textContent = placeLabel(location);
+      copy.append(name, place);
+      const check = document.createElement("span");
+      check.className = "tx-location-option-check";
+      check.setAttribute("aria-hidden", "true");
+      check.textContent = location.id === activeLocation.id ? "✓" : "";
+      button.append(copy, check);
+      li.append(button);
+      list.append(li);
+    });
+  }
+
+  function renderGrid() {
+    const grid = $("#tx-rank-grid");
+    const ranks = period === "Today" && activeKeyword === sampleKeywords[0].keyword && scanRevision === 0
+      ? (activeLocation.ranks || makeRanks(activeLocation))
+      : makeRanks(activeLocation, String(scanRevision));
+    grid.replaceChildren();
+    ranks.forEach((rank, index) => {
+      const cell = document.createElement("span");
+      cell.className = `tx-rank-cell ${rankClass(rank)}`;
+      cell.textContent = String(rank);
+      cell.setAttribute("aria-label", `Position ${rank}, scan point ${index + 1}`);
+      grid.append(cell);
+    });
+    grid.setAttribute("aria-label", `Five by five sample local rank grid for ${activeKeyword} in ${placeLabel(activeLocation)}. Lower position numbers are better.`);
+    $("#tx-grid-meta-right").textContent = `${period} · sample scan · 25 search points`;
+  }
+
+  function addTextCell(row, text, className = "") {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+    if (className) cell.className = className;
+    row.append(cell);
+    return cell;
+  }
+
+  function renderKeywords() {
+    const table = $("#tx-keyword-rows");
+    const rows = [
+      ...addedKeywords.map((keyword, index) => ({ keyword, offset: 0.5 + index * 0.2, change: "New", coverage: "—", custom: true })),
+      ...sampleKeywords
+    ];
+    const visible = showAll ? rows : rows.slice(0, Math.max(3, addedKeywords.length));
+    table.replaceChildren();
+    visible.forEach((item) => {
+      const row = document.createElement("tr");
+      addTextCell(row, item.keyword, "tx-keyword");
+      addTextCell(row, activeLocation.area, "tx-intent");
+      addTextCell(row, Math.max(1, activeLocation.average + item.offset).toFixed(1), "tx-position");
+      addTextCell(row, item.change, item.change.startsWith("−") ? "tx-position" : "tx-position tx-positive");
+      addTextCell(row, item.coverage);
+      const action = document.createElement("td");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tx-table-link";
+      button.textContent = "Use in grid";
+      button.setAttribute("aria-label", `Show ${item.keyword} in the rank grid`);
+      button.addEventListener("click", () => {
+        activeKeyword = item.keyword;
+        save();
+        render();
+        toast(`Showing sample grid for “${item.keyword}”`);
+      });
+      action.append(button);
+      row.append(action);
+      table.append(row);
+    });
+    $("#tx-keyword-total").textContent = String(activeLocation.total + addedKeywords.length);
+    const viewAll = $("#tx-view-keywords");
+    viewAll.textContent = showAll ? "Show fewer ↑" : "View all →";
+    viewAll.setAttribute("aria-expanded", String(showAll));
+  }
+
+  function renderTrend() {
+    const average = activeLocation.average;
+    $("#tx-trend-value").textContent = average.toFixed(1);
+    const values = [average + 1.6, average + 1.1, average + 0.7, average + 0.4, average].map((item) => Math.max(3.1, Math.min(6.9, item)));
+    const xs = [35, 105, 175, 245, 315];
+    const ys = values.map((item) => 17 + (item - 3) * 17.5);
+    const path = xs.map((x, index) => `${index === 0 ? "M" : "L"}${x} ${ys[index].toFixed(1)}`).join(" ");
+    $(".trend-line").setAttribute("d", path);
+    $(".trend-area").setAttribute("d", `${path} L315 104 L35 104 Z`);
+    $(".tx-chart").querySelectorAll(".trend-point").forEach((point, index) => point.setAttribute("cy", ys[index].toFixed(1)));
+    $(".tx-chart").setAttribute("aria-label", `Sample position trend for ${placeLabel(activeLocation)}; current average ${average.toFixed(1)}. Lower is better.`);
+  }
+
+  function render() {
+    $("#tx-business-breadcrumb").textContent = activeLocation.business;
+    $("#tx-workspace-title").textContent = activeLocation.business;
+    $("#tx-location-count").textContent = `${locations.length} global locations`;
+    $("#tx-location-button-label").textContent = `${activeLocation.business} · ${activeLocation.city}`;
+    $("#tx-current-location-name").textContent = `${activeLocation.area} location`;
+    $("#tx-current-location-place").textContent = placeLabel(activeLocation);
+    $("#tx-grid-location-name").textContent = areaLabel(activeLocation);
+    $("#tx-grid-keyword-label").textContent = activeKeyword;
+    $("#tx-average-position").textContent = activeLocation.average.toFixed(1);
+    $("#tx-top3-count").textContent = String(activeLocation.top3);
+    renderGrid();
+    renderKeywords();
+    renderTrend();
+  }
+
+  root.querySelectorAll("[data-toast]").forEach((button) => button.addEventListener("click", () => toast(button.dataset.toast)));
+  $("#tx-location-button").addEventListener("click", () => {
+    $("#tx-location-search").value = "";
+    renderLocations("");
+    $("#tx-location-dialog").showModal();
+    $("#tx-location-search").focus();
+  });
+  $("#tx-location-search").addEventListener("input", (event) => renderLocations(event.target.value));
+  $("#tx-location-list").addEventListener("click", (event) => {
+    const button = event.target.closest("[data-location-id]");
+    if (!button) return;
+    const selected = locations.find((item) => item.id === button.dataset.locationId);
+    if (!selected) return;
+    activeLocation = selected;
+    period = "Today";
+    scanRevision = 0;
+    root.querySelectorAll(".tx-period button").forEach((item) => item.setAttribute("aria-pressed", String(item.dataset.period === period)));
+    save();
+    render();
+    $("#tx-location-dialog").close();
+    toast(`Showing ${selected.city}, ${selected.country} · sample data`);
+  });
+  $("#tx-location-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const fields = new FormData(form);
+    const business = String(fields.get("business") || "").trim();
+    const area = String(fields.get("area") || "").trim();
+    const city = String(fields.get("city") || "").trim();
+    const country = String(fields.get("country") || "").trim();
+    const error = $("#tx-location-error");
+    if (!business || !area || !city || !country) {
+      error.textContent = "Enter the business, area, city, and country to add the location.";
+      error.hidden = false;
+      return;
+    }
+    error.hidden = true;
+    const id = `custom-${Date.now()}`;
+    const seed = hash(`${business}|${area}|${city}|${country}`);
+    const location = { id, business, area, city, country, average: Number((3.2 + (seed % 31) / 10).toFixed(1)), top3: 5 + (seed % 9), total: 18, ranks: [] };
+    location.ranks = makeRanks(location, "custom-location");
+    customLocations.push(location);
+    locations.push(location);
+    activeLocation = location;
+    period = "Today";
+    scanRevision = 0;
+    save();
+    render();
+    form.reset();
+    $(".tx-custom-location").open = false;
+    $("#tx-location-dialog").close();
+    toast(`Added ${city}, ${country} · sample data`);
+  });
+  $("#tx-add-keyword").addEventListener("click", () => {
+    $("#tx-keyword-error").hidden = true;
+    $("#tx-keyword-dialog").showModal();
+    $("#tx-keyword-input").focus();
+  });
+  $("#tx-keyword-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = $("#tx-keyword-input");
+    const keyword = input.value.trim();
+    const error = $("#tx-keyword-error");
+    if (!keyword) return;
+    const duplicates = [...sampleKeywords.map((item) => item.keyword), ...addedKeywords].some((item) => item.toLowerCase() === keyword.toLowerCase());
+    if (duplicates) {
+      error.textContent = "That keyword is already being tracked.";
+      error.hidden = false;
+      return;
+    }
+    addedKeywords.unshift(keyword);
+    activeKeyword = keyword;
+    showAll = false;
+    save();
+    render();
+    event.currentTarget.reset();
+    $("#tx-keyword-dialog").close();
+    toast(`Added “${keyword}” with sample rankings`);
+  });
+  root.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => $(`#${button.dataset.closeDialog}`).close()));
+  root.querySelectorAll(".tx-nav button").forEach((button) => button.addEventListener("click", () => {
+    root.querySelectorAll(".tx-nav button").forEach((item) => item.classList.remove("is-active"));
+    button.classList.add("is-active");
+    $("#tx-current-section").textContent = button.dataset.section;
+    if (button.dataset.section !== "Overview") toast(`${button.dataset.section} section selected · demo`);
+  }));
+  root.querySelectorAll(".tx-period button").forEach((button) => button.addEventListener("click", () => {
+    period = button.dataset.period;
+    root.querySelectorAll(".tx-period button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+    renderGrid();
+  }));
+  $("#tx-run-scan").addEventListener("click", () => {
+    scanRevision += 1;
+    period = "Today";
+    root.querySelectorAll(".tx-period button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.period === period)));
+    renderGrid();
+    toast("Demo scan refreshed sample positions · no live Google data");
+  });
+  $("#tx-view-keywords").addEventListener("click", () => { showAll = !showAll; renderKeywords(); });
+  render();
+})();
+  </script>
+</div>
+<script>if (window.lucide) window.lucide.createIcons();</script>
+</body>
+</html>
