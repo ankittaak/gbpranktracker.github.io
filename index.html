@@ -341,6 +341,10 @@
         </div>
         <div class="tx-location-chip"><i data-lucide="map-pin" aria-hidden="true"></i><strong id="tx-current-location-name">Downtown location</strong><span>·</span><span id="tx-current-location-place">Central District, United States</span><span class="tx-demo">SAMPLE DATA</span></div>
         <section class="tx-metrics" aria-label="Location ranking summary">
+          <div id="tx-live-scan-output" role="status" aria-live="polite"
+     style="margin:10px 0 0;padding:10px 12px;border:1px solid var(--tx-line);border-radius:9px;color:var(--tx-muted);font-size:12px">
+  No live scan yet.
+</div>
           <article class="tx-metric">
             <div class="tx-metric-top"><span>Average local position</span><span class="tx-metric-icon"><i data-lucide="map" aria-hidden="true"></i></span></div>
             <div class="tx-metric-value" id="tx-average-position">4.2</div>
@@ -747,16 +751,60 @@
     root.querySelectorAll(".tx-period button").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
     renderGrid();
   }));
-  $("#tx-run-scan").addEventListener("click", () => {
-    scanRevision += 1;
-    period = "Today";
-    root.querySelectorAll(".tx-period button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.period === period)));
-    renderGrid();
-    toast("Demo scan refreshed sample positions · no live Google data");
+   const scanButton = $("#tx-run-scan");
+  const originalScanButton = scanButton.innerHTML;
+
+  scanButton.addEventListener("click", async () => {
+    const output = $("#tx-live-scan-output");
+    scanButton.disabled = true;
+    scanButton.textContent = "Scanning…";
+    output.textContent = "Checking live Google Maps results…";
+
+    try {
+      const response = await fetch("/api/check-rank", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          keyword: activeKeyword,
+          business: activeLocation.business,
+          area: activeLocation.area,
+          city: activeLocation.city,
+          country: activeLocation.country
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Scan failed.");
+
+      const summary = document.createElement("p");
+      summary.textContent =
+        data.rank === null
+          ? `${activeLocation.business} was not found in the ${data.checked} results returned for "${data.keyword}" in ${data.location}.`
+          : `${activeLocation.business} is at position #${data.rank} for "${data.keyword}" in ${data.location}.`;
+
+      output.replaceChildren(summary);
+
+      if (data.results.length) {
+        const list = document.createElement("ol");
+
+        data.results.forEach((place) => {
+          const item = document.createElement("li");
+          item.textContent =
+            `#${place.position} ${place.title}` +
+            (place.address ? ` — ${place.address}` : "");
+          list.append(item);
+        });
+
+        output.append(list);
+      }
+    } catch (error) {
+      output.textContent = `Scan failed: ${error.message}`;
+    } finally {
+      scanButton.disabled = false;
+      scanButton.innerHTML = originalScanButton;
+      if (window.lucide) window.lucide.createIcons();
+    }
   });
-  $("#tx-view-keywords").addEventListener("click", () => { showAll = !showAll; renderKeywords(); });
-  render();
-})();
   </script>
 </div>
 <script>if (window.lucide) window.lucide.createIcons();</script>
