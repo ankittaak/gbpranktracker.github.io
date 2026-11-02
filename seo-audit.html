@@ -57,6 +57,16 @@
     .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
     .card-heading h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
     .card-heading p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .mode-switch { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 5px; width: min(460px,100%); margin-bottom: 22px; padding: 5px; background: #f1f5f7; border: 1px solid #e7edf2; border-radius: 12px; }
+    .mode-button { min-height: 40px; border: 0; border-radius: 8px; color: #697e8d; background: transparent; font-size: 12px; font-weight: 750; cursor: pointer; }
+    .mode-button.active { color: #183549; background: #fff; box-shadow: 0 2px 8px rgba(17,43,61,.09); }
+    .mode-button:disabled { cursor: wait; opacity: .65; }
+    .scan-options { display: flex; align-items: end; flex-wrap: wrap; gap: 15px; margin: 0 0 15px; }
+    .scan-options[hidden] { display: none; }
+    .scan-option { display: grid; gap: 6px; color: #465c6d; font-size: 11px; font-weight: 700; }
+    .scan-option select { min-width: 190px; height: 39px; padding: 0 11px; color: #223a4d; background: #fff; border: 1px solid #dfe7ed; border-radius: 9px; outline: none; }
+    .scan-option select:focus { border-color: #46c1a7; box-shadow: 0 0 0 3px rgba(25,185,154,.11); }
+    .scan-explainer { max-width: 520px; color: #8594a0; font-size: 11px; line-height: 1.5; }
     .field label { display: block; margin: 0 0 8px; color: #465c6d; font-size: 11px; font-weight: 700; }
     .input-row { display: flex; gap: 12px; }
     .field input { width: 100%; height: 45px; padding: 0 14px; color: #223a4d; background: #fff; border: 1px solid #dfe7ed; border-radius: 10px; outline: none; }
@@ -67,6 +77,13 @@
     .primary-button:disabled { cursor: wait; opacity: .72; }
     .spinner { width: 15px; height: 15px; border: 2px solid rgba(6,46,41,.25); border-top-color: #062e29; border-radius: 50%; animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .scan-progress { margin-top: 17px; padding: 14px 15px; background: #f8fbfc; border: 1px solid #e8eff2; border-radius: 11px; }
+    .scan-progress[hidden] { display: none; }
+    .progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #43596b; font-size: 11px; }
+    .progress-meta span { color: #748794; font-variant-numeric: tabular-nums; }
+    .progress-track { height: 7px; margin-top: 10px; overflow: hidden; background: #e6eef1; border-radius: 999px; }
+    .progress-fill { width: 0; height: 100%; background: linear-gradient(90deg, #14b897, #4dd2ae); border-radius: inherit; transition: width .25s ease; }
+    .progress-detail { margin: 8px 0 0; color: #83929e; font-size: 10px; }
     .note { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px 13px; color: #657a88; background: #f8fafb; border: 1px solid #edf1f4; border-radius: 10px; font-size: 11px; line-height: 1.55; }
     .error-box { display: none; margin-top: 16px; padding: 12px 14px; color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 10px; font-size: 12px; line-height: 1.5; }
     .error-box.show { display: block; }
@@ -91,6 +108,25 @@
     .site-check-state.warning { color: #a33a3a; background: #fff0ef; }
     .site-check-state.info { color: #627989; background: #eef3f6; }
     .site-check p { margin: 10px 0 0; color: #7a8a97; font-size: 11px; line-height: 1.45; }
+    .speed-card { display: none; margin-top: 18px; }
+    .speed-card.show { display: block; }
+    .speed-card[hidden] { display: none; }
+    .speed-summary { color: #7d8c98; font-size: 11px; }
+    .speed-runs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; }
+    .speed-run { padding: 16px; background: #f8fafb; border: 1px solid #eaf0f3; border-radius: 13px; }
+    .speed-run-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .speed-run-head h3 { margin: 0; color: #2b4356; font-size: 12px; }
+    .speed-score { min-width: 44px; padding: 7px 8px; border-radius: 9px; text-align: center; color: #087763; background: #dff6ee; font-size: 15px; font-weight: 850; }
+    .speed-score.medium { color: #956512; background: #fff3d9; }
+    .speed-score.low { color: #a33a3a; background: #fff0ef; }
+    .speed-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+    .speed-metric { padding: 9px; background: #fff; border: 1px solid #edf1f4; border-radius: 8px; }
+    .speed-metric b { display: block; color: #30485b; font-size: 11px; }
+    .speed-metric span { display: block; margin-top: 4px; color: #7d8c98; font-size: 10px; }
+    .speed-opportunities { margin-top: 13px; }
+    .speed-opportunities summary { font-size: 11px; }
+    .speed-opportunities ul { display: grid; gap: 7px; margin: 9px 0 0; padding-left: 17px; color: #657988; font-size: 10px; line-height: 1.45; }
+    .speed-error { color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 9px; padding: 12px; font-size: 11px; }
     .results-card { display: none; margin-top: 18px; padding: 0; overflow: hidden; }
     .results-card.show { display: block; }
     .results-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 19px 21px; border-bottom: 1px solid #edf1f4; }
@@ -137,6 +173,7 @@
       .topbar { height: 54px; }
       .metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .site-checks { grid-template-columns: 1fr; }
+      .speed-runs { grid-template-columns: 1fr; }
     }
     @media (max-width: 620px) {
       .content { padding-top: 25px; }
@@ -174,27 +211,57 @@
       <div class="eyebrow">Website health</div>
       <div class="page-heading">
         <div>
-          <h1>Find technical SEO issues.</h1>
-          <p class="subtitle">Scan public pages and see practical fixes for common on-page and crawlability problems.</p>
+          <h1>Audit one page or crawl a site.</h1>
+          <p class="subtitle">Choose a focused page check or a larger technical SEO crawl with progress you can follow.</p>
         </div>
       </div>
 
       <section class="card" aria-labelledby="audit-title">
         <div class="card-heading">
-          <div><h2 id="audit-title">Run a website audit</h2><p>Enter a domain to check its homepage and up to 9 other pages.</p></div>
+          <div><h2 id="audit-title">Choose your scan</h2><p>Run a detailed check for one page or crawl multiple pages on a site.</p></div>
         </div>
         <form id="audit-form">
+          <div class="mode-switch" role="group" aria-label="Scan type">
+            <button class="mode-button active" type="button" data-mode="single" aria-pressed="true">Single page</button>
+            <button class="mode-button" type="button" data-mode="bulk" aria-pressed="false">Bulk site scan</button>
+          </div>
+          <div class="scan-options" id="single-options">
+            <label class="scan-option" for="pagespeed-strategy">PageSpeed test
+              <select id="pagespeed-strategy" name="pagespeed-strategy">
+                <option value="mobile">Mobile</option>
+                <option value="desktop">Desktop</option>
+                <option value="both">Mobile + desktop</option>
+              </select>
+            </label>
+            <label class="scan-explainer"><input id="include-pagespeed" type="checkbox" checked> Include Google PageSpeed recommendations for this page</label>
+          </div>
+          <div class="scan-options" id="bulk-options" hidden>
+            <label class="scan-option" for="page-limit">Maximum pages
+              <select id="page-limit" name="page-limit">
+                <option value="10">10 pages</option>
+                <option value="20">20 pages</option>
+                <option value="50">50 pages</option>
+                <option value="100">100 pages</option>
+              </select>
+            </label>
+            <span class="scan-explainer">The scan follows public links and sitemap pages, respects robots.txt, and checks results in batches of 10.</span>
+          </div>
           <div class="field">
-            <label for="site-url">Website address</label>
+            <label id="url-label" for="site-url">Page URL</label>
             <div class="input-row">
-              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="https://yourwebsite.com" required>
-              <button class="primary-button" id="audit-button" type="submit"><span>Run audit</span></button>
+              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="https://yourwebsite.com/page" required>
+              <button class="primary-button" id="audit-button" type="submit"><span>Scan this page</span></button>
             </div>
-            <span class="field-hint">The audit reads public HTML pages, robots.txt, and sitemap.xml. It checks up to 10 pages and follows the site's basic robots.txt rules.</span>
+            <span class="field-hint" id="field-hint">Checks the exact URL, including its PageSpeed report if selected.</span>
           </div>
         </form>
+        <div class="scan-progress" id="scan-progress" hidden aria-live="polite">
+          <div class="progress-meta"><strong id="progress-title">Preparing scan…</strong><span id="progress-count">0 / 1</span></div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <p class="progress-detail" id="progress-detail">Connecting to the website.</p>
+        </div>
         <div class="error-box" id="error-box" role="alert"></div>
-        <div class="note"><span aria-hidden="true">ⓘ</span><span>Checks include metadata, duplicate titles and descriptions, heading structure, HTTP status, canonical links, indexability, page language, image alt text, Open Graph, JSON-LD, HTTPS, robots.txt, sitemaps, and links to pages in the crawl. It does not measure Core Web Vitals, backlinks, keyword rankings, or JavaScript-rendered content.</span></div>
+        <div class="note"><span aria-hidden="true">ⓘ</span><span>Technical checks include metadata, duplicate titles and descriptions, headings, HTTP status, canonical links, indexability, page language, image alt text, Open Graph, JSON-LD, HTTPS, robots.txt, sitemaps, and links to pages in the crawl. PageSpeed uses Google Lighthouse. Backlink databases, keyword rankings, and JavaScript-rendered content are not included in this version.</span></div>
       </section>
 
       <section class="metrics" id="metrics" aria-label="Audit summary">
@@ -207,6 +274,13 @@
       <section class="site-health" id="site-health" hidden aria-labelledby="site-health-title">
         <div class="section-heading"><h2 id="site-health-title">Site-wide checks</h2><span id="site-health-caption"></span></div>
         <div class="site-checks" id="site-checks"></div>
+      </section>
+
+      <section class="card speed-card" id="pagespeed-card" hidden aria-labelledby="pagespeed-title">
+        <div class="card-heading">
+          <div><h2 id="pagespeed-title">Google PageSpeed results</h2><p class="speed-summary" id="pagespeed-summary"></p></div>
+        </div>
+        <div class="speed-runs" id="pagespeed-runs"></div>
       </section>
 
       <section class="card results-card" id="results-card" aria-labelledby="results-title">
@@ -245,15 +319,66 @@
       const siteHealth = document.getElementById("site-health");
       const siteHealthCaption = document.getElementById("site-health-caption");
       const siteChecksBody = document.getElementById("site-checks");
+      const modeButtons = Array.from(document.querySelectorAll(".mode-button"));
+      const singleOptions = document.getElementById("single-options");
+      const bulkOptions = document.getElementById("bulk-options");
+      const pageLimitSelect = document.getElementById("page-limit");
+      const pageSpeedStrategy = document.getElementById("pagespeed-strategy");
+      const includePageSpeed = document.getElementById("include-pagespeed");
+      const urlLabel = document.getElementById("url-label");
+      const fieldHint = document.getElementById("field-hint");
+      const scanProgress = document.getElementById("scan-progress");
+      const progressTitle = document.getElementById("progress-title");
+      const progressCount = document.getElementById("progress-count");
+      const progressFill = document.getElementById("progress-fill");
+      const progressDetail = document.getElementById("progress-detail");
+      const pageSpeedCard = document.getElementById("pagespeed-card");
+      const pageSpeedSummary = document.getElementById("pagespeed-summary");
+      const pageSpeedRuns = document.getElementById("pagespeed-runs");
       let latestPages = [];
       let latestSite = "";
+      let scanMode = "single";
 
       function setBusy(busy) {
         button.disabled = busy;
+        input.disabled = busy;
+        pageLimitSelect.disabled = busy;
+        pageSpeedStrategy.disabled = busy;
+        includePageSpeed.disabled = busy;
+        modeButtons.forEach(function (modeButton) { modeButton.disabled = busy; });
         button.innerHTML = busy
           ? '<span class="spinner" aria-hidden="true"></span><span>Scanning…</span>'
-          : '<span>Run audit</span>';
+          : '<span>' + (scanMode === "single" ? "Scan this page" : "Start bulk scan") + '</span>';
       }
+
+      function setProgress(done, total, title, detail) {
+        scanProgress.hidden = false;
+        progressTitle.textContent = title;
+        progressCount.textContent = Math.min(done, total) + " / " + total;
+        progressFill.style.width = Math.round(Math.min(done, total) / Math.max(total, 1) * 100) + "%";
+        progressDetail.textContent = detail;
+      }
+
+      function updateMode(mode) {
+        scanMode = mode === "bulk" ? "bulk" : "single";
+        modeButtons.forEach(function (button) {
+          const active = button.dataset.mode === scanMode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        singleOptions.hidden = scanMode !== "single";
+        bulkOptions.hidden = scanMode !== "bulk";
+        urlLabel.textContent = scanMode === "single" ? "Page URL" : "Website domain";
+        input.placeholder = scanMode === "single" ? "https://yourwebsite.com/page" : "https://yourwebsite.com";
+        fieldHint.textContent = scanMode === "single"
+          ? "Checks the exact URL, including its PageSpeed report if selected."
+          : "Crawls public pages on this site, up to your selected page limit, and follows robots.txt rules.";
+        setBusy(false);
+      }
+
+      modeButtons.forEach(function (button) {
+        button.addEventListener("click", function () { updateMode(button.dataset.mode); });
+      });
 
       function showError(message) {
         errorBox.textContent = message;
@@ -309,6 +434,83 @@
           detail.textContent = check.detail || "No details available.";
           card.append(top, detail);
           siteChecksBody.appendChild(card);
+        });
+      }
+
+      function renderPageSpeed(results, errors) {
+        const runs = Array.isArray(results) ? results : [];
+        const failures = Array.isArray(errors) ? errors : [];
+        pageSpeedRuns.replaceChildren();
+        pageSpeedCard.hidden = !runs.length && !failures.length;
+        pageSpeedCard.classList.toggle("show", !pageSpeedCard.hidden);
+        pageSpeedSummary.textContent = runs.length
+          ? "Google Lighthouse lab results · scores can vary between runs."
+          : "PageSpeed could not return a result for this URL.";
+
+        runs.forEach(function (result) {
+          const card = document.createElement("article");
+          card.className = "speed-run";
+          const head = document.createElement("div");
+          head.className = "speed-run-head";
+          const heading = document.createElement("h3");
+          heading.textContent = result.strategy === "desktop" ? "Desktop" : "Mobile";
+          const score = document.createElement("span");
+          const performance = result.scores && result.scores.performance;
+          score.className = "speed-score" + (performance < 50 ? " low" : performance < 90 ? " medium" : "");
+          score.textContent = performance === null || performance === undefined ? "—" : String(performance);
+          score.title = "Lighthouse performance score out of 100";
+          head.append(heading, score);
+
+          const metricsGrid = document.createElement("div");
+          metricsGrid.className = "speed-metrics";
+          const metricRows = [
+            ["Accessibility score", result.scores?.accessibility === null || result.scores?.accessibility === undefined ? "No score" : result.scores.accessibility + " / 100"],
+            ["Best practices score", result.scores?.bestPractices === null || result.scores?.bestPractices === undefined ? "No score" : result.scores.bestPractices + " / 100"],
+            ["SEO score", result.scores?.seo === null || result.scores?.seo === undefined ? "No score" : result.scores.seo + " / 100"],
+            ["Largest Contentful Paint", result.metrics?.largestContentfulPaint],
+            ["Cumulative Layout Shift", result.metrics?.cumulativeLayoutShift],
+            ["First Contentful Paint", result.metrics?.firstContentfulPaint],
+            ["Total Blocking Time", result.metrics?.totalBlockingTime],
+            ["Speed Index", result.metrics?.speedIndex],
+            ["Real-user field data", result.fieldData?.overallCategory || "No field data available"]
+          ];
+          metricRows.forEach(function (entry) {
+            const item = document.createElement("div");
+            item.className = "speed-metric";
+            const name = document.createElement("b");
+            name.textContent = entry[0];
+            const value = document.createElement("span");
+            value.textContent = entry[1] || "No value returned";
+            item.append(name, value);
+            metricsGrid.appendChild(item);
+          });
+
+          card.append(head, metricsGrid);
+          const opportunities = Array.isArray(result.opportunities) ? result.opportunities : [];
+          if (opportunities.length) {
+            const details = document.createElement("details");
+            details.className = "speed-opportunities";
+            const summary = document.createElement("summary");
+            summary.textContent = opportunities.length + " improvement suggestions";
+            const list = document.createElement("ul");
+            opportunities.forEach(function (opportunity) {
+              const item = document.createElement("li");
+              item.textContent = (opportunity.title || "Suggestion")
+                + (opportunity.savings ? " · " + opportunity.savings : "")
+                + (opportunity.description ? ": " + opportunity.description : "");
+              list.appendChild(item);
+            });
+            details.append(summary, list);
+            card.appendChild(details);
+          }
+          pageSpeedRuns.appendChild(card);
+        });
+
+        failures.forEach(function (message) {
+          const error = document.createElement("div");
+          error.className = "speed-error";
+          error.textContent = message;
+          pageSpeedRuns.appendChild(error);
         });
       }
 
@@ -413,12 +615,211 @@
         metrics.classList.add("show");
         resultsCard.classList.add("show");
         resultsCaption.textContent = "Checked " + (data.pagesScanned || pages.length) + " page(s) on " + displaySiteLabel(data.site)
+          + (data.mode === "bulk" && data.pageLimit ? " · selected limit " + data.pageLimit : "")
+          + (data.mode === "bulk" && pages.length < data.pageLimit ? " · no more crawlable pages were found" : "")
           + (data.skippedByRobots ? " · " + data.skippedByRobots + " page(s) skipped by robots.txt" : "");
         renderSiteChecks(Array.isArray(data.siteChecks) ? data.siteChecks : []);
+        renderPageSpeed(data.pageSpeedResults, data.pageSpeedErrors);
         resultsBody.replaceChildren();
         pages.forEach(function (page) { resultsBody.appendChild(renderPage(page)); });
         emptyState.hidden = pages.length > 0;
         exportButton.disabled = pages.length === 0;
+      }
+
+      async function postJson(path, body) {
+        const response = await fetch(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        let data;
+        try { data = await response.json(); }
+        catch (_) { throw new Error("The audit endpoint returned an unreadable response."); }
+        if (!response.ok || data.error) throw new Error(data.error || "The audit could not be completed.");
+        return data;
+      }
+
+      function queueKey(value) {
+        try {
+          const url = new URL(value);
+          url.hash = "";
+          url.hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+          return url.toString();
+        } catch (_) {
+          return String(value || "");
+        }
+      }
+
+      function bulkStartUrl(value) {
+        try {
+          const inputUrl = /^https?:\/\//i.test(value) ? value : "https://" + value;
+          const url = new URL(inputUrl);
+          url.pathname = "/";
+          url.search = "";
+          url.hash = "";
+          return url.toString();
+        } catch (_) {
+          return value;
+        }
+      }
+
+      function finalizeBulkReport(pages, firstReport, skippedByRobots, pageLimit) {
+        const crossPageCodes = new Set(["duplicate-title", "duplicate-description", "broken-internal-links"]);
+        pages.forEach(function (page) {
+          page.issues = (page.issues || []).filter(function (issue) { return !crossPageCodes.has(issue.code); });
+          page.brokenInternalLinks = 0;
+        });
+
+        [
+          { field: "title", code: "duplicate-title", title: "Duplicate page title", recommendation: "Give each page a distinct title that describes its own content." },
+          { field: "description", code: "duplicate-description", title: "Duplicate meta description", recommendation: "Write a unique summary for each page." }
+        ].forEach(function (config) {
+          const groups = new Map();
+          pages.forEach(function (page) {
+            const value = String(page[config.field] || "").trim().toLowerCase().replace(/\s+/g, " ");
+            if (!value) return;
+            if (!groups.has(value)) groups.set(value, []);
+            groups.get(value).push(page);
+          });
+          groups.forEach(function (group) {
+            if (group.length < 2) return;
+            group.forEach(function (page) {
+              page.issues.push({
+                severity: "warning",
+                code: config.code,
+                title: config.title,
+                recommendation: config.recommendation + " Duplicate found on " + group.length + " scanned pages."
+              });
+            });
+          });
+        });
+
+        const statusByUrl = new Map();
+        pages.forEach(function (page) {
+          if (page.url) statusByUrl.set(queueKey(page.url), page.status);
+          if (page.finalUrl) statusByUrl.set(queueKey(page.finalUrl), page.status);
+        });
+        pages.forEach(function (page) {
+          const broken = Array.from(new Set((page.links || []).filter(function (link) {
+            return Number(statusByUrl.get(queueKey(link))) >= 400;
+          })));
+          page.brokenInternalLinks = broken.length;
+          if (broken.length) page.issues.push({
+            severity: "warning",
+            code: "broken-internal-links",
+            title: broken.length + " internal link(s) point to scanned pages that return an error",
+            recommendation: "Update or remove links to the affected pages. This check only covers links whose targets were scanned."
+          });
+        });
+
+        const counts = { critical: 0, warning: 0, info: 0 };
+        pages.forEach(function (page) {
+          (page.issues || []).forEach(function (issue) {
+            if (Object.prototype.hasOwnProperty.call(counts, issue.severity)) counts[issue.severity] += 1;
+          });
+        });
+        (firstReport.siteChecks || []).forEach(function (check) {
+          if (check.status === "warning") counts.warning += 1;
+          else if (check.status === "info") counts.info += 1;
+        });
+        return Object.assign({}, firstReport, {
+          mode: "bulk",
+          pages,
+          pagesScanned: pages.length,
+          pageLimit,
+          skippedByRobots,
+          summary: {
+            critical: counts.critical,
+            warnings: counts.warning,
+            info: counts.info,
+            totalIssues: counts.critical + counts.warning + counts.info,
+            pagesWithIssues: pages.filter(function (page) { return (page.issues || []).length > 0; }).length
+          }
+        });
+      }
+
+      async function runBulkScan(value) {
+        const pageLimit = Number(pageLimitSelect.value) || 10;
+        const startUrl = bulkStartUrl(value);
+        const queue = [startUrl];
+        const queued = new Set([queueKey(startUrl)]);
+        const scanned = new Set();
+        const pages = [];
+        let firstReport = null;
+        let skippedByRobots = 0;
+        let batchNumber = 0;
+
+        while (pages.length < pageLimit && queue.length) {
+          const batchLimit = Math.min(10, pageLimit - pages.length);
+          const pageUrls = [];
+          while (queue.length && pageUrls.length < batchLimit) {
+            const nextUrl = queue.shift();
+            if (scanned.has(queueKey(nextUrl))) continue;
+            pageUrls.push(nextUrl);
+          }
+          if (!pageUrls.length) break;
+
+          batchNumber += 1;
+          setProgress(pages.length, pageLimit, "Scanning your site", "Checking batch " + batchNumber + " of up to " + Math.ceil(pageLimit / 10) + "…");
+          const data = await postJson("/api/seo-audit", {
+            url: startUrl,
+            mode: "bulk",
+            pageLimit,
+            batchLimit,
+            pageUrls,
+            excludeUrls: Array.from(scanned),
+            discoverSitemap: batchNumber === 1
+          });
+          if (!firstReport) firstReport = data;
+          skippedByRobots += Number(data.skippedByRobots) || 0;
+
+          (data.pages || []).forEach(function (page) {
+            const pageKey = queueKey(page.url);
+            if (!scanned.has(pageKey)) pages.push(page);
+            if (page.url) scanned.add(pageKey);
+            if (page.finalUrl) scanned.add(queueKey(page.finalUrl));
+          });
+
+          const foundLinks = (data.discoveredLinks || []).concat((data.pages || []).flatMap(function (page) { return page.links || []; }));
+          foundLinks.forEach(function (link) {
+            const key = queueKey(link);
+            if (!key || scanned.has(key) || queued.has(key) || queue.length >= 5000) return;
+            queue.push(link);
+            queued.add(key);
+          });
+          setProgress(pages.length, pageLimit, "Scanning your site", pages.length + " page(s) checked; finding more internal pages…");
+        }
+
+        if (!firstReport) throw new Error("No crawlable pages were found for this website.");
+        const report = finalizeBulkReport(pages, firstReport, skippedByRobots, pageLimit);
+        setProgress(pages.length, pageLimit, "Bulk scan complete", pages.length < pageLimit
+          ? "Checked all crawlable pages found before reaching the selected limit."
+          : "Reached the selected page limit.");
+        return report;
+      }
+
+      async function runSingleScan(value) {
+        setProgress(0, 1, "Checking this page", "Reading page details and technical signals…");
+        const report = await postJson("/api/seo-audit", { url: value, mode: "single", pageLimit: 1 });
+        report.pageSpeedResults = [];
+        report.pageSpeedErrors = [];
+        if (includePageSpeed.checked) {
+          const selected = pageSpeedStrategy.value;
+          const strategies = selected === "both" ? ["mobile", "desktop"] : [selected];
+          for (let index = 0; index < strategies.length; index += 1) {
+            const strategy = strategies[index];
+            setProgress(index, strategies.length, "Running PageSpeed", "Google Lighthouse is checking " + strategy + " performance…");
+            try {
+              report.pageSpeedResults.push(await postJson("/api/page-speed", { url: value, strategy }));
+            } catch (error) {
+              report.pageSpeedErrors.push((strategy === "desktop" ? "Desktop" : "Mobile") + ": "
+                + (error && error.message ? error.message : "PageSpeed could not complete this check."));
+            }
+            setProgress(index + 1, strategies.length, "Running PageSpeed", (index + 1) + " of " + strategies.length + " PageSpeed check(s) complete.");
+          }
+        }
+        setProgress(1, 1, "Single-page scan complete", "Technical audit and selected PageSpeed checks are finished.");
+        return report;
       }
 
       form.addEventListener("submit", async function (event) {
@@ -426,25 +827,22 @@
         clearError();
         const url = input.value.trim();
         if (!url) {
-          showError("Enter a website address to start the audit.");
+          showError("Enter a page URL or website address to start the scan.");
           return;
         }
 
         setBusy(true);
+        scanProgress.hidden = false;
+        pageSpeedCard.hidden = true;
+        pageSpeedCard.classList.remove("show");
         try {
-          const response = await fetch("/api/seo-audit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: url })
-          });
-          let data;
-          try { data = await response.json(); }
-          catch (_) { throw new Error("The audit endpoint returned an unreadable response."); }
-          if (!response.ok || data.error) throw new Error(data.error || "The audit could not be completed.");
-          renderReport(data);
+          const report = scanMode === "single" ? await runSingleScan(url) : await runBulkScan(url);
+          renderReport(report);
           document.getElementById("results-card").scrollIntoView({ behavior: "smooth", block: "start" });
         } catch (error) {
-          showError(error && error.message ? error.message : "The audit failed. Check the website address and try again.");
+          showError(error && error.message ? error.message : "The scan failed. Check the URL and try again.");
+          progressTitle.textContent = "Scan could not finish";
+          progressDetail.textContent = error && error.message ? error.message : "Check the URL and try again.";
         } finally {
           setBusy(false);
         }
@@ -497,3 +895,4 @@
   </script>
 </body>
 </html>
+
