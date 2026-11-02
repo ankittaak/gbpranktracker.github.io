@@ -47,10 +47,12 @@
     .content { width: min(1320px, 100%); margin: 0 auto; padding: 37px clamp(22px, 4.4vw, 64px) 62px; }
     .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--teal-dark); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
     .eyebrow:before { content: ""; width: 18px; height: 2px; background: var(--teal); border-radius: 5px; }
-    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 10px 0 26px; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 10px 0 26px; padding: 27px 29px; color: #fff; background: radial-gradient(circle at 92% 15%, rgba(25,185,154,.25), transparent 28%), linear-gradient(125deg, #0b1d2c, #17384a); border-radius: 19px; box-shadow: 0 14px 32px rgba(11,29,44,.12); }
+    .page-heading h1 { color: #fff; }
+    .page-heading .subtitle { color: #b9c9d2; }
     h1 { margin: 0; color: #14283a; font-size: clamp(27px, 3vw, 35px); letter-spacing: -.045em; line-height: 1.15; }
     .subtitle { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .pill { display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: #177e6a; background: #e5f8f3; border: 1px solid #d5f1e9; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .pill { display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: #c9fff0; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15); border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
     .card, .metric { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
     .card { padding: 24px; }
     .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
@@ -69,13 +71,27 @@
     .note { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px 13px; color: #657a88; background: #f8fafb; border: 1px solid #edf1f4; border-radius: 10px; font-size: 11px; line-height: 1.55; }
     .error-box { display: none; margin-top: 16px; padding: 12px 14px; color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 10px; font-size: 12px; line-height: 1.5; }
     .error-box.show { display: block; }
-    .metrics { display: none; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 15px; margin: 18px 0; }
+    .metrics { display: none; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 15px; margin: 18px 0; }
     .metrics.show { display: grid; }
     .metric { min-height: 106px; padding: 17px 19px; }
     .metric-label { color: #788897; font-size: 11px; font-weight: 650; }
     .metric-value { margin-top: 12px; color: #1b3347; font-size: 25px; font-weight: 750; letter-spacing: -.04em; }
     .metric-value.warn { color: var(--amber); }
     .metric-value.bad { color: var(--red); }
+    .site-health { margin: 18px 0; }
+    .site-health[hidden] { display: none; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 24px 2px 11px; }
+    .section-heading h2 { margin: 0; color: #243a4d; font-size: 14px; }
+    .section-heading span { color: #83919d; font-size: 11px; }
+    .site-checks { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px; }
+    .site-check { min-height: 105px; padding: 16px 18px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+    .site-check-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .site-check-label { color: #31495b; font-size: 12px; font-weight: 750; }
+    .site-check-state { padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+    .site-check-state.good { color: #087763; background: #dff6ee; }
+    .site-check-state.warning { color: #a33a3a; background: #fff0ef; }
+    .site-check-state.info { color: #627989; background: #eef3f6; }
+    .site-check p { margin: 10px 0 0; color: #7a8a97; font-size: 11px; line-height: 1.45; }
     .results-card { display: none; margin-top: 18px; padding: 0; overflow: hidden; }
     .results-card.show { display: block; }
     .results-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 19px 21px; border-bottom: 1px solid #edf1f4; }
@@ -84,11 +100,14 @@
     .secondary-button { height: 34px; padding: 0 11px; color: #506577; background: #fff; border: 1px solid #dfe7ed; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
     .secondary-button:disabled { color: #b1bbc3; cursor: not-allowed; }
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 760px; text-align: left; }
+    table { width: 100%; border-collapse: collapse; min-width: 860px; text-align: left; }
     th { padding: 12px 18px; color: #8b98a4; background: #fff; font-size: 9px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
     td { padding: 14px 18px; color: #526575; border-top: 1px solid #f0f3f5; font-size: 11px; vertical-align: top; }
     tbody tr:first-child td { border-top: 0; }
     .page-link { color: #167a68; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+    .page-title { display: block; color: #31495b; font-weight: 700; line-height: 1.45; }
+    .page-signals { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .page-signal { padding: 4px 6px; color: #687c8b; background: #f2f6f8; border-radius: 6px; font-size: 9px; white-space: nowrap; }
     .status { display: inline-flex; padding: 5px 7px; border-radius: 7px; font-size: 10px; font-weight: 800; }
     .status.good { color: #087763; background: #dff6ee; }
     .status.bad { color: #a33a3a; background: #fff0ef; }
@@ -117,10 +136,13 @@
       .nav a { min-width: max-content; min-height: 38px; }
       .main { margin-left: 0; }
       .topbar { height: 54px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .site-checks { grid-template-columns: 1fr; }
     }
     @media (max-width: 620px) {
       .content { padding-top: 25px; }
       .page-heading { align-items: flex-start; flex-direction: column; }
+      .page-heading { padding: 22px; }
       .input-row { flex-direction: column; }
       .primary-button { width: 100%; }
       .metrics { grid-template-columns: 1fr; }
@@ -167,20 +189,26 @@
           <div class="field">
             <label for="site-url">Website address</label>
             <div class="input-row">
-              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="example.com" required>
+              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="https://yourwebsite.com" required>
               <button class="primary-button" id="audit-button" type="submit"><span>Run audit</span></button>
             </div>
             <span class="field-hint">The audit reads public HTML pages, robots.txt, and sitemap.xml. It checks up to 10 pages and follows the site's basic robots.txt rules.</span>
           </div>
         </form>
         <div class="error-box" id="error-box" role="alert"></div>
-        <div class="note"><span aria-hidden="true">ⓘ</span><span>This first version checks technical page signals such as titles, descriptions, headings, canonical links, noindex tags, mobile viewport, and image alt text. It does not check keyword rankings, backlinks, or JavaScript-rendered content.</span></div>
+        <div class="note"><span aria-hidden="true">ⓘ</span><span>Checks include metadata, duplicate titles and descriptions, heading structure, HTTP status, canonical links, indexability, page language, image alt text, Open Graph, JSON-LD, HTTPS, robots.txt, sitemaps, and links to pages in the crawl. It does not measure Core Web Vitals, backlinks, keyword rankings, or JavaScript-rendered content.</span></div>
       </section>
 
       <section class="metrics" id="metrics" aria-label="Audit summary">
         <article class="metric"><div class="metric-label">Pages checked</div><div class="metric-value" id="pages-count">—</div></article>
         <article class="metric"><div class="metric-label">Findings</div><div class="metric-value warn" id="issues-count">—</div></article>
+        <article class="metric"><div class="metric-label">Warnings</div><div class="metric-value warn" id="warnings-count">—</div></article>
         <article class="metric"><div class="metric-label">Critical issues</div><div class="metric-value bad" id="critical-count">—</div></article>
+      </section>
+
+      <section class="site-health" id="site-health" hidden aria-labelledby="site-health-title">
+        <div class="section-heading"><h2 id="site-health-title">Site-wide checks</h2><span id="site-health-caption"></span></div>
+        <div class="site-checks" id="site-checks"></div>
       </section>
 
       <section class="card results-card" id="results-card" aria-labelledby="results-title">
@@ -190,7 +218,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Page</th><th>Status</th><th>Title</th><th>Findings and recommended fixes</th></tr></thead>
+            <thead><tr><th>Page</th><th>Status</th><th>Title &amp; page signals</th><th>Findings and recommended fixes</th></tr></thead>
             <tbody id="results-body"></tbody>
           </table>
         </div>
@@ -216,7 +244,11 @@
       const resultsCaption = document.getElementById("results-caption");
       const emptyState = document.getElementById("empty-state");
       const exportButton = document.getElementById("export-button");
+      const siteHealth = document.getElementById("site-health");
+      const siteHealthCaption = document.getElementById("site-health-caption");
+      const siteChecksBody = document.getElementById("site-checks");
       let latestPages = [];
+      let latestSite = "";
 
       function setBusy(busy) {
         button.disabled = busy;
@@ -235,10 +267,51 @@
         errorBox.classList.remove("show");
       }
 
-      function createCell(text) {
-        const cell = document.createElement("td");
-        cell.textContent = text;
-        return cell;
+      function displaySiteLabel(value) {
+        try {
+          const host = new URL(value).hostname.toLowerCase();
+          const currentHost = window.location.hostname.toLowerCase();
+          if (host === currentHost && /^gbpranktrackergithubio-git-.+-trexivo\.vercel\.app$/.test(host)) {
+            return "gbpranktrackergithubio.vercel.app · preview";
+          }
+          return host;
+        } catch (_) {
+          return value || "the submitted website";
+        }
+      }
+
+      function displayPagePath(value) {
+        try {
+          const url = new URL(value);
+          const siteHost = new URL(latestSite).hostname.toLowerCase().replace(/^www\./, "");
+          const pageHost = url.hostname.toLowerCase().replace(/^www\./, "");
+          return pageHost === siteHost ? (url.pathname || "/") : (url.hostname + url.pathname);
+        } catch (_) {
+          return value;
+        }
+      }
+
+      function renderSiteChecks(checks) {
+        siteChecksBody.replaceChildren();
+        siteHealth.hidden = !checks.length;
+        siteHealthCaption.textContent = displaySiteLabel(latestSite);
+        checks.forEach(function (check) {
+          const card = document.createElement("article");
+          card.className = "site-check";
+          const top = document.createElement("div");
+          top.className = "site-check-top";
+          const label = document.createElement("span");
+          label.className = "site-check-label";
+          label.textContent = check.label || "Site check";
+          const state = document.createElement("span");
+          state.className = "site-check-state " + (check.status || "info");
+          state.textContent = check.status === "good" ? "Good" : check.status === "warning" ? "Review" : "Info";
+          top.append(label, state);
+          const detail = document.createElement("p");
+          detail.textContent = check.detail || "No details available.";
+          card.append(top, detail);
+          siteChecksBody.appendChild(card);
+        });
       }
 
       function renderIssue(issue) {
@@ -269,7 +342,8 @@
         link.href = page.url;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.textContent = page.url;
+        link.textContent = displayPagePath(page.url);
+        link.title = page.url;
         pageCell.appendChild(link);
 
         const statusCell = document.createElement("td");
@@ -280,7 +354,31 @@
         statusCell.appendChild(status);
 
         const titleCell = document.createElement("td");
-        titleCell.textContent = page.title || "No page title found";
+        const pageTitle = document.createElement("span");
+        pageTitle.className = "page-title";
+        pageTitle.textContent = page.title || "No page title found";
+        const signals = document.createElement("div");
+        signals.className = "page-signals";
+        const titleLength = page.titleLength ?? (page.title || "").length;
+        const descriptionLength = page.descriptionLength ?? (page.description || "").length;
+        const signalValues = [
+          "Title " + titleLength + " chars",
+          "Description " + descriptionLength + " chars",
+          "H1 " + (page.h1Count ?? 0) + " · H2 " + (page.h2Count ?? 0),
+          "Language " + (page.language || "unset"),
+          "Images " + (page.imageCount ?? 0) + " · " + (page.missingAltCount ?? 0) + " missing alt",
+          "Links " + (page.internalLinks ?? 0) + " in · " + (page.externalLinks ?? 0) + " out",
+          "Broken links " + (page.brokenInternalLinks ?? 0),
+          "Schema " + ((page.structuredDataTypes || []).join(", ") || "none"),
+          page.responseTimeMs ? "Response " + page.responseTimeMs + " ms" : "Response time n/a"
+        ];
+        signalValues.forEach(function (value) {
+          const chip = document.createElement("span");
+          chip.className = "page-signal";
+          chip.textContent = value;
+          signals.appendChild(chip);
+        });
+        titleCell.append(pageTitle, signals);
 
         const issueCell = document.createElement("td");
         const issues = Array.isArray(page.issues) ? page.issues : [];
@@ -309,13 +407,16 @@
         const pages = Array.isArray(data.pages) ? data.pages : [];
         const summary = data.summary || {};
         latestPages = pages;
+        latestSite = data.site || "";
         document.getElementById("pages-count").textContent = String(data.pagesScanned || pages.length);
         document.getElementById("issues-count").textContent = String(summary.totalIssues || 0);
+        document.getElementById("warnings-count").textContent = String(summary.warnings || 0);
         document.getElementById("critical-count").textContent = String(summary.critical || 0);
         metrics.classList.add("show");
         resultsCard.classList.add("show");
-        resultsCaption.textContent = "Checked " + (data.pagesScanned || pages.length) + " page(s) on " + (data.site || "the submitted website")
+        resultsCaption.textContent = "Checked " + (data.pagesScanned || pages.length) + " page(s) on " + displaySiteLabel(data.site)
           + (data.skippedByRobots ? " · " + data.skippedByRobots + " page(s) skipped by robots.txt" : "");
+        renderSiteChecks(Array.isArray(data.siteChecks) ? data.siteChecks : []);
         resultsBody.replaceChildren();
         pages.forEach(function (page) { resultsBody.appendChild(renderPage(page)); });
         emptyState.hidden = pages.length > 0;
@@ -353,19 +454,31 @@
 
       exportButton.addEventListener("click", function () {
         if (!latestPages.length) return;
-        const rows = [["URL", "HTTP status", "Title", "Meta description", "H1 count", "Canonical", "Noindex", "Images missing alt", "Internal links", "Findings"]];
+        const rows = [["URL", "HTTP status", "Title", "Title length", "Meta description", "Description length", "Language", "H1 count", "H2 count", "Canonical", "Noindex", "Images", "Images missing alt", "Internal links", "External links", "Broken scanned links", "Open Graph title", "Open Graph description", "JSON-LD blocks", "JSON-LD types", "Response time ms", "Findings"]];
         latestPages.forEach(function (page) {
           const issueNames = (page.issues || []).map(function (issue) { return issue.title; }).join("; ");
           rows.push([
             page.url || "",
             page.status ?? "",
             page.title || "",
+            page.titleLength ?? "",
             page.description || "",
+            page.descriptionLength ?? "",
+            page.language || "",
             page.h1Count ?? "",
+            page.h2Count ?? "",
             page.canonical || "",
             page.noindex ? "Yes" : "No",
+            page.imageCount ?? "",
             page.missingAltCount ?? "",
             page.internalLinks ?? "",
+            page.externalLinks ?? "",
+            page.brokenInternalLinks ?? "",
+            page.ogTitle || "",
+            page.ogDescription || "",
+            page.structuredDataCount ?? "",
+            (page.structuredDataTypes || []).join("; "),
+            page.responseTimeMs ?? "",
             issueNames
           ]);
         });
