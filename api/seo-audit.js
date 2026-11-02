@@ -122,6 +122,7 @@ async function readLimitedText(response, maxBytes) {
 
 async function fetchWebsiteText(value, rootHostname, maxBytes) {
   let current = new URL(value);
+  const startedAt = Date.now();
 
   for (let redirectCount = 0; redirectCount <= 3; redirectCount += 1) {
     if (!["http:", "https:"].includes(current.protocol)
@@ -133,7 +134,8 @@ async function fetchWebsiteText(value, rootHostname, maxBytes) {
         status: 0,
         headers: new Headers(),
         text: "",
-        outOfScopeRedirect: true
+        outOfScopeRedirect: true,
+        durationMs: Date.now() - startedAt
       };
     }
 
@@ -160,7 +162,8 @@ async function fetchWebsiteText(value, rootHostname, maxBytes) {
             finalUrl: current.toString(),
             status: response.status,
             headers: response.headers,
-            text: ""
+            text: "",
+            durationMs: Date.now() - startedAt
           };
         }
         const next = new URL(location, current);
@@ -171,7 +174,8 @@ async function fetchWebsiteText(value, rootHostname, maxBytes) {
             status: response.status,
             headers: response.headers,
             text: "",
-            outOfScopeRedirect: true
+            outOfScopeRedirect: true,
+            durationMs: Date.now() - startedAt
           };
         }
         current = next;
@@ -185,7 +189,8 @@ async function fetchWebsiteText(value, rootHostname, maxBytes) {
         status: response.status,
         headers: response.headers,
         text,
-        contentType: response.headers.get("content-type") || ""
+        contentType: response.headers.get("content-type") || "",
+        durationMs: Date.now() - startedAt
       };
     } finally {
       clearTimeout(timer);
@@ -271,6 +276,60 @@ function getMetaContent(html, metaName) {
     }
   }
   return "";
+}
+
+function getMetaPropertyContent(html, propertyName) {
+  const tags = html.match(/<meta\b[^>]*>/gi) || [];
+  for (const tag of tags) {
+    const property = getAttribute(tag, "property");
+    if (property && property.toLowerCase() === propertyName.toLowerCase()) {
+      return getAttribute(tag, "content") || "";
+    }
+  }
+  return "";
+}
+
+function getStructuredData(html) {
+  const types = new Set();
+  let blocks = 0;
+  let invalidBlocks = 0;
+  const scripts = html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi);
+
+  for (const script of scripts) {
+    const openingTag = "<script" + script[1] + ">";
+    const type = getAttribute(openingTag, "type") || "";
+    if (type.toLowerCase().split(";")[0].trim() !== "application/ld+json") continue;
+    blocks += 1;
+
+    let parsed;
+    try {
+      parsed = JSON.parse(script[2].trim());
+    } catch {
+      invalidBlocks += 1;
+      continue;
+    }
+
+    const pending = [parsed];
+    let visited = 0;
+    while (pending.length && visited < 500) {
+      const value = pending.pop();
+      visited += 1;
+      if (Array.isArray(value)) {
+        for (const item of value) {
+          if (pending.length < 500) pending.push(item);
+        }
+      } else if (value && typeof value === "object") {
+        const itemTypes = value["@type"];
+        if (Array.isArray(itemTypes)) itemTypes.forEach((item) => types.add(String(item)));
+        else if (itemTypes) types.add(String(itemTypes));
+        for (const item of Object.values(value)) {
+          if (item && typeof item === "object" && pending.length < 500) pending.push(item);
+        }
+      }
+    }
+  }
+
+  return { blocks, invalidBlocks, types: Array.from(types).slice(0, 12) };
 }
 
 function getRobotsRules(text) {
@@ -385,6 +444,43 @@ function addIssue(issues, severity, code, title, recommendation) {
   issues.push({ severity, code, title, recommendation });
 }
 
+function addDuplicateFieldIssues(pages, field, code, title, recommendation) {
+  const groups = new Map();
+  for (const page of pages) {
+    const value = String(page[field] || "").trim().toLowerCase().replace(/\s+/g, " ");
+    if (!value) continue;
+    if (!groups.has(value)) groups.set(value, []);
+    groups.get(value).push(page);
+  }
+
+  for (const group of groups.values()) {
+    if (group.length < 2) continue;
+    for (const page of group) {
+      addIssue(page.issues, "warning", code, title,
+        recommendation + " Duplicate found on " + group.length + " scanned pages.");
+    }
+  }
+}
+
+function addBrokenInternalLinkIssues(pages) {
+  const statusByUrl = new Map();
+  for (const page of pages) {
+    if (page.url) statusByUrl.set(page.url, page.status);
+    if (page.finalUrl) statusByUrl.set(page.finalUrl, page.status);
+  }
+
+  for (const page of pages) {
+    const brokenLinks = Array.from(new Set((page.links || []).filter((link) => {
+      const status = statusByUrl.get(link);
+      return Number(status) >= 400;
+    })));
+    page.brokenInternalLinks = brokenLinks.length;
+    if (brokenLinks.length) addIssue(page.issues, "warning", "broken-internal-links",
+      brokenLinks.length + " internal link(s) point to scanned pages that return an error",
+      "Update or remove links to the affected pages. This check only covers links whose targets were scanned.");
+  }
+}
+
 function auditPage(url, response, rootHostname) {
   const html = response.text || "";
   const issues = [];
@@ -393,13 +489,13 @@ function auditPage(url, response, rootHostname) {
   if (response.outOfScopeRedirect) {
     addIssue(issues, "warning", "external-redirect", "Redirects outside this website",
       "Enter the final website address so the audit stays within one site.");
-    return { url, finalUrl: response.finalUrl, status, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, issues, links: [] };
+    return { url, finalUrl: response.finalUrl, status, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, responseTimeMs: response.durationMs || null, issues, links: [] };
   }
 
   if (!status) {
     addIssue(issues, "critical", "fetch-failed", "Page could not be fetched",
       "Check that the page is public and responds to a normal browser request.");
-    return { url, finalUrl: response.finalUrl || url, status: null, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, issues, links: [] };
+    return { url, finalUrl: response.finalUrl || url, status: null, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, responseTimeMs: response.durationMs || null, issues, links: [] };
   }
 
   if (status >= 400) {
@@ -412,18 +508,31 @@ function auditPage(url, response, rootHostname) {
   if (!isHtml && status < 400) {
     addIssue(issues, "info", "not-html", "URL is not an HTML page",
       "This first audit checks HTML pages; non-HTML files are listed but not analyzed.");
-    return { url, finalUrl: response.finalUrl, status, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, issues, links: [] };
+    return { url, finalUrl: response.finalUrl, status, title: "", description: "", h1Count: 0, canonical: "", noindex: false, missingAltCount: 0, internalLinks: 0, responseTimeMs: response.durationMs || null, issues, links: [] };
   }
 
   const titleMatch = html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i);
   const title = titleMatch ? stripHtml(titleMatch[1]) : "";
   const description = getMetaContent(html, "description").trim();
+  const htmlTag = html.match(/<html\b[^>]*>/i);
+  const language = htmlTag ? getAttribute(htmlTag[0], "lang") || "" : "";
   const h1Tags = html.match(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi) || [];
+  const h2Tags = html.match(/<h2\b[^>]*>[\s\S]*?<\/h2>/gi) || [];
+  const headingLevels = Array.from(html.matchAll(/<h([1-6])\b[^>]*>/gi), (match) => Number(match[1]));
+  const skipsHeadingLevel = headingLevels.some((level, index) => index > 0 && level > headingLevels[index - 1] + 1);
   const canonicalTag = (html.match(/<link\b[^>]*>/gi) || []).find((tag) => {
     const rel = getAttribute(tag, "rel") || "";
     return rel.toLowerCase().split(/\s+/).includes("canonical");
   });
   const canonical = canonicalTag ? getAttribute(canonicalTag, "href") || "" : "";
+  let canonicalIsExternal = false;
+  if (canonical) {
+    try {
+      canonicalIsExternal = !hostIsInScope(new URL(canonical, response.finalUrl || url).hostname, rootHostname);
+    } catch {
+      canonicalIsExternal = true;
+    }
+  }
   const robotsMeta = (getMetaContent(html, "robots") + " " + getMetaContent(html, "googlebot")).toLowerCase();
   const noindex = /noindex/i.test(robotsMeta) || /noindex/i.test(response.headers.get("x-robots-tag") || "");
   const imageTags = html.match(/<img\b[^>]*>/gi) || [];
@@ -434,7 +543,20 @@ function auditPage(url, response, rootHostname) {
   const hasViewport = (html.match(/<meta\b[^>]*>/gi) || []).some((tag) => {
     return (getAttribute(tag, "name") || "").toLowerCase() === "viewport";
   });
+  const ogTitle = getMetaPropertyContent(html, "og:title").trim();
+  const ogDescription = getMetaPropertyContent(html, "og:description").trim();
+  const structuredData = getStructuredData(html);
   const links = findPageLinks(html, response.finalUrl || url, rootHostname);
+  const externalLinks = (html.match(/<a\b[^>]*>/gi) || []).filter((tag) => {
+    const href = getAttribute(tag, "href");
+    if (!href) return false;
+    try {
+      const target = new URL(href, response.finalUrl || url);
+      return ["http:", "https:"].includes(target.protocol) && !hostIsInScope(target.hostname, rootHostname);
+    } catch {
+      return false;
+    }
+  }).length;
 
   if (!title) addIssue(issues, "warning", "missing-title", "Missing page title",
     "Add a concise, unique title that describes this page.");
@@ -450,27 +572,52 @@ function auditPage(url, response, rootHostname) {
     "Add a clear main heading that describes the page content.");
   else if (h1Tags.length > 1) addIssue(issues, "info", "multiple-h1", "More than one H1 heading found",
     "Check that the page has a clear primary heading and a useful heading structure.");
+  if (skipsHeadingLevel) addIssue(issues, "warning", "heading-order", "Heading levels skip a level",
+    "Keep heading levels in a logical order so readers and assistive technology can follow the page structure.");
 
   if (!canonical) addIssue(issues, "info", "missing-canonical", "No canonical link found",
     "Add a canonical link if this page has duplicate or alternate URLs.");
+  else if (canonicalIsExternal) addIssue(issues, "warning", "external-canonical", "Canonical points to a different website",
+    "Check that the canonical URL is intentional and points to the preferred version of this page.");
   if (noindex) addIssue(issues, "critical", "noindex", "Page is marked noindex",
     "Remove the noindex directive if this page should appear in search results.");
+  if (!language) addIssue(issues, "info", "missing-language", "Page language is not declared",
+    "Set the correct lang attribute on the html element to help browsers and assistive technology identify the page language.");
   if (!hasViewport) addIssue(issues, "warning", "missing-viewport", "Missing mobile viewport setting",
     "Add a viewport meta tag so the page scales correctly on mobile devices.");
   if (missingAltCount) addIssue(issues, "warning", "missing-image-alt", missingAltCount + " image(s) have no alt text",
     "Add useful alternative text to informative images; use empty alt text for decorative images.");
+  if (!ogTitle || !ogDescription) addIssue(issues, "info", "open-graph", "Open Graph sharing tags are incomplete",
+    "Add og:title and og:description so shared links have a clear preview on social platforms.");
+  if (!structuredData.blocks) addIssue(issues, "info", "missing-structured-data", "No JSON-LD structured data found",
+    "Consider adding valid structured data for content types that support it, such as local businesses, products, or articles.");
+  if (structuredData.invalidBlocks) addIssue(issues, "warning", "invalid-structured-data", "Some JSON-LD blocks are not valid JSON",
+    "Fix the JSON syntax in each application/ld+json script block.");
 
   return {
     url,
     finalUrl: response.finalUrl || url,
     status,
     title,
+    titleLength: title.length,
     description,
+    descriptionLength: description.length,
+    language,
     h1Count: h1Tags.length,
+    h2Count: h2Tags.length,
     canonical,
+    canonicalIsExternal,
     noindex,
+    ogTitle,
+    ogDescription,
+    structuredDataCount: structuredData.blocks,
+    structuredDataInvalidCount: structuredData.invalidBlocks,
+    structuredDataTypes: structuredData.types,
+    imageCount: imageTags.length,
     missingAltCount,
     internalLinks: links.length,
+    externalLinks,
+    responseTimeMs: response.durationMs || null,
     issues,
     links
   };
@@ -501,6 +648,7 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
   const sitemapQueue = firstSitemaps.slice(0, 3);
   const visitedSitemaps = new Set();
   const pages = [];
+  let firstStatus = null;
 
   while (sitemapQueue.length && visitedSitemaps.size < 3 && pages.length < 40) {
     const sitemapUrl = sitemapQueue.shift();
@@ -509,6 +657,7 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
 
     try {
       const response = await fetchWebsiteText(sitemapUrl, rootHostname, MAX_AUX_BYTES);
+      if (firstStatus === null) firstStatus = response.status || null;
       if (response.status < 200 || response.status >= 300) continue;
       const locations = findSitemapLocations(response.text);
       if (/<sitemapindex\b/i.test(response.text)) {
@@ -528,7 +677,11 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
     }
   }
 
-  return Array.from(new Set(pages)).slice(0, 40);
+  return {
+    pages: Array.from(new Set(pages)).slice(0, 40),
+    status: firstStatus,
+    sitemapsChecked: visitedSitemaps.size
+  };
 }
 
 export default {
@@ -574,8 +727,8 @@ export default {
       const robots = getRobotsRules(robotsResponse.text);
       const siteUrl = new URL("/", robotsResponse.finalUrl || startUrl.toString()).toString();
 
-      const sitemapPages = await getSitemapPages(siteUrl, rootHostname, robots.sitemapUrls, robots.rules);
-      const queue = [siteUrl, ...sitemapPages];
+      const sitemapResult = await getSitemapPages(siteUrl, rootHostname, robots.sitemapUrls, robots.rules);
+      const queue = [siteUrl, ...sitemapResult.pages];
       const visited = new Set();
       const pages = [];
       let skippedByRobots = 0;
@@ -618,9 +771,46 @@ export default {
         }
       }
 
+      addDuplicateFieldIssues(pages, "title", "duplicate-title", "Duplicate page title",
+        "Give each page a distinct title that describes its own content.");
+      addDuplicateFieldIssues(pages, "description", "duplicate-description", "Duplicate meta description",
+        "Write a unique summary for each page.");
+      addBrokenInternalLinkIssues(pages);
+
+      const robotsStatus = robotsResponse.status || null;
+      const sitemapStatus = sitemapResult.status;
+      const siteChecks = [
+        {
+          code: "https",
+          label: "HTTPS",
+          status: new URL(siteUrl).protocol === "https:" ? "good" : "warning",
+          detail: new URL(siteUrl).protocol === "https:" ? "The audited site uses HTTPS." : "The audited site is served over HTTP."
+        },
+        {
+          code: "robots",
+          label: "robots.txt",
+          status: robotsStatus >= 200 && robotsStatus < 300 ? "good" : robotsStatus === 404 ? "info" : "warning",
+          detail: robotsStatus >= 200 && robotsStatus < 300
+            ? robots.rules.length + " crawl rule(s) read."
+            : robotsStatus === 404 ? "No robots.txt file was found." : "Could not confirm robots.txt availability (HTTP " + (robotsStatus || "unknown") + ")."
+        },
+        {
+          code: "sitemap",
+          label: "XML sitemap",
+          status: sitemapStatus >= 200 && sitemapStatus < 300 ? "good" : sitemapStatus === 404 ? "info" : "warning",
+          detail: sitemapStatus >= 200 && sitemapStatus < 300
+            ? sitemapResult.pages.length + " allowed page URL(s) found in " + sitemapResult.sitemapsChecked + " sitemap(s)."
+            : sitemapStatus === 404 ? "No sitemap was found at the discovered location." : "Could not confirm a sitemap (HTTP " + (sitemapStatus || "unknown") + ")."
+        }
+      ];
+
       const counts = { critical: 0, warning: 0, info: 0 };
       for (const page of pages) {
         for (const issue of page.issues) counts[issue.severity] += 1;
+      }
+      for (const check of siteChecks) {
+        if (check.status === "warning") counts.warning += 1;
+        else if (check.status === "info") counts.info += 1;
       }
 
       return Response.json({
@@ -628,6 +818,14 @@ export default {
         pagesScanned: pages.length,
         pageLimit: MAX_PAGES,
         skippedByRobots,
+        siteChecks,
+        crawlability: {
+          robotsStatus,
+          robotsRules: robots.rules.length,
+          sitemapStatus,
+          sitemapPagesFound: sitemapResult.pages.length,
+          sitemapsChecked: sitemapResult.sitemapsChecked
+        },
         summary: {
           critical: counts.critical,
           warnings: counts.warning,
