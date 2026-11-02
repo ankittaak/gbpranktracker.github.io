@@ -142,6 +142,8 @@
     .target-row .position { color: #087763; background: #d6f4e9; }
     .business-cell { color: #263e51; font-size: 11px; font-weight: 700; }
     .target-tag { display: inline-block; margin-left: 7px; padding: 3px 6px; color: #13816d; background: #def6ee; border-radius: 5px; font-size: 8px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; vertical-align: 1px; }
+    .gap-row td { padding: 5px 18px; border-top: 0; text-align: center; }
+    .gap-marker { color: #9aa7b0; font-size: 15px; font-weight: 800; letter-spacing: .32em; }
     .rating { color: #b17b25; font-weight: 700; white-space: nowrap; }
     .address-cell { max-width: 235px; color: #8795a0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .empty-state { display: grid; place-items: center; min-height: 210px; padding: 25px; text-align: center; }
@@ -447,15 +449,53 @@
       }
 
       function renderResults(data, business) {
-        const results = Array.isArray(data.results) ? data.results : [];
+        const scannedResults = Array.isArray(data.scannedResults)
+          ? data.scannedResults
+          : Array.isArray(data.results) ? data.results.slice() : [];
+        scannedResults.sort(function (a, b) {
+          return (Number(a.position) || 0) - (Number(b.position) || 0);
+        });
         const target = normalize(business);
+        const matchingIndex = scannedResults.findIndex(function (item) {
+          return target && normalize(item.title).includes(target);
+        });
+        const rankIndex = matchingIndex < 0 && data.rank !== null && data.rank !== undefined
+          ? scannedResults.findIndex(function (item) {
+              return Number(item.position) === Number(data.rank);
+            })
+          : -1;
+        const targetIndex = matchingIndex >= 0 ? matchingIndex : rankIndex;
+        let results;
+        if (Array.isArray(data.displayResults)) {
+          results = data.displayResults.slice();
+        } else if (targetIndex >= 0) {
+          const visibleIndices = new Set();
+          for (let index = 0; index < Math.min(3, scannedResults.length); index += 1) visibleIndices.add(index);
+          const firstContextIndex = Math.max(0, targetIndex - 2);
+          const lastContextIndex = Math.min(scannedResults.length - 1, targetIndex + 2);
+          for (let index = firstContextIndex; index <= lastContextIndex; index += 1) visibleIndices.add(index);
+          results = Array.from(visibleIndices).sort(function (a, b) { return a - b; }).map(function (index) {
+            return scannedResults[index];
+          });
+        } else {
+          results = scannedResults.slice(0, 10);
+        }
+        results.sort(function (a, b) {
+          return (Number(a.position) || 0) - (Number(b.position) || 0);
+        });
         latestResults = results;
         latestKeyword = data.keyword || "";
         latestLocation = data.location || "";
+        const targetVisible = targetIndex >= 0 || results.some(function (item) {
+          return (target && normalize(item.title).includes(target))
+            || (data.rank !== null && data.rank !== undefined && Number(item.position) === Number(data.rank));
+        });
 
         rankValue.textContent = data.rank === null || data.rank === undefined ? "Not found" : "#" + data.rank;
         rankFoot.textContent = data.rank === null || data.rank === undefined
-          ? "Business not in the returned listings"
+          ? (data.scanLimitReached
+              ? "Not found in the first " + data.checked + " listings scanned"
+              : "Business not in the returned listings")
           : "Position in this Google Maps search";
         checkedValue.textContent = Number.isFinite(Number(data.checked)) ? String(data.checked) : String(results.length);
         marketValue.textContent = latestLocation || "—";
@@ -464,7 +504,9 @@
         gridStatus.textContent = "City-level result · grid points not scanned";
 
         caption.textContent = results.length
-          ? "Showing the listings returned for this live search."
+          ? (targetVisible
+              ? "Showing the top 3 and listings around your business."
+              : "Showing the listings returned for this live search.")
           : "The search returned no local listings for this phrase and market.";
         meta.replaceChildren();
         const keywordLabel = document.createElement("strong");
@@ -477,15 +519,32 @@
         meta.hidden = false;
 
         tbody.replaceChildren();
+        let previousPosition = null;
         results.forEach(function (item, index) {
+          const currentPosition = Number(item.position) || index + 1;
+          if (previousPosition !== null && currentPosition > previousPosition + 1) {
+            const gapRow = document.createElement("tr");
+            gapRow.className = "gap-row";
+            const gapCell = document.createElement("td");
+            gapCell.colSpan = 4;
+            gapCell.setAttribute("aria-label", "Some search results omitted");
+            const gapMarker = document.createElement("span");
+            gapMarker.className = "gap-marker";
+            gapMarker.textContent = "···";
+            gapCell.appendChild(gapMarker);
+            gapRow.appendChild(gapCell);
+            tbody.appendChild(gapRow);
+          }
+
           const row = document.createElement("tr");
-          const isTarget = target && normalize(item.title).includes(target);
+          const isTarget = (target && normalize(item.title).includes(target))
+            || (data.rank !== null && data.rank !== undefined && currentPosition === Number(data.rank));
           if (isTarget) row.className = "target-row";
 
           const positionCell = document.createElement("td");
           const position = document.createElement("span");
           position.className = "position";
-          position.textContent = item.position || index + 1;
+          position.textContent = currentPosition;
           positionCell.appendChild(position);
 
           const businessCell = document.createElement("td");
@@ -509,6 +568,7 @@
 
           row.append(positionCell, businessCell, ratingCell, addressCell);
           tbody.appendChild(row);
+          previousPosition = currentPosition;
         });
 
         tableWrap.hidden = results.length === 0;
