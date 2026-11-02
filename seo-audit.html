@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1d2c">
+  <meta name="description" content="Run a basic technical SEO audit across public pages on your website.">
+  <title>SEO Audit | GBP Tracker by Trexivo</title>
+  <style>
+    :root {
+      --ink: #14283a;
+      --muted: #778697;
+      --line: #e7edf2;
+      --paper: #fff;
+      --canvas: #f4f7f9;
+      --navy: #0b1d2c;
+      --teal: #19b99a;
+      --teal-dark: #0d947c;
+      --red: #c44f4f;
+      --amber: #b5812e;
+      --blue: #3577e8;
+      --shadow: 0 12px 36px rgba(25, 48, 69, .06);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+    button, input { font: inherit; }
+    .sidebar { background: var(--navy); color: #fff; width: 248px; position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; padding: 25px 16px 18px; z-index: 5; }
+    .brand { display: block; padding: 0 4px 25px; color: white; text-decoration: none; }
+    .brand-logo { display: block; width: 100%; height: 67px; border-radius: 10px; object-fit: cover; object-position: center 52%; }
+    .brand-copy { display: block; margin: 6px 0 0 7px; color: #91a4b1; font-size: 9px; font-weight: 750; letter-spacing: .15em; }
+    .nav-label { padding: 0 11px; color: #748a9a; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .nav { display: grid; gap: 5px; margin-top: 12px; }
+    .nav a { display: flex; align-items: center; gap: 12px; min-height: 43px; padding: 0 12px; border-radius: 11px; color: #a8b7c2; text-decoration: none; font-size: 13px; font-weight: 600; transition: .18s ease; }
+    .nav a:hover { background: rgba(255,255,255,.06); color: white; }
+    .nav a.active { color: white; background: rgba(25,185,154,.14); box-shadow: inset 3px 0 0 var(--teal); }
+    .nav svg { width: 17px; height: 17px; flex: none; opacity: .85; }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-foot { padding: 14px 10px 0; border-top: 1px solid rgba(255,255,255,.09); color: #8093a2; font-size: 11px; }
+    .sidebar-foot b { color: #dce6ec; font-weight: 600; }
+    .main { margin-left: 248px; min-height: 100vh; }
+    .topbar { height: 72px; background: rgba(255,255,255,.88); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(22px, 4.4vw, 64px); }
+    .crumb { color: #8b98a5; font-size: 12px; }
+    .crumb b { color: #354b5d; font-weight: 650; }
+    .live-status { display: inline-flex; align-items: center; gap: 8px; color: #5c6f7f; font-size: 12px; font-weight: 600; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #23b48f; box-shadow: 0 0 0 4px #e5f7f1; }
+    .content { width: min(1320px, 100%); margin: 0 auto; padding: 37px clamp(22px, 4.4vw, 64px) 62px; }
+    .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--teal-dark); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow:before { content: ""; width: 18px; height: 2px; background: var(--teal); border-radius: 5px; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 10px 0 26px; }
+    h1 { margin: 0; color: #14283a; font-size: clamp(27px, 3vw, 35px); letter-spacing: -.045em; line-height: 1.15; }
+    .subtitle { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .pill { display: flex; align-items: center; gap: 8px; padding: 9px 12px; color: #177e6a; background: #e5f8f3; border: 1px solid #d5f1e9; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .card, .metric { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .card { padding: 24px; }
+    .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .card-heading h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+    .card-heading p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .field label { display: block; margin: 0 0 8px; color: #465c6d; font-size: 11px; font-weight: 700; }
+    .input-row { display: flex; gap: 12px; }
+    .field input { width: 100%; height: 45px; padding: 0 14px; color: #223a4d; background: #fff; border: 1px solid #dfe7ed; border-radius: 10px; outline: none; }
+    .field input:focus { border-color: #46c1a7; box-shadow: 0 0 0 3px rgba(25,185,154,.11); }
+    .field-hint { display: block; margin-top: 7px; color: #8998a4; font-size: 11px; line-height: 1.5; }
+    .primary-button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-width: 155px; height: 45px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--teal); color: #062e29; box-shadow: 0 5px 12px rgba(25,185,154,.18); font-size: 12px; font-weight: 800; cursor: pointer; }
+    .primary-button:hover:not(:disabled) { background: #26c7a7; }
+    .primary-button:disabled { cursor: wait; opacity: .72; }
+    .spinner { width: 15px; height: 15px; border: 2px solid rgba(6,46,41,.25); border-top-color: #062e29; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .note { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px 13px; color: #657a88; background: #f8fafb; border: 1px solid #edf1f4; border-radius: 10px; font-size: 11px; line-height: 1.55; }
+    .error-box { display: none; margin-top: 16px; padding: 12px 14px; color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+    .error-box.show { display: block; }
+    .metrics { display: none; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 15px; margin: 18px 0; }
+    .metrics.show { display: grid; }
+    .metric { min-height: 106px; padding: 17px 19px; }
+    .metric-label { color: #788897; font-size: 11px; font-weight: 650; }
+    .metric-value { margin-top: 12px; color: #1b3347; font-size: 25px; font-weight: 750; letter-spacing: -.04em; }
+    .metric-value.warn { color: var(--amber); }
+    .metric-value.bad { color: var(--red); }
+    .results-card { display: none; margin-top: 18px; padding: 0; overflow: hidden; }
+    .results-card.show { display: block; }
+    .results-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 19px 21px; border-bottom: 1px solid #edf1f4; }
+    .results-head h2 { margin: 0; font-size: 14px; font-weight: 750; }
+    .results-head p { margin: 5px 0 0; color: #8b99a5; font-size: 11px; }
+    .secondary-button { height: 34px; padding: 0 11px; color: #506577; background: #fff; border: 1px solid #dfe7ed; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .secondary-button:disabled { color: #b1bbc3; cursor: not-allowed; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; text-align: left; }
+    th { padding: 12px 18px; color: #8b98a4; background: #fff; font-size: 9px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    td { padding: 14px 18px; color: #526575; border-top: 1px solid #f0f3f5; font-size: 11px; vertical-align: top; }
+    tbody tr:first-child td { border-top: 0; }
+    .page-link { color: #167a68; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+    .status { display: inline-flex; padding: 5px 7px; border-radius: 7px; font-size: 10px; font-weight: 800; }
+    .status.good { color: #087763; background: #dff6ee; }
+    .status.bad { color: #a33a3a; background: #fff0ef; }
+    .status.neutral { color: #667988; background: #f0f4f7; }
+    .finding-count { color: #40586b; font-weight: 750; }
+    details { min-width: 230px; }
+    summary { cursor: pointer; color: #506577; font-weight: 700; }
+    .issue-list { display: grid; gap: 9px; margin: 11px 0 0; padding: 0; list-style: none; }
+    .issue { padding: 10px; border-radius: 9px; background: #f8fafb; border: 1px solid #edf1f4; }
+    .issue-top { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+    .severity { font-size: 8px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .severity.critical { color: #ae3737; }
+    .severity.warning { color: #a56b15; }
+    .severity.info { color: #47719c; }
+    .issue-title { color: #2b4356; font-weight: 750; }
+    .issue-recommendation { color: #788897; line-height: 1.45; }
+    .empty-state { padding: 45px 25px; text-align: center; color: #80909c; font-size: 12px; }
+    .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 30px; padding: 18px 4px; color: #8b98a4; font-size: 10px; }
+    .site-footer a { color: #167a68; text-decoration: none; font-weight: 700; }
+    @media (max-width: 900px) {
+      .sidebar { position: relative; width: 100%; height: auto; padding: 12px 16px; }
+      .brand { padding: 0 4px 12px; }
+      .brand-logo { width: 180px; height: 46px; }
+      .sidebar-spacer, .sidebar-foot, .nav-label { display: none; }
+      .nav { display: flex; overflow-x: auto; margin-top: 0; }
+      .nav a { min-width: max-content; min-height: 38px; }
+      .main { margin-left: 0; }
+      .topbar { height: 54px; }
+    }
+    @media (max-width: 620px) {
+      .content { padding-top: 25px; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .input-row { flex-direction: column; }
+      .primary-button { width: 100%; }
+      .metrics { grid-template-columns: 1fr; }
+      .site-footer { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="index.html#dashboard" aria-label="GBP Tracker by Trexivo home">
+      <img class="brand-logo" src="assets/trexivo-logo.png" alt="Trexivo">
+      <span class="brand-copy">BUSINESS GROWTH TOOLS</span>
+    </a>
+    <div class="nav-label">Workspace</div>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html#dashboard"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="5" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="11" width="7" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="14" width="8" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg><span>GBP Tracker</span></a>
+      <a class="active" href="seo-audit.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2M10.8 7.5v6.6M7.5 10.8h6.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>SEO Audit</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-foot">TREXIVO <b>·</b> VISIBILITY</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb">Workspace <b>/ SEO Audit</b></div>
+      <div class="live-status"><span class="live-dot"></span><span>Technical site audit</span></div>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">Website health</div>
+      <div class="page-heading">
+        <div>
+          <h1>Find technical SEO issues.</h1>
+          <p class="subtitle">Scan public pages and see practical fixes for common on-page and crawlability problems.</p>
+        </div>
+        <div class="pill">No Google API key needed</div>
+      </div>
+
+      <section class="card" aria-labelledby="audit-title">
+        <div class="card-heading">
+          <div><h2 id="audit-title">Run a website audit</h2><p>Enter a domain to check its homepage and up to 9 other pages.</p></div>
+        </div>
+        <form id="audit-form">
+          <div class="field">
+            <label for="site-url">Website address</label>
+            <div class="input-row">
+              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="example.com" required>
+              <button class="primary-button" id="audit-button" type="submit"><span>Run audit</span></button>
+            </div>
+            <span class="field-hint">The audit reads public HTML pages, robots.txt, and sitemap.xml. It checks up to 10 pages and follows the site's basic robots.txt rules.</span>
+          </div>
+        </form>
+        <div class="error-box" id="error-box" role="alert"></div>
+        <div class="note"><span aria-hidden="true">ⓘ</span><span>This first version checks technical page signals such as titles, descriptions, headings, canonical links, noindex tags, mobile viewport, and image alt text. It does not check keyword rankings, backlinks, or JavaScript-rendered content.</span></div>
+      </section>
+
+      <section class="metrics" id="metrics" aria-label="Audit summary">
+        <article class="metric"><div class="metric-label">Pages checked</div><div class="metric-value" id="pages-count">—</div></article>
+        <article class="metric"><div class="metric-label">Findings</div><div class="metric-value warn" id="issues-count">—</div></article>
+        <article class="metric"><div class="metric-label">Critical issues</div><div class="metric-value bad" id="critical-count">—</div></article>
+      </section>
+
+      <section class="card results-card" id="results-card" aria-labelledby="results-title">
+        <div class="results-head">
+          <div><h2 id="results-title">Page-by-page findings</h2><p id="results-caption">Audit results</p></div>
+          <button class="secondary-button" id="export-button" type="button" disabled>Export CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Page</th><th>Status</th><th>Title</th><th>Findings and recommended fixes</th></tr></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="empty-state" hidden>No pages were available to audit.</div>
+      </section>
+
+      <footer class="site-footer">
+        <span>Trexivo · Business growth tools</span>
+        <a href="index.html#dashboard">Return to GBP Tracker</a>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const form = document.getElementById("audit-form");
+      const input = document.getElementById("site-url");
+      const button = document.getElementById("audit-button");
+      const errorBox = document.getElementById("error-box");
+      const metrics = document.getElementById("metrics");
+      const resultsCard = document.getElementById("results-card");
+      const resultsBody = document.getElementById("results-body");
+      const resultsCaption = document.getElementById("results-caption");
+      const emptyState = document.getElementById("empty-state");
+      const exportButton = document.getElementById("export-button");
+      let latestPages = [];
+
+      function setBusy(busy) {
+        button.disabled = busy;
+        button.innerHTML = busy
+          ? '<span class="spinner" aria-hidden="true"></span><span>Scanning…</span>'
+          : '<span>Run audit</span>';
+      }
+
+      function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.add("show");
+      }
+
+      function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.remove("show");
+      }
+
+      function createCell(text) {
+        const cell = document.createElement("td");
+        cell.textContent = text;
+        return cell;
+      }
+
+      function renderIssue(issue) {
+        const item = document.createElement("li");
+        item.className = "issue";
+        const top = document.createElement("div");
+        top.className = "issue-top";
+        const severity = document.createElement("span");
+        severity.className = "severity " + (issue.severity || "info");
+        severity.textContent = issue.severity || "info";
+        const title = document.createElement("span");
+        title.className = "issue-title";
+        title.textContent = issue.title || "Audit finding";
+        top.append(severity, title);
+        const recommendation = document.createElement("div");
+        recommendation.className = "issue-recommendation";
+        recommendation.textContent = issue.recommendation || "";
+        item.append(top, recommendation);
+        return item;
+      }
+
+      function renderPage(page) {
+        const row = document.createElement("tr");
+
+        const pageCell = document.createElement("td");
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = page.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = page.url;
+        pageCell.appendChild(link);
+
+        const statusCell = document.createElement("td");
+        const status = document.createElement("span");
+        const statusCode = Number(page.status) || 0;
+        status.className = "status " + (statusCode >= 400 || !statusCode ? "bad" : statusCode < 300 ? "good" : "neutral");
+        status.textContent = statusCode ? String(statusCode) : "Fetch error";
+        statusCell.appendChild(status);
+
+        const titleCell = document.createElement("td");
+        titleCell.textContent = page.title || "No page title found";
+
+        const issueCell = document.createElement("td");
+        const issues = Array.isArray(page.issues) ? page.issues : [];
+        if (!issues.length) {
+          const good = document.createElement("span");
+          good.className = "status good";
+          good.textContent = "No issues found";
+          issueCell.appendChild(good);
+        } else {
+          const details = document.createElement("details");
+          const summary = document.createElement("summary");
+          summary.className = "finding-count";
+          summary.textContent = issues.length + (issues.length === 1 ? " finding" : " findings");
+          const list = document.createElement("ul");
+          list.className = "issue-list";
+          issues.forEach(function (issue) { list.appendChild(renderIssue(issue)); });
+          details.append(summary, list);
+          issueCell.appendChild(details);
+        }
+
+        row.append(pageCell, statusCell, titleCell, issueCell);
+        return row;
+      }
+
+      function renderReport(data) {
+        const pages = Array.isArray(data.pages) ? data.pages : [];
+        const summary = data.summary || {};
+        latestPages = pages;
+        document.getElementById("pages-count").textContent = String(data.pagesScanned || pages.length);
+        document.getElementById("issues-count").textContent = String(summary.totalIssues || 0);
+        document.getElementById("critical-count").textContent = String(summary.critical || 0);
+        metrics.classList.add("show");
+        resultsCard.classList.add("show");
+        resultsCaption.textContent = "Checked " + (data.pagesScanned || pages.length) + " page(s) on " + (data.site || "the submitted website")
+          + (data.skippedByRobots ? " · " + data.skippedByRobots + " page(s) skipped by robots.txt" : "");
+        resultsBody.replaceChildren();
+        pages.forEach(function (page) { resultsBody.appendChild(renderPage(page)); });
+        emptyState.hidden = pages.length > 0;
+        exportButton.disabled = pages.length === 0;
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        clearError();
+        const url = input.value.trim();
+        if (!url) {
+          showError("Enter a website address to start the audit.");
+          return;
+        }
+
+        setBusy(true);
+        try {
+          const response = await fetch("/api/seo-audit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: url })
+          });
+          let data;
+          try { data = await response.json(); }
+          catch (_) { throw new Error("The audit endpoint returned an unreadable response."); }
+          if (!response.ok || data.error) throw new Error(data.error || "The audit could not be completed.");
+          renderReport(data);
+          document.getElementById("results-card").scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          showError(error && error.message ? error.message : "The audit failed. Check the website address and try again.");
+        } finally {
+          setBusy(false);
+        }
+      });
+
+      exportButton.addEventListener("click", function () {
+        if (!latestPages.length) return;
+        const rows = [["URL", "HTTP status", "Title", "Meta description", "H1 count", "Canonical", "Noindex", "Images missing alt", "Internal links", "Findings"]];
+        latestPages.forEach(function (page) {
+          const issueNames = (page.issues || []).map(function (issue) { return issue.title; }).join("; ");
+          rows.push([
+            page.url || "",
+            page.status ?? "",
+            page.title || "",
+            page.description || "",
+            page.h1Count ?? "",
+            page.canonical || "",
+            page.noindex ? "Yes" : "No",
+            page.missingAltCount ?? "",
+            page.internalLinks ?? "",
+            issueNames
+          ]);
+        });
+        const csv = rows.map(function (row) {
+          return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(",");
+        }).join("\r\n");
+        const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const objectUrl = URL.createObjectURL(file);
+        const anchor = document.createElement("a");
+        anchor.href = objectUrl;
+        anchor.download = "seo-audit.csv";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(objectUrl);
+      });
+    })();
+  </script>
+</body>
+</html>
