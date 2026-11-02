@@ -121,7 +121,7 @@ export default {
 
       if (!response.ok) {
         if (response.status === 429) {
-          return Response.json({ error: "Google PageSpeed is temporarily rate-limiting checks. Try again shortly." }, { status: 429 });
+          return Response.json({ error: "Google PageSpeed has reached its request limit. Try again later, or add a Google PageSpeed API key in Vercel under GOOGLE_PAGESPEED_API_KEY." }, { status: 429 });
         }
         if (response.status === 403) {
           return Response.json({ error: "Google PageSpeed denied this request. Add a PageSpeed API key in Vercel and try again." }, { status: 502 });
