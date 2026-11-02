@@ -1,7 +1,9 @@
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 
-const MAX_PAGES = 10;
+const MAX_BATCH_PAGES = 10;
+const MAX_PAGE_LIMIT = 100;
+const MAX_SITEMAP_PAGES = 100;
 const PAGE_BATCH_SIZE = 3;
 const MAX_PAGE_BYTES = 900000;
 const MAX_AUX_BYTES = 300000;
@@ -65,7 +67,7 @@ async function ensurePublicHost(hostname) {
   }
 }
 
-function normalizeInputUrl(value) {
+function normalizeInputUrl(value, preservePath = false) {
   let input = String(value || "").trim();
   if (!input) throw new Error("Enter a website address.");
   if (!/^https?:\/\//i.test(input)) input = "https://" + input;
@@ -84,8 +86,10 @@ function normalizeInputUrl(value) {
     throw new Error("Custom ports are not supported.");
   }
 
-  url.pathname = "/";
-  url.search = "";
+  if (!preservePath) {
+    url.pathname = "/";
+    url.search = "";
+  }
   url.hash = "";
   return url;
 }
@@ -636,7 +640,7 @@ function allowAuditRequest(request) {
     rateLimits.set(key, { count: 1, resetAt: now + 60000 });
     return true;
   }
-  if (current.count >= 5) return false;
+  if (current.count >= 20) return false;
   current.count += 1;
   return true;
 }
@@ -650,7 +654,7 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
   const pages = [];
   let firstStatus = null;
 
-  while (sitemapQueue.length && visitedSitemaps.size < 3 && pages.length < 40) {
+  while (sitemapQueue.length && visitedSitemaps.size < 5 && pages.length < MAX_SITEMAP_PAGES) {
     const sitemapUrl = sitemapQueue.shift();
     if (!sitemapUrl || visitedSitemaps.has(sitemapUrl)) continue;
     visitedSitemaps.add(sitemapUrl);
@@ -669,7 +673,7 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
         for (const location of locations) {
           const pageUrl = cleanCandidateUrl(location, siteUrl, rootHostname);
           if (pageUrl && isAllowedByRobots(new URL(pageUrl).pathname, robotsRules)) pages.push(pageUrl);
-          if (pages.length >= 40) break;
+           if (pages.length >= MAX_SITEMAP_PAGES) break;
         }
       }
     } catch {
@@ -678,7 +682,7 @@ async function getSitemapPages(siteUrl, rootHostname, robotsSitemaps, robotsRule
   }
 
   return {
-    pages: Array.from(new Set(pages)).slice(0, 40),
+    pages: Array.from(new Set(pages)).slice(0, MAX_SITEMAP_PAGES),
     status: firstStatus,
     sitemapsChecked: visitedSitemaps.size
   };
@@ -695,7 +699,11 @@ export default {
 
     try {
       const input = await request.json();
-      const startUrl = normalizeInputUrl(input.url);
+      const mode = input.mode === "single" ? "single" : "bulk";
+      const selectedPageLimit = Number(input.pageLimit);
+      const requestedPageLimit = mode === "single" ? 1
+        : selectedPageLimit <= MAX_PAGE_LIMIT && [10, 20, 50, 100].includes(selectedPageLimit) ? selectedPageLimit : 10;
+      const startUrl = normalizeInputUrl(input.url, mode === "single");
       const rootHostname = startUrl.hostname;
       await ensurePublicHost(rootHostname);
 
@@ -727,15 +735,37 @@ export default {
       const robots = getRobotsRules(robotsResponse.text);
       const siteUrl = new URL("/", robotsResponse.finalUrl || startUrl.toString()).toString();
 
-      const sitemapResult = await getSitemapPages(siteUrl, rootHostname, robots.sitemapUrls, robots.rules);
-      const queue = [siteUrl, ...sitemapResult.pages];
-      const visited = new Set();
+      const discoverSitemap = mode === "single" || input.discoverSitemap === true;
+      const sitemapResult = discoverSitemap
+        ? await getSitemapPages(siteUrl, rootHostname, robots.sitemapUrls, robots.rules)
+        : { pages: [], status: null, sitemapsChecked: 0 };
+      const requestedUrls = Array.isArray(input.pageUrls) ? input.pageUrls : [mode === "single" ? startUrl.toString() : siteUrl];
+      const queue = [];
+      for (const value of requestedUrls.slice(0, MAX_BATCH_PAGES)) {
+        const candidate = mode === "single" ? startUrl.toString() : cleanCandidateUrl(value, siteUrl, rootHostname);
+        if (candidate && !queue.includes(candidate)) queue.push(candidate);
+      }
+      if (mode === "bulk" && discoverSitemap) {
+        for (const sitemapPage of sitemapResult.pages) {
+          if (!queue.includes(sitemapPage) && queue.length < 500) queue.push(sitemapPage);
+        }
+      }
+      const excludedUrls = Array.isArray(input.excludeUrls) ? input.excludeUrls : [];
+      const visited = new Set(excludedUrls.slice(0, 2000)
+        .map((value) => cleanCandidateUrl(value, siteUrl, rootHostname))
+        .filter(Boolean));
       const pages = [];
+      const discoveredLinks = new Set(sitemapResult.pages);
       let skippedByRobots = 0;
+      const requestedBatchLimit = Number(input.batchLimit);
+      const batchPageLimit = mode === "single" ? 1
+        : requestedBatchLimit >= 1 && requestedBatchLimit <= MAX_BATCH_PAGES
+          ? Math.min(requestedBatchLimit, requestedPageLimit)
+          : Math.min(MAX_BATCH_PAGES, requestedPageLimit);
 
-      while (queue.length && pages.length < MAX_PAGES) {
+      while (queue.length && pages.length < batchPageLimit) {
         const batch = [];
-        while (queue.length && batch.length < PAGE_BATCH_SIZE && pages.length + batch.length < MAX_PAGES) {
+        while (queue.length && batch.length < PAGE_BATCH_SIZE && pages.length + batch.length < batchPageLimit) {
           const candidate = queue.shift();
           if (!candidate || visited.has(candidate)) continue;
           visited.add(candidate);
@@ -766,6 +796,7 @@ export default {
         for (const page of batchResults) {
           pages.push(page);
           for (const link of page.links || []) {
+            discoveredLinks.add(link);
             if (!visited.has(link) && queue.length < 100) queue.push(link);
           }
         }
@@ -815,9 +846,12 @@ export default {
 
       return Response.json({
         site: siteUrl,
+        mode,
         pagesScanned: pages.length,
-        pageLimit: MAX_PAGES,
+        pageLimit: requestedPageLimit,
+        batchPageLimit,
         skippedByRobots,
+        discoveredLinks: Array.from(discoveredLinks).slice(0, 500),
         siteChecks,
         crawlability: {
           robotsStatus,
@@ -833,7 +867,7 @@ export default {
           totalIssues: counts.critical + counts.warning + counts.info,
           pagesWithIssues: pages.filter((page) => page.issues.length > 0).length
         },
-        pages: pages.map(({ links, ...page }) => page)
+        pages
       });
     } catch (error) {
       return Response.json(
@@ -843,3 +877,4 @@ export default {
     }
   }
 };
+
