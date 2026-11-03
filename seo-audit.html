@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1d2c">
   <meta name="description" content="Run a basic technical SEO audit across public pages on your website.">
-  <title>SEO Audit | GBP Tracker by Trexivo</title>
+  <title>SEO Audit &amp; PageSpeed | Trexivo Tools</title>
   <style>
     :root {
       --ink: #14283a;
@@ -184,26 +184,80 @@
       .metrics { grid-template-columns: 1fr; }
       .site-footer { align-items: flex-start; flex-direction: column; }
     }
-  </style>
+  
+    :root { --ink:#152c39; --muted:#667782; --line:#e2e9e6; --canvas:#f5f4ef; --navy:#102c3a; --navy-2:#193d4b; --teal:#1aa58d; --teal-dark:#087a69; --teal-soft:#e4f2ed; --shadow:0 16px 38px rgba(16,44,58,.07); --radius:16px; }
+    .site-header { position:sticky; top:0; z-index:20; width:100%; background:var(--navy); border-bottom:1px solid rgba(255,255,255,.1); }
+    .site-header-inner { width:min(1280px,100%); min-height:82px; margin:0 auto; padding:10px clamp(20px,4vw,52px); display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .site-brand { display:flex; align-items:center; gap:12px; min-width:190px; color:#fff; text-decoration:none; }
+    .site-brand img { display:block; width:150px; height:54px; object-fit:contain; }
+    .brand-caption { padding-left:12px; border-left:1px solid rgba(255,255,255,.22); color:#bdcbd0; font-size:9px; font-weight:800; letter-spacing:.14em; line-height:1.45; }
+    .site-nav { display:flex; align-items:center; gap:7px; }
+    .site-nav a { display:inline-flex; align-items:center; gap:9px; min-height:39px; padding:0 12px; border-radius:8px; color:#d5e0e2; text-decoration:none; white-space:nowrap; font-size:12px; font-weight:650; transition:background .16s ease,color .16s ease; }
+    .site-nav a:hover { color:#fff; background:rgba(255,255,255,.09); }
+    .site-nav a.active { color:#fff; background:rgba(26,165,141,.18); box-shadow:inset 0 -2px 0 var(--teal); }
+    .site-nav .site-nav-contact { margin-left:8px; color:#102c3a; background:#d8efe7; font-weight:750; }
+    .site-nav .site-nav-contact:hover { color:#102c3a; background:#fff; }
+    .main { margin-left:0 !important; min-height:calc(100vh - 82px); background:var(--canvas); }
+    .topbar { height:58px !important; padding:0 clamp(20px,4vw,52px) !important; background:transparent !important; border-bottom:1px solid rgba(21,44,57,.08) !important; }
+    .topbar .crumb a { color:var(--teal-dark); text-decoration:none; }
+    .content { width:min(1240px,100%) !important; padding:34px clamp(20px,4vw,52px) 58px !important; }
+    .site-footer { display:block !important; width:100%; margin:0; padding:0; color:#ecf2ef; background:#102c3a; border-radius:0; font-size:initial; }
+    .footer-inner { width:min(1240px,100%); margin:0 auto; padding:42px clamp(20px,4vw,52px) 18px; }
+    .footer-main { display:grid; grid-template-columns:minmax(250px,.9fr) minmax(350px,1.1fr); gap:52px; padding-bottom:32px; }
+    .footer-brand { display:inline-flex; align-items:center; gap:10px; color:#fff; text-decoration:none; }
+    .footer-brand img { width:142px; height:50px; object-fit:contain; }
+    .footer-brand span { padding-left:10px; border-left:1px solid rgba(255,255,255,.22); color:#b8c9cd; font-size:9px; font-weight:800; letter-spacing:.14em; }
+    .footer-description { max-width:420px; margin:15px 0 14px; color:#c0ced0; font-size:12px; line-height:1.75; }
+    .footer-website { display:inline-flex; align-items:center; gap:8px; color:#aee2d3; font-size:12px; font-weight:750; text-decoration:none; }
+    .footer-website:hover { color:#fff; }
+    .footer-kicker { color:#a7b9bd; font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    .service-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px 24px; margin:17px 0 0; padding:0; list-style:none; }
+    .service-list li { color:#e0e9e7; font-size:11px; line-height:1.4; }
+    .service-list li::before { content:"/"; margin-right:8px; color:#4bc2a6; font-weight:800; }
+    .footer-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14); color:#9eb0b4; font-size:10px; }
+    .footer-heart { color:#f06a64; font-size:14px; vertical-align:-1px; }
+    .header-profile { display:block; flex:0 0 34px; width:34px; height:34px; overflow:hidden; margin:0 3px 0 5px; border:1px solid rgba(255,255,255,.28); border-radius:50%; background:#d9eae1; }
+    .header-profile .profile-photo { display:block; width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .site-header .avatar { margin:0 3px 0 5px; }
+    @media (max-width:780px) { .header-profile { flex-basis:30px; width:30px; height:30px; } }
+
+    @media (max-width:780px) {
+      .site-header { position:relative; }
+      .site-header-inner { flex-wrap:wrap; gap:9px 15px; padding-top:11px; padding-bottom:10px; }
+      .site-brand { min-width:0; }
+      .site-brand img { width:128px; height:47px; }
+      .brand-caption { font-size:8px; }
+      .site-nav { width:100%; overflow-x:auto; padding:2px 0 3px; }
+      .site-nav a { min-height:36px; padding:0 10px; font-size:11px; }
+      .site-nav .site-nav-contact { margin-left:auto; }
+      .topbar { height:auto !important; min-height:50px; }
+      .footer-main { grid-template-columns:1fr; gap:27px; }
+      .service-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .footer-bottom { align-items:flex-start; flex-direction:column; }
+    }
+    @media (max-width:420px) {
+      .brand-caption { max-width:78px; }
+      .site-nav { gap:2px; }
+      .site-nav a { font-size:10px; padding:0 8px; }
+      .service-list { grid-template-columns:1fr; gap:9px; }
+    }
+</style>
 </head>
 <body>
-  <aside class="sidebar">
-    <a class="brand" href="index.html#dashboard" aria-label="GBP Tracker by Trexivo home">
-      <img class="brand-logo" src="assets/trexivo-logo.png" alt="Trexivo">
-      <span class="brand-copy">BUSINESS GROWTH TOOLS</span>
-    </a>
-    <div class="nav-label">Workspace</div>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="index.html#dashboard"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="5" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="11" width="7" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="14" width="8" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg><span>GBP Tracker</span></a>
-      <a class="active" href="seo-audit.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2M10.8 7.5v6.6M7.5 10.8h6.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>SEO Audit</span></a>
-    </nav>
-    <div class="sidebar-spacer"></div>
-    <div class="sidebar-foot">TREXIVO <b>·</b> VISIBILITY</div>
-  </aside>
+  <header class="site-header"><div class="site-header-inner">
+  <a class="site-brand" href="/" aria-label="Trexivo Tools home"><img src="assets/trexivo-logo.png" alt="Trexivo"><span class="brand-caption">DIGITAL GROWTH TOOLS</span></a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class=""  href="/">All tools</a>
+    <a class=""  href="/local-seo-tracker">Local SEO Tracker</a>
+    <a class="active" aria-current="page" href="/seo-audit">SEO Audit &amp; PageSpeed</a>
+    <span class="header-profile" aria-label="Ankit Taak"><img class="profile-photo" src="assets/ankit-taak-imgg.png" alt="Ankit Taak"></span>
+    <a class="site-nav-contact" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">Trexivo website <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
 
   <main class="main">
     <div class="topbar">
-      <div class="crumb">Workspace <b>/ SEO Audit</b></div>
+      <div class="crumb"><a href="/">All tools</a> <span aria-hidden="true">/</span> <b>SEO Audit &amp; PageSpeed</b></div>
       <div class="live-status"><span class="live-dot"></span><span>Technical site audit</span></div>
     </div>
 
@@ -297,11 +351,39 @@
         <div class="empty-state" id="empty-state" hidden>No pages were available to audit.</div>
       </section>
 
-      <footer class="site-footer">
-        <span>Trexivo · Business growth tools</span>
-        <a href="index.html#dashboard">Return to GBP Tracker</a>
-      </footer>
+      
     </div>
+<footer class="site-footer" aria-label="Trexivo services and contact">
+  <div class="footer-inner">
+    <div class="footer-main">
+      <div class="footer-brand-column">
+        <a class="footer-brand" href="/" aria-label="Trexivo Tools home">
+          <img src="assets/trexivo-logo.png" alt="Trexivo">
+          <span>TOOLS</span>
+        </a>
+        <p class="footer-description">Trexivo helps businesses grow through full-service digital marketing, from building a clear online presence to reaching the right customers.</p>
+        <a class="footer-website" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">www.trexivosolution.com <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="footer-services">
+        <span class="footer-kicker">Digital marketing services</span>
+        <ul class="service-list">
+          <li>SEO &amp; Local SEO</li>
+          <li>Website design &amp; development</li>
+          <li>Social media marketing</li>
+          <li>Google Ads &amp; paid media</li>
+          <li>Content marketing</li>
+          <li>Branding &amp; creative</li>
+          <li>Analytics &amp; reporting</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Trexivo Tools</span>
+      <span>Built with love <span class="footer-heart" aria-label="red heart">❤️</span> by Ankit Taak</span>
+    </div>
+  </div>
+</footer>
+
   </main>
 
   <script>
