@@ -7,6 +7,27 @@
     "api/page-speed.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/local-seo-tracker.html",
+      "destination": "/local-seo-tracker",
+      "permanent": true
+    },
+    {
+      "source": "/seo-audit.html",
+      "destination": "/seo-audit",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/local-seo-tracker",
+      "destination": "/local-seo-tracker.html"
+    },
+    {
+      "source": "/seo-audit",
+      "destination": "/seo-audit.html"
+    }
+  ]
 }
-
