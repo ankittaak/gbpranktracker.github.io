@@ -121,7 +121,10 @@ export default {
 
       if (!response.ok) {
         if (response.status === 429) {
-          return Response.json({ error: "Google PageSpeed has reached its request limit. Try again later, or add a Google PageSpeed API key in Vercel under GOOGLE_PAGESPEED_API_KEY." }, { status: 429 });
+          const message = apiKey
+            ? "Google PageSpeed has reached the quota for the configured API key. Check the PageSpeed Insights API quota in the Google Cloud project that created the key, then try again later."
+            : "This Vercel deployment is not sending a Google PageSpeed API key. Add GOOGLE_PAGESPEED_API_KEY to the Preview environment and redeploy.";
+          return Response.json({ error: message }, { status: 429 });
         }
         if (response.status === 403) {
           return Response.json({ error: "Google PageSpeed denied this request. Add a PageSpeed API key in Vercel and try again." }, { status: 502 });
