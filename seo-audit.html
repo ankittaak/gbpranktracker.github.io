@@ -216,6 +216,11 @@
     .service-list li::before { content:"/"; margin-right:8px; color:#4bc2a6; font-weight:800; }
     .footer-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.14); color:#9eb0b4; font-size:10px; }
     .footer-heart { color:#f06a64; font-size:14px; vertical-align:-1px; }
+    .header-profile { display:block; flex:0 0 34px; width:34px; height:34px; overflow:hidden; margin:0 3px 0 5px; border:1px solid rgba(255,255,255,.28); border-radius:50%; background:#d9eae1; }
+    .header-profile .profile-photo { display:block; width:100%; height:100%; object-fit:cover; border-radius:50%; }
+    .site-header .avatar { margin:0 3px 0 5px; }
+    @media (max-width:780px) { .header-profile { flex-basis:30px; width:30px; height:30px; } }
+
     @media (max-width:780px) {
       .site-header { position:relative; }
       .site-header-inner { flex-wrap:wrap; gap:9px 15px; padding-top:11px; padding-bottom:10px; }
@@ -239,24 +244,20 @@
 </style>
 </head>
 <body>
-  <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-brand" href="index.html" aria-label="Trexivo Tools home">
-      <img src="assets/trexivo-logo.png" alt="Trexivo">
-      <span class="brand-caption">DIGITAL GROWTH TOOLS</span>
-    </a>
-    <nav class="site-nav" aria-label="Main navigation">
-      <a class=""  href="index.html">All tools</a>
-      <a class=""  href="local-seo-tracker.html">Local SEO Tracker</a>
-      <a class="active" aria-current="page" href="seo-audit.html">SEO Audit &amp; PageSpeed</a>
-      <a class="site-nav-contact" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">Trexivo website <span aria-hidden="true">↗</span></a>
-    </nav>
-  </div>
-</header>
+  <header class="site-header"><div class="site-header-inner">
+  <a class="site-brand" href="/" aria-label="Trexivo Tools home"><img src="assets/trexivo-logo.png" alt="Trexivo"><span class="brand-caption">DIGITAL GROWTH TOOLS</span></a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class=""  href="/">All tools</a>
+    <a class=""  href="/local-seo-tracker">Local SEO Tracker</a>
+    <a class="active" aria-current="page" href="/seo-audit">SEO Audit &amp; PageSpeed</a>
+    <span class="header-profile" aria-label="Ankit Taak"><img class="profile-photo" src="assets/ankit-taak-imgg.png" alt="Ankit Taak"></span>
+    <a class="site-nav-contact" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">Trexivo website <span aria-hidden="true">↗</span></a>
+  </nav>
+</div></header>
 
   <main class="main">
     <div class="topbar">
-      <div class="crumb"><a href="index.html">All tools</a> <span aria-hidden="true">/</span> <b>SEO Audit &amp; PageSpeed</b></div>
+      <div class="crumb"><a href="/">All tools</a> <span aria-hidden="true">/</span> <b>SEO Audit &amp; PageSpeed</b></div>
       <div class="live-status"><span class="live-dot"></span><span>Technical site audit</span></div>
     </div>
 
@@ -356,7 +357,7 @@
   <div class="footer-inner">
     <div class="footer-main">
       <div class="footer-brand-column">
-        <a class="footer-brand" href="index.html" aria-label="Trexivo Tools home">
+        <a class="footer-brand" href="/" aria-label="Trexivo Tools home">
           <img src="assets/trexivo-logo.png" alt="Trexivo">
           <span>TOOLS</span>
         </a>
