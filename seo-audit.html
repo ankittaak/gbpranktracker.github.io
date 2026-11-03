@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1d2c">
+  <meta name="description" content="Run a basic technical SEO audit across public pages on your website.">
+  <title>SEO Audit | GBP Tracker by Trexivo</title>
+  <style>
+    :root {
+      --ink: #14283a;
+      --muted: #778697;
+      --line: #e7edf2;
+      --paper: #fff;
+      --canvas: #f4f7f9;
+      --navy: #0b1d2c;
+      --teal: #19b99a;
+      --teal-dark: #0d947c;
+      --red: #c44f4f;
+      --amber: #b5812e;
+      --blue: #3577e8;
+      --shadow: 0 12px 36px rgba(25, 48, 69, .06);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+    button, input { font: inherit; }
+    .sidebar { background: var(--navy); color: #fff; width: 248px; position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; padding: 25px 16px 18px; z-index: 5; }
+    .brand { display: block; padding: 0 4px 25px; color: white; text-decoration: none; }
+    .brand-logo { display: block; width: 100%; height: 67px; border-radius: 10px; object-fit: cover; object-position: center 52%; }
+    .brand-copy { display: block; margin: 6px 0 0 7px; color: #91a4b1; font-size: 9px; font-weight: 750; letter-spacing: .15em; }
+    .nav-label { padding: 0 11px; color: #748a9a; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .nav { display: grid; gap: 5px; margin-top: 12px; }
+    .nav a { display: flex; align-items: center; gap: 12px; min-height: 43px; padding: 0 12px; border-radius: 11px; color: #a8b7c2; text-decoration: none; font-size: 13px; font-weight: 600; transition: .18s ease; }
+    .nav a:hover { background: rgba(255,255,255,.06); color: white; }
+    .nav a.active { color: white; background: rgba(25,185,154,.14); box-shadow: inset 3px 0 0 var(--teal); }
+    .nav svg { width: 17px; height: 17px; flex: none; opacity: .85; }
+    .sidebar-spacer { flex: 1; }
+    .sidebar-foot { padding: 14px 10px 0; border-top: 1px solid rgba(255,255,255,.09); color: #8093a2; font-size: 11px; }
+    .sidebar-foot b { color: #dce6ec; font-weight: 600; }
+    .main { margin-left: 248px; min-height: 100vh; }
+    .topbar { height: 72px; background: rgba(255,255,255,.88); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(22px, 4.4vw, 64px); }
+    .crumb { color: #8b98a5; font-size: 12px; }
+    .crumb b { color: #354b5d; font-weight: 650; }
+    .live-status { display: inline-flex; align-items: center; gap: 8px; color: #5c6f7f; font-size: 12px; font-weight: 600; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #23b48f; box-shadow: 0 0 0 4px #e5f7f1; }
+    .content { width: min(1320px, 100%); margin: 0 auto; padding: 37px clamp(22px, 4.4vw, 64px) 62px; }
+    .eyebrow { display: flex; align-items: center; gap: 8px; color: var(--teal-dark); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow:before { content: ""; width: 18px; height: 2px; background: var(--teal); border-radius: 5px; }
+    .page-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin: 10px 0 26px; padding: 27px 29px; color: #fff; background: radial-gradient(circle at 92% 15%, rgba(25,185,154,.25), transparent 28%), linear-gradient(125deg, #0b1d2c, #17384a); border-radius: 19px; box-shadow: 0 14px 32px rgba(11,29,44,.12); }
+    .page-heading h1 { color: #fff; }
+    .page-heading .subtitle { color: #b9c9d2; }
+    h1 { margin: 0; color: #14283a; font-size: clamp(27px, 3vw, 35px); letter-spacing: -.045em; line-height: 1.15; }
+    .subtitle { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .card, .metric { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .card { padding: 24px; }
+    .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .card-heading h2 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+    .card-heading p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .mode-switch { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 5px; width: min(460px,100%); margin-bottom: 22px; padding: 5px; background: #f1f5f7; border: 1px solid #e7edf2; border-radius: 12px; }
+    .mode-button { min-height: 40px; border: 0; border-radius: 8px; color: #697e8d; background: transparent; font-size: 12px; font-weight: 750; cursor: pointer; }
+    .mode-button.active { color: #183549; background: #fff; box-shadow: 0 2px 8px rgba(17,43,61,.09); }
+    .mode-button:disabled { cursor: wait; opacity: .65; }
+    .scan-options { display: flex; align-items: end; flex-wrap: wrap; gap: 15px; margin: 0 0 15px; }
+    .scan-options[hidden] { display: none; }
+    .scan-option { display: grid; gap: 6px; color: #465c6d; font-size: 11px; font-weight: 700; }
+    .scan-option select { min-width: 190px; height: 39px; padding: 0 11px; color: #223a4d; background: #fff; border: 1px solid #dfe7ed; border-radius: 9px; outline: none; }
+    .scan-option select:focus { border-color: #46c1a7; box-shadow: 0 0 0 3px rgba(25,185,154,.11); }
+    .scan-explainer { max-width: 520px; color: #8594a0; font-size: 11px; line-height: 1.5; }
+    .field label { display: block; margin: 0 0 8px; color: #465c6d; font-size: 11px; font-weight: 700; }
+    .input-row { display: flex; gap: 12px; }
+    .field input { width: 100%; height: 45px; padding: 0 14px; color: #223a4d; background: #fff; border: 1px solid #dfe7ed; border-radius: 10px; outline: none; }
+    .field input:focus { border-color: #46c1a7; box-shadow: 0 0 0 3px rgba(25,185,154,.11); }
+    .field-hint { display: block; margin-top: 7px; color: #8998a4; font-size: 11px; line-height: 1.5; }
+    .primary-button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-width: 155px; height: 45px; padding: 0 18px; border: 0; border-radius: 10px; background: var(--teal); color: #062e29; box-shadow: 0 5px 12px rgba(25,185,154,.18); font-size: 12px; font-weight: 800; cursor: pointer; }
+    .primary-button:hover:not(:disabled) { background: #26c7a7; }
+    .primary-button:disabled { cursor: wait; opacity: .72; }
+    .spinner { width: 15px; height: 15px; border: 2px solid rgba(6,46,41,.25); border-top-color: #062e29; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .scan-progress { margin-top: 17px; padding: 14px 15px; background: #f8fbfc; border: 1px solid #e8eff2; border-radius: 11px; }
+    .scan-progress[hidden] { display: none; }
+    .progress-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #43596b; font-size: 11px; }
+    .progress-meta span { color: #748794; font-variant-numeric: tabular-nums; }
+    .progress-track { height: 7px; margin-top: 10px; overflow: hidden; background: #e6eef1; border-radius: 999px; }
+    .progress-fill { width: 0; height: 100%; background: linear-gradient(90deg, #14b897, #4dd2ae); border-radius: inherit; transition: width .25s ease; }
+    .progress-detail { margin: 8px 0 0; color: #83929e; font-size: 10px; }
+    .note { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px 13px; color: #657a88; background: #f8fafb; border: 1px solid #edf1f4; border-radius: 10px; font-size: 11px; line-height: 1.55; }
+    .error-box { display: none; margin-top: 16px; padding: 12px 14px; color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+    .error-box.show { display: block; }
+    .metrics { display: none; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 15px; margin: 18px 0; }
+    .metrics.show { display: grid; }
+    .metric { min-height: 106px; padding: 17px 19px; }
+    .metric-label { color: #788897; font-size: 11px; font-weight: 650; }
+    .metric-value { margin-top: 12px; color: #1b3347; font-size: 25px; font-weight: 750; letter-spacing: -.04em; }
+    .metric-value.warn { color: var(--amber); }
+    .metric-value.bad { color: var(--red); }
+    .site-health { margin: 18px 0; }
+    .site-health[hidden] { display: none; }
+    .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 24px 2px 11px; }
+    .section-heading h2 { margin: 0; color: #243a4d; font-size: 14px; }
+    .section-heading span { color: #83919d; font-size: 11px; }
+    .site-checks { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px; }
+    .site-check { min-height: 105px; padding: 16px 18px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+    .site-check-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .site-check-label { color: #31495b; font-size: 12px; font-weight: 750; }
+    .site-check-state { padding: 4px 7px; border-radius: 999px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+    .site-check-state.good { color: #087763; background: #dff6ee; }
+    .site-check-state.warning { color: #a33a3a; background: #fff0ef; }
+    .site-check-state.info { color: #627989; background: #eef3f6; }
+    .site-check p { margin: 10px 0 0; color: #7a8a97; font-size: 11px; line-height: 1.45; }
+    .speed-card { display: none; margin-top: 18px; }
+    .speed-card.show { display: block; }
+    .speed-card[hidden] { display: none; }
+    .speed-summary { color: #7d8c98; font-size: 11px; }
+    .speed-runs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; }
+    .speed-run { padding: 16px; background: #f8fafb; border: 1px solid #eaf0f3; border-radius: 13px; }
+    .speed-run-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .speed-run-head h3 { margin: 0; color: #2b4356; font-size: 12px; }
+    .speed-score { min-width: 44px; padding: 7px 8px; border-radius: 9px; text-align: center; color: #087763; background: #dff6ee; font-size: 15px; font-weight: 850; }
+    .speed-score.medium { color: #956512; background: #fff3d9; }
+    .speed-score.low { color: #a33a3a; background: #fff0ef; }
+    .speed-metrics { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+    .speed-metric { padding: 9px; background: #fff; border: 1px solid #edf1f4; border-radius: 8px; }
+    .speed-metric b { display: block; color: #30485b; font-size: 11px; }
+    .speed-metric span { display: block; margin-top: 4px; color: #7d8c98; font-size: 10px; }
+    .speed-opportunities { margin-top: 13px; }
+    .speed-opportunities summary { font-size: 11px; }
+    .speed-opportunities ul { display: grid; gap: 7px; margin: 9px 0 0; padding-left: 17px; color: #657988; font-size: 10px; line-height: 1.45; }
+    .speed-error { color: #9e3838; background: #fff2f1; border: 1px solid #f5d9d7; border-radius: 9px; padding: 12px; font-size: 11px; }
+    .results-card { display: none; margin-top: 18px; padding: 0; overflow: hidden; }
+    .results-card.show { display: block; }
+    .results-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 19px 21px; border-bottom: 1px solid #edf1f4; }
+    .results-head h2 { margin: 0; font-size: 14px; font-weight: 750; }
+    .results-head p { margin: 5px 0 0; color: #8b99a5; font-size: 11px; }
+    .secondary-button { height: 34px; padding: 0 11px; color: #506577; background: #fff; border: 1px solid #dfe7ed; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .secondary-button:disabled { color: #b1bbc3; cursor: not-allowed; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 860px; text-align: left; }
+    th { padding: 12px 18px; color: #8b98a4; background: #fff; font-size: 9px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+    td { padding: 14px 18px; color: #526575; border-top: 1px solid #f0f3f5; font-size: 11px; vertical-align: top; }
+    tbody tr:first-child td { border-top: 0; }
+    .page-link { color: #167a68; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+    .page-title { display: block; color: #31495b; font-weight: 700; line-height: 1.45; }
+    .page-signals { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .page-signal { padding: 4px 6px; color: #687c8b; background: #f2f6f8; border-radius: 6px; font-size: 9px; white-space: nowrap; }
+    .status { display: inline-flex; padding: 5px 7px; border-radius: 7px; font-size: 10px; font-weight: 800; }
+    .status.good { color: #087763; background: #dff6ee; }
+    .status.bad { color: #a33a3a; background: #fff0ef; }
+    .status.neutral { color: #667988; background: #f0f4f7; }
+    .finding-count { color: #40586b; font-weight: 750; }
+    details { min-width: 230px; }
+    summary { cursor: pointer; color: #506577; font-weight: 700; }
+    .issue-list { display: grid; gap: 9px; margin: 11px 0 0; padding: 0; list-style: none; }
+    .issue { padding: 10px; border-radius: 9px; background: #f8fafb; border: 1px solid #edf1f4; }
+    .issue-top { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+    .severity { font-size: 8px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .severity.critical { color: #ae3737; }
+    .severity.warning { color: #a56b15; }
+    .severity.info { color: #47719c; }
+    .issue-title { color: #2b4356; font-weight: 750; }
+    .issue-recommendation { color: #788897; line-height: 1.45; }
+    .empty-state { padding: 45px 25px; text-align: center; color: #80909c; font-size: 12px; }
+    .site-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 30px; padding: 18px 4px; color: #8b98a4; font-size: 10px; }
+    .site-footer a { color: #167a68; text-decoration: none; font-weight: 700; }
+    @media (max-width: 900px) {
+      .sidebar { position: relative; width: 100%; height: auto; padding: 12px 16px; }
+      .brand { padding: 0 4px 12px; }
+      .brand-logo { width: 180px; height: 46px; }
+      .sidebar-spacer, .sidebar-foot, .nav-label { display: none; }
+      .nav { display: flex; overflow-x: auto; margin-top: 0; }
+      .nav a { min-width: max-content; min-height: 38px; }
+      .main { margin-left: 0; }
+      .topbar { height: 54px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .site-checks { grid-template-columns: 1fr; }
+      .speed-runs { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .content { padding-top: 25px; }
+      .page-heading { align-items: flex-start; flex-direction: column; }
+      .page-heading { padding: 22px; }
+      .input-row { flex-direction: column; }
+      .primary-button { width: 100%; }
+      .metrics { grid-template-columns: 1fr; }
+      .site-footer { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="index.html#dashboard" aria-label="GBP Tracker by Trexivo home">
+      <img class="brand-logo" src="assets/trexivo-logo.png" alt="Trexivo">
+      <span class="brand-copy">BUSINESS GROWTH TOOLS</span>
+    </a>
+    <div class="nav-label">Workspace</div>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html#dashboard"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="3" width="7" height="5" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="11" width="7" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/><rect x="3" y="14" width="8" height="7" rx="2" stroke="currentColor" stroke-width="1.7"/></svg><span>GBP Tracker</span></a>
+      <a class="active" href="seo-audit.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2M10.8 7.5v6.6M7.5 10.8h6.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>SEO Audit</span></a>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-foot">TREXIVO <b>·</b> VISIBILITY</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb">Workspace <b>/ SEO Audit</b></div>
+      <div class="live-status"><span class="live-dot"></span><span>Technical site audit</span></div>
+    </div>
+
+    <div class="content">
+      <div class="eyebrow">Website health</div>
+      <div class="page-heading">
+        <div>
+          <h1>Audit one page or crawl a site.</h1>
+          <p class="subtitle">Choose a focused page check or a larger technical SEO crawl with progress you can follow.</p>
+        </div>
+      </div>
+
+      <section class="card" aria-labelledby="audit-title">
+        <div class="card-heading">
+          <div><h2 id="audit-title">Choose your scan</h2><p>Run a detailed check for one page or crawl multiple pages on a site.</p></div>
+        </div>
+        <form id="audit-form">
+          <div class="mode-switch" role="group" aria-label="Scan type">
+            <button class="mode-button active" type="button" data-mode="single" aria-pressed="true">Single page</button>
+            <button class="mode-button" type="button" data-mode="bulk" aria-pressed="false">Bulk site scan</button>
+          </div>
+          <div class="scan-options" id="single-options">
+            <label class="scan-option" for="pagespeed-strategy">PageSpeed test
+              <select id="pagespeed-strategy" name="pagespeed-strategy">
+                <option value="mobile">Mobile</option>
+                <option value="desktop">Desktop</option>
+                <option value="both">Mobile + desktop</option>
+              </select>
+            </label>
+            <label class="scan-explainer"><input id="include-pagespeed" type="checkbox" checked> Include Google PageSpeed recommendations for this page</label>
+          </div>
+          <div class="scan-options" id="bulk-options" hidden>
+            <label class="scan-option" for="page-limit">Maximum pages
+              <select id="page-limit" name="page-limit">
+                <option value="10">10 pages</option>
+                <option value="20">20 pages</option>
+                <option value="50">50 pages</option>
+                <option value="100">100 pages</option>
+              </select>
+            </label>
+            <span class="scan-explainer">The scan follows public links and sitemap pages, respects robots.txt, and checks results in batches of 10.</span>
+          </div>
+          <div class="field">
+            <label id="url-label" for="site-url">Page URL</label>
+            <div class="input-row">
+              <input id="site-url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="https://yourwebsite.com/page" required>
+              <button class="primary-button" id="audit-button" type="submit"><span>Scan this page</span></button>
+            </div>
+            <span class="field-hint" id="field-hint">Checks the exact URL, including its PageSpeed report if selected.</span>
+          </div>
+        </form>
+        <div class="scan-progress" id="scan-progress" hidden aria-live="polite">
+          <div class="progress-meta"><strong id="progress-title">Preparing scan…</strong><span id="progress-count">0 / 1</span></div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <p class="progress-detail" id="progress-detail">Connecting to the website.</p>
+        </div>
+        <div class="error-box" id="error-box" role="alert"></div>
+        <div class="note"><span aria-hidden="true">ⓘ</span><span>Technical checks include metadata, duplicate titles and descriptions, headings, HTTP status, canonical links, indexability, page language, image alt text, Open Graph, JSON-LD, HTTPS, robots.txt, sitemaps, and links to pages in the crawl. PageSpeed uses Google Lighthouse. Backlink databases, keyword rankings, and JavaScript-rendered content are not included in this version.</span></div>
+      </section>
+
+      <section class="metrics" id="metrics" aria-label="Audit summary">
+        <article class="metric"><div class="metric-label">Pages checked</div><div class="metric-value" id="pages-count">—</div></article>
+        <article class="metric"><div class="metric-label">Findings</div><div class="metric-value warn" id="issues-count">—</div></article>
+        <article class="metric"><div class="metric-label">Warnings</div><div class="metric-value warn" id="warnings-count">—</div></article>
+        <article class="metric"><div class="metric-label">Critical issues</div><div class="metric-value bad" id="critical-count">—</div></article>
+      </section>
+
+      <section class="site-health" id="site-health" hidden aria-labelledby="site-health-title">
+        <div class="section-heading"><h2 id="site-health-title">Site-wide checks</h2><span id="site-health-caption"></span></div>
+        <div class="site-checks" id="site-checks"></div>
+      </section>
+
+      <section class="card speed-card" id="pagespeed-card" hidden aria-labelledby="pagespeed-title">
+        <div class="card-heading">
+          <div><h2 id="pagespeed-title">Google PageSpeed results</h2><p class="speed-summary" id="pagespeed-summary"></p></div>
+        </div>
+        <div class="speed-runs" id="pagespeed-runs"></div>
+      </section>
+
+      <section class="card results-card" id="results-card" aria-labelledby="results-title">
+        <div class="results-head">
+          <div><h2 id="results-title">Page-by-page findings</h2><p id="results-caption">Audit results</p></div>
+          <button class="secondary-button" id="export-button" type="button" disabled>Export CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Page</th><th>Status</th><th>Title &amp; page signals</th><th>Findings and recommended fixes</th></tr></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="empty-state" hidden>No pages were available to audit.</div>
+      </section>
+
+      <footer class="site-footer">
+        <span>Trexivo · Business growth tools</span>
+        <a href="index.html#dashboard">Return to GBP Tracker</a>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const form = document.getElementById("audit-form");
+      const input = document.getElementById("site-url");
+      const button = document.getElementById("audit-button");
+      const errorBox = document.getElementById("error-box");
+      const metrics = document.getElementById("metrics");
+      const resultsCard = document.getElementById("results-card");
+      const resultsBody = document.getElementById("results-body");
+      const resultsCaption = document.getElementById("results-caption");
+      const emptyState = document.getElementById("empty-state");
+      const exportButton = document.getElementById("export-button");
+      const siteHealth = document.getElementById("site-health");
+      const siteHealthCaption = document.getElementById("site-health-caption");
+      const siteChecksBody = document.getElementById("site-checks");
+      const modeButtons = Array.from(document.querySelectorAll(".mode-button"));
+      const singleOptions = document.getElementById("single-options");
+      const bulkOptions = document.getElementById("bulk-options");
+      const pageLimitSelect = document.getElementById("page-limit");
+      const pageSpeedStrategy = document.getElementById("pagespeed-strategy");
+      const includePageSpeed = document.getElementById("include-pagespeed");
+      const urlLabel = document.getElementById("url-label");
+      const fieldHint = document.getElementById("field-hint");
+      const scanProgress = document.getElementById("scan-progress");
+      const progressTitle = document.getElementById("progress-title");
+      const progressCount = document.getElementById("progress-count");
+      const progressFill = document.getElementById("progress-fill");
+      const progressDetail = document.getElementById("progress-detail");
+      const pageSpeedCard = document.getElementById("pagespeed-card");
+      const pageSpeedSummary = document.getElementById("pagespeed-summary");
+      const pageSpeedRuns = document.getElementById("pagespeed-runs");
+      let latestPages = [];
+      let latestSite = "";
+      let scanMode = "single";
+
+      function setBusy(busy) {
+        button.disabled = busy;
+        input.disabled = busy;
+        pageLimitSelect.disabled = busy;
+        pageSpeedStrategy.disabled = busy;
+        includePageSpeed.disabled = busy;
+        modeButtons.forEach(function (modeButton) { modeButton.disabled = busy; });
+        button.innerHTML = busy
+          ? '<span class="spinner" aria-hidden="true"></span><span>Scanning…</span>'
+          : '<span>' + (scanMode === "single" ? "Scan this page" : "Start bulk scan") + '</span>';
+      }
+
+      function setProgress(done, total, title, detail) {
+        scanProgress.hidden = false;
+        progressTitle.textContent = title;
+        progressCount.textContent = Math.min(done, total) + " / " + total;
+        progressFill.style.width = Math.round(Math.min(done, total) / Math.max(total, 1) * 100) + "%";
+        progressDetail.textContent = detail;
+      }
+
+      function updateMode(mode) {
+        scanMode = mode === "bulk" ? "bulk" : "single";
+        modeButtons.forEach(function (button) {
+          const active = button.dataset.mode === scanMode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        singleOptions.hidden = scanMode !== "single";
+        bulkOptions.hidden = scanMode !== "bulk";
+        urlLabel.textContent = scanMode === "single" ? "Page URL" : "Website domain";
+        input.placeholder = scanMode === "single" ? "https://yourwebsite.com/page" : "https://yourwebsite.com";
+        fieldHint.textContent = scanMode === "single"
+          ? "Checks the exact URL, including its PageSpeed report if selected."
+          : "Crawls public pages on this site, up to your selected page limit, and follows robots.txt rules.";
+        setBusy(false);
+      }
+
+      modeButtons.forEach(function (button) {
+        button.addEventListener("click", function () { updateMode(button.dataset.mode); });
+      });
+
+      function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.add("show");
+      }
+
+      function clearError() {
+        errorBox.textContent = "";
+        errorBox.classList.remove("show");
+      }
+
+      function displaySiteLabel(value) {
+        try {
+          const host = new URL(value).hostname.toLowerCase();
+          const currentHost = window.location.hostname.toLowerCase();
+          if (host === currentHost && /^gbpranktrackergithubio-git-.+-trexivo\.vercel\.app$/.test(host)) {
+            return "gbpranktrackergithubio.vercel.app · preview";
+          }
+          return host;
+        } catch (_) {
+          return value || "the submitted website";
+        }
+      }
+
+      function displayPagePath(value) {
+        try {
+          const url = new URL(value);
+          const siteHost = new URL(latestSite).hostname.toLowerCase().replace(/^www\./, "");
+          const pageHost = url.hostname.toLowerCase().replace(/^www\./, "");
+          return pageHost === siteHost ? (url.pathname || "/") : (url.hostname + url.pathname);
+        } catch (_) {
+          return value;
+        }
+      }
+
+      function renderSiteChecks(checks) {
+        siteChecksBody.replaceChildren();
+        siteHealth.hidden = !checks.length;
+        siteHealthCaption.textContent = displaySiteLabel(latestSite);
+        checks.forEach(function (check) {
+          const card = document.createElement("article");
+          card.className = "site-check";
+          const top = document.createElement("div");
+          top.className = "site-check-top";
+          const label = document.createElement("span");
+          label.className = "site-check-label";
+          label.textContent = check.label || "Site check";
+          const state = document.createElement("span");
+          state.className = "site-check-state " + (check.status || "info");
+          state.textContent = check.status === "good" ? "Good" : check.status === "warning" ? "Review" : "Info";
+          top.append(label, state);
+          const detail = document.createElement("p");
+          detail.textContent = check.detail || "No details available.";
+          card.append(top, detail);
+          siteChecksBody.appendChild(card);
+        });
+      }
+
+      function renderPageSpeed(results, errors) {
+        const runs = Array.isArray(results) ? results : [];
+        const failures = Array.isArray(errors) ? errors : [];
+        pageSpeedRuns.replaceChildren();
+        pageSpeedCard.hidden = !runs.length && !failures.length;
+        pageSpeedCard.classList.toggle("show", !pageSpeedCard.hidden);
+        pageSpeedSummary.textContent = runs.length
+          ? "Google Lighthouse lab results · scores can vary between runs."
+          : "PageSpeed could not return a result for this URL.";
+
+        runs.forEach(function (result) {
+          const card = document.createElement("article");
+          card.className = "speed-run";
+          const head = document.createElement("div");
+          head.className = "speed-run-head";
+          const heading = document.createElement("h3");
+          heading.textContent = result.strategy === "desktop" ? "Desktop" : "Mobile";
+          const score = document.createElement("span");
+          const performance = result.scores && result.scores.performance;
+          score.className = "speed-score" + (performance < 50 ? " low" : performance < 90 ? " medium" : "");
+          score.textContent = performance === null || performance === undefined ? "—" : String(performance);
+          score.title = "Lighthouse performance score out of 100";
+          head.append(heading, score);
+
+          const metricsGrid = document.createElement("div");
+          metricsGrid.className = "speed-metrics";
+          const metricRows = [
+            ["Accessibility score", result.scores?.accessibility === null || result.scores?.accessibility === undefined ? "No score" : result.scores.accessibility + " / 100"],
+            ["Best practices score", result.scores?.bestPractices === null || result.scores?.bestPractices === undefined ? "No score" : result.scores.bestPractices + " / 100"],
+            ["SEO score", result.scores?.seo === null || result.scores?.seo === undefined ? "No score" : result.scores.seo + " / 100"],
+            ["Largest Contentful Paint", result.metrics?.largestContentfulPaint],
+            ["Cumulative Layout Shift", result.metrics?.cumulativeLayoutShift],
+            ["First Contentful Paint", result.metrics?.firstContentfulPaint],
+            ["Total Blocking Time", result.metrics?.totalBlockingTime],
+            ["Speed Index", result.metrics?.speedIndex],
+            ["Real-user field data", result.fieldData?.overallCategory || "No field data available"]
+          ];
+          metricRows.forEach(function (entry) {
+            const item = document.createElement("div");
+            item.className = "speed-metric";
+            const name = document.createElement("b");
+            name.textContent = entry[0];
+            const value = document.createElement("span");
+            value.textContent = entry[1] || "No value returned";
+            item.append(name, value);
+            metricsGrid.appendChild(item);
+          });
+
+          card.append(head, metricsGrid);
+          const opportunities = Array.isArray(result.opportunities) ? result.opportunities : [];
+          if (opportunities.length) {
+            const details = document.createElement("details");
+            details.className = "speed-opportunities";
+            const summary = document.createElement("summary");
+            summary.textContent = opportunities.length + " improvement suggestions";
+            const list = document.createElement("ul");
+            opportunities.forEach(function (opportunity) {
+              const item = document.createElement("li");
+              item.textContent = (opportunity.title || "Suggestion")
+                + (opportunity.savings ? " · " + opportunity.savings : "")
+                + (opportunity.description ? ": " + opportunity.description : "");
+              list.appendChild(item);
+            });
+            details.append(summary, list);
+            card.appendChild(details);
+          }
+          pageSpeedRuns.appendChild(card);
+        });
+
+        failures.forEach(function (message) {
+          const error = document.createElement("div");
+          error.className = "speed-error";
+          error.textContent = message;
+          pageSpeedRuns.appendChild(error);
+        });
+      }
+
+      function renderIssue(issue) {
+        const item = document.createElement("li");
+        item.className = "issue";
+        const top = document.createElement("div");
+        top.className = "issue-top";
+        const severity = document.createElement("span");
+        severity.className = "severity " + (issue.severity || "info");
+        severity.textContent = issue.severity || "info";
+        const title = document.createElement("span");
+        title.className = "issue-title";
+        title.textContent = issue.title || "Audit finding";
+        top.append(severity, title);
+        const recommendation = document.createElement("div");
+        recommendation.className = "issue-recommendation";
+        recommendation.textContent = issue.recommendation || "";
+        item.append(top, recommendation);
+        return item;
+      }
+
+      function renderPage(page) {
+        const row = document.createElement("tr");
+
+        const pageCell = document.createElement("td");
+        const link = document.createElement("a");
+        link.className = "page-link";
+        link.href = page.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = displayPagePath(page.url);
+        link.title = page.url;
+        pageCell.appendChild(link);
+
+        const statusCell = document.createElement("td");
+        const status = document.createElement("span");
+        const statusCode = Number(page.status) || 0;
+        status.className = "status " + (statusCode >= 400 || !statusCode ? "bad" : statusCode < 300 ? "good" : "neutral");
+        status.textContent = statusCode ? String(statusCode) : "Fetch error";
+        statusCell.appendChild(status);
+
+        const titleCell = document.createElement("td");
+        const pageTitle = document.createElement("span");
+        pageTitle.className = "page-title";
+        pageTitle.textContent = page.title || "No page title found";
+        const signals = document.createElement("div");
+        signals.className = "page-signals";
+        const titleLength = page.titleLength ?? (page.title || "").length;
+        const descriptionLength = page.descriptionLength ?? (page.description || "").length;
+        const signalValues = [
+          "Title " + titleLength + " chars",
+          "Description " + descriptionLength + " chars",
+          "H1 " + (page.h1Count ?? 0) + " · H2 " + (page.h2Count ?? 0),
+          "Language " + (page.language || "unset"),
+          "Images " + (page.imageCount ?? 0) + " · " + (page.missingAltCount ?? 0) + " missing alt",
+          "Links " + (page.internalLinks ?? 0) + " in · " + (page.externalLinks ?? 0) + " out",
+          "Broken links " + (page.brokenInternalLinks ?? 0),
+          "Schema " + ((page.structuredDataTypes || []).join(", ") || "none"),
+          page.responseTimeMs ? "Response " + page.responseTimeMs + " ms" : "Response time n/a"
+        ];
+        signalValues.forEach(function (value) {
+          const chip = document.createElement("span");
+          chip.className = "page-signal";
+          chip.textContent = value;
+          signals.appendChild(chip);
+        });
+        titleCell.append(pageTitle, signals);
+
+        const issueCell = document.createElement("td");
+        const issues = Array.isArray(page.issues) ? page.issues : [];
+        if (!issues.length) {
+          const good = document.createElement("span");
+          good.className = "status good";
+          good.textContent = "No issues found";
+          issueCell.appendChild(good);
+        } else {
+          const details = document.createElement("details");
+          const summary = document.createElement("summary");
+          summary.className = "finding-count";
+          summary.textContent = issues.length + (issues.length === 1 ? " finding" : " findings");
+          const list = document.createElement("ul");
+          list.className = "issue-list";
+          issues.forEach(function (issue) { list.appendChild(renderIssue(issue)); });
+          details.append(summary, list);
+          issueCell.appendChild(details);
+        }
+
+        row.append(pageCell, statusCell, titleCell, issueCell);
+        return row;
+      }
+
+      function renderReport(data) {
+        const pages = Array.isArray(data.pages) ? data.pages : [];
+        const summary = data.summary || {};
+        latestPages = pages;
+        latestSite = data.site || "";
+        document.getElementById("pages-count").textContent = String(data.pagesScanned || pages.length);
+        document.getElementById("issues-count").textContent = String(summary.totalIssues || 0);
+        document.getElementById("warnings-count").textContent = String(summary.warnings || 0);
+        document.getElementById("critical-count").textContent = String(summary.critical || 0);
+        metrics.classList.add("show");
+        resultsCard.classList.add("show");
+        resultsCaption.textContent = "Checked " + (data.pagesScanned || pages.length) + " page(s) on " + displaySiteLabel(data.site)
+          + (data.mode === "bulk" && data.pageLimit ? " · selected limit " + data.pageLimit : "")
+          + (data.mode === "bulk" && pages.length < data.pageLimit ? " · no more crawlable pages were found" : "")
+          + (data.skippedByRobots ? " · " + data.skippedByRobots + " page(s) skipped by robots.txt" : "");
+        renderSiteChecks(Array.isArray(data.siteChecks) ? data.siteChecks : []);
+        renderPageSpeed(data.pageSpeedResults, data.pageSpeedErrors);
+        resultsBody.replaceChildren();
+        pages.forEach(function (page) { resultsBody.appendChild(renderPage(page)); });
+        emptyState.hidden = pages.length > 0;
+        exportButton.disabled = pages.length === 0;
+      }
+
+      async function postJson(path, body) {
+        const response = await fetch(path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        let data;
+        try { data = await response.json(); }
+        catch (_) { throw new Error("The audit endpoint returned an unreadable response."); }
+        if (!response.ok || data.error) throw new Error(data.error || "The audit could not be completed.");
+        return data;
+      }
+
+      function queueKey(value) {
+        try {
+          const url = new URL(value);
+          url.hash = "";
+          url.hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+          return url.toString();
+        } catch (_) {
+          return String(value || "");
+        }
+      }
+
+      function bulkStartUrl(value) {
+        try {
+          const inputUrl = /^https?:\/\//i.test(value) ? value : "https://" + value;
+          const url = new URL(inputUrl);
+          url.pathname = "/";
+          url.search = "";
+          url.hash = "";
+          return url.toString();
+        } catch (_) {
+          return value;
+        }
+      }
+
+      function finalizeBulkReport(pages, firstReport, skippedByRobots, pageLimit) {
+        const crossPageCodes = new Set(["duplicate-title", "duplicate-description", "broken-internal-links"]);
+        pages.forEach(function (page) {
+          page.issues = (page.issues || []).filter(function (issue) { return !crossPageCodes.has(issue.code); });
+          page.brokenInternalLinks = 0;
+        });
+
+        [
+          { field: "title", code: "duplicate-title", title: "Duplicate page title", recommendation: "Give each page a distinct title that describes its own content." },
+          { field: "description", code: "duplicate-description", title: "Duplicate meta description", recommendation: "Write a unique summary for each page." }
+        ].forEach(function (config) {
+          const groups = new Map();
+          pages.forEach(function (page) {
+            const value = String(page[config.field] || "").trim().toLowerCase().replace(/\s+/g, " ");
+            if (!value) return;
+            if (!groups.has(value)) groups.set(value, []);
+            groups.get(value).push(page);
+          });
+          groups.forEach(function (group) {
+            if (group.length < 2) return;
+            group.forEach(function (page) {
+              page.issues.push({
+                severity: "warning",
+                code: config.code,
+                title: config.title,
+                recommendation: config.recommendation + " Duplicate found on " + group.length + " scanned pages."
+              });
+            });
+          });
+        });
+
+        const statusByUrl = new Map();
+        pages.forEach(function (page) {
+          if (page.url) statusByUrl.set(queueKey(page.url), page.status);
+          if (page.finalUrl) statusByUrl.set(queueKey(page.finalUrl), page.status);
+        });
+        pages.forEach(function (page) {
+          const broken = Array.from(new Set((page.links || []).filter(function (link) {
+            return Number(statusByUrl.get(queueKey(link))) >= 400;
+          })));
+          page.brokenInternalLinks = broken.length;
+          if (broken.length) page.issues.push({
+            severity: "warning",
+            code: "broken-internal-links",
+            title: broken.length + " internal link(s) point to scanned pages that return an error",
+            recommendation: "Update or remove links to the affected pages. This check only covers links whose targets were scanned."
+          });
+        });
+
+        const counts = { critical: 0, warning: 0, info: 0 };
+        pages.forEach(function (page) {
+          (page.issues || []).forEach(function (issue) {
+            if (Object.prototype.hasOwnProperty.call(counts, issue.severity)) counts[issue.severity] += 1;
+          });
+        });
+        (firstReport.siteChecks || []).forEach(function (check) {
+          if (check.status === "warning") counts.warning += 1;
+          else if (check.status === "info") counts.info += 1;
+        });
+        return Object.assign({}, firstReport, {
+          mode: "bulk",
+          pages,
+          pagesScanned: pages.length,
+          pageLimit,
+          skippedByRobots,
+          summary: {
+            critical: counts.critical,
+            warnings: counts.warning,
+            info: counts.info,
+            totalIssues: counts.critical + counts.warning + counts.info,
+            pagesWithIssues: pages.filter(function (page) { return (page.issues || []).length > 0; }).length
+          }
+        });
+      }
+
+      async function runBulkScan(value) {
+        const pageLimit = Number(pageLimitSelect.value) || 10;
+        const startUrl = bulkStartUrl(value);
+        const queue = [startUrl];
+        const queued = new Set([queueKey(startUrl)]);
+        const scanned = new Set();
+        const pages = [];
+        let firstReport = null;
+        let skippedByRobots = 0;
+        let batchNumber = 0;
+
+        while (pages.length < pageLimit && queue.length) {
+          const batchLimit = Math.min(10, pageLimit - pages.length);
+          const pageUrls = [];
+          while (queue.length && pageUrls.length < batchLimit) {
+            const nextUrl = queue.shift();
+            if (scanned.has(queueKey(nextUrl))) continue;
+            pageUrls.push(nextUrl);
+          }
+          if (!pageUrls.length) break;
+
+          batchNumber += 1;
+          setProgress(pages.length, pageLimit, "Scanning your site", "Checking batch " + batchNumber + " of up to " + Math.ceil(pageLimit / 10) + "…");
+          const data = await postJson("/api/seo-audit", {
+            url: startUrl,
+            mode: "bulk",
+            pageLimit,
+            batchLimit,
+            pageUrls,
+            excludeUrls: Array.from(scanned),
+            discoverSitemap: batchNumber === 1
+          });
+          if (!firstReport) firstReport = data;
+          skippedByRobots += Number(data.skippedByRobots) || 0;
+
+          (data.pages || []).forEach(function (page) {
+            const pageKey = queueKey(page.url);
+            if (!scanned.has(pageKey)) pages.push(page);
+            if (page.url) scanned.add(pageKey);
+            if (page.finalUrl) scanned.add(queueKey(page.finalUrl));
+          });
+
+          const foundLinks = (data.discoveredLinks || []).concat((data.pages || []).flatMap(function (page) { return page.links || []; }));
+          foundLinks.forEach(function (link) {
+            const key = queueKey(link);
+            if (!key || scanned.has(key) || queued.has(key) || queue.length >= 5000) return;
+            queue.push(link);
+            queued.add(key);
+          });
+          setProgress(pages.length, pageLimit, "Scanning your site", pages.length + " page(s) checked; finding more internal pages…");
+        }
+
+        if (!firstReport) throw new Error("No crawlable pages were found for this website.");
+        const report = finalizeBulkReport(pages, firstReport, skippedByRobots, pageLimit);
+        setProgress(pages.length, pageLimit, "Bulk scan complete", pages.length < pageLimit
+          ? "Checked all crawlable pages found before reaching the selected limit."
+          : "Reached the selected page limit.");
+        return report;
+      }
+
+      async function runSingleScan(value) {
+        setProgress(0, 1, "Checking this page", "Reading page details and technical signals…");
+        const report = await postJson("/api/seo-audit", { url: value, mode: "single", pageLimit: 1 });
+        report.pageSpeedResults = [];
+        report.pageSpeedErrors = [];
+        if (includePageSpeed.checked) {
+          const selected = pageSpeedStrategy.value;
+          const strategies = selected === "both" ? ["mobile", "desktop"] : [selected];
+          for (let index = 0; index < strategies.length; index += 1) {
+            const strategy = strategies[index];
+            setProgress(index, strategies.length, "Running PageSpeed", "Google Lighthouse is checking " + strategy + " performance…");
+            try {
+              report.pageSpeedResults.push(await postJson("/api/page-speed", { url: value, strategy }));
+            } catch (error) {
+              report.pageSpeedErrors.push((strategy === "desktop" ? "Desktop" : "Mobile") + ": "
+                + (error && error.message ? error.message : "PageSpeed could not complete this check."));
+            }
+            setProgress(index + 1, strategies.length, "Running PageSpeed", (index + 1) + " of " + strategies.length + " PageSpeed check(s) complete.");
+          }
+        }
+        setProgress(1, 1, "Single-page scan complete", "Technical audit and selected PageSpeed checks are finished.");
+        return report;
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        clearError();
+        const url = input.value.trim();
+        if (!url) {
+          showError("Enter a page URL or website address to start the scan.");
+          return;
+        }
+
+        setBusy(true);
+        scanProgress.hidden = false;
+        pageSpeedCard.hidden = true;
+        pageSpeedCard.classList.remove("show");
+        try {
+          const report = scanMode === "single" ? await runSingleScan(url) : await runBulkScan(url);
+          renderReport(report);
+          document.getElementById("results-card").scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          showError(error && error.message ? error.message : "The scan failed. Check the URL and try again.");
+          progressTitle.textContent = "Scan could not finish";
+          progressDetail.textContent = error && error.message ? error.message : "Check the URL and try again.";
+        } finally {
+          setBusy(false);
+        }
+      });
+
+      exportButton.addEventListener("click", function () {
+        if (!latestPages.length) return;
+        const rows = [["URL", "HTTP status", "Title", "Title length", "Meta description", "Description length", "Language", "H1 count", "H2 count", "Canonical", "Noindex", "Images", "Images missing alt", "Internal links", "External links", "Broken scanned links", "Open Graph title", "Open Graph description", "JSON-LD blocks", "JSON-LD types", "Response time ms", "Findings"]];
+        latestPages.forEach(function (page) {
+          const issueNames = (page.issues || []).map(function (issue) { return issue.title; }).join("; ");
+          rows.push([
+            page.url || "",
+            page.status ?? "",
+            page.title || "",
+            page.titleLength ?? "",
+            page.description || "",
+            page.descriptionLength ?? "",
+            page.language || "",
+            page.h1Count ?? "",
+            page.h2Count ?? "",
+            page.canonical || "",
+            page.noindex ? "Yes" : "No",
+            page.imageCount ?? "",
+            page.missingAltCount ?? "",
+            page.internalLinks ?? "",
+            page.externalLinks ?? "",
+            page.brokenInternalLinks ?? "",
+            page.ogTitle || "",
+            page.ogDescription || "",
+            page.structuredDataCount ?? "",
+            (page.structuredDataTypes || []).join("; "),
+            page.responseTimeMs ?? "",
+            issueNames
+          ]);
+        });
+        const csv = rows.map(function (row) {
+          return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(",");
+        }).join("\r\n");
+        const file = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const objectUrl = URL.createObjectURL(file);
+        const anchor = document.createElement("a");
+        anchor.href = objectUrl;
+        anchor.download = "seo-audit.csv";
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(objectUrl);
+      });
+    })();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/seo-audit.js": {
+      "maxDuration": 60
+    },
+    "api/page-speed.js": {
+      "maxDuration": 60
+    }
+  }
+}
+
