@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c3a">
+  <meta name="description" content="Find practical local and service keyword ideas for your business with Trexivo Tools.">
+  <title>Keyword Research | Trexivo Tools</title>
+  <style>
+    :root {
+      --ink: #172f3b;
+      --muted: #63757d;
+      --line: #e2e8e3;
+      --paper: #fffefa;
+      --canvas: #f5f4ef;
+      --navy: #102c3a;
+      --teal: #1aa58d;
+      --teal-dark: #087a69;
+      --teal-soft: #e4f2ed;
+      --clay: #b56c51;
+      --shadow: 0 16px 38px rgba(16,44,58,.07);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; }
+    button, input, select { font: inherit; }
+    .site-header { position: relative; z-index: 2; width: 100%; background: var(--navy); border-bottom: 1px solid rgba(255,255,255,.1); }
+    .site-header-inner { width: min(1280px,100%); min-height: 82px; margin: 0 auto; padding: 10px clamp(20px,4vw,52px); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .site-brand { display: flex; align-items: center; gap: 12px; min-width: 190px; color: #fff; text-decoration: none; }
+    .site-brand img { display: block; width: 150px; height: 54px; object-fit: contain; }
+    .brand-caption { padding-left: 12px; border-left: 1px solid rgba(255,255,255,.22); color: #bdcbd0; font-size: 9px; font-weight: 800; letter-spacing: .14em; line-height: 1.45; }
+    .site-nav { display: flex; align-items: center; gap: 7px; }
+    .site-nav a { display: inline-flex; align-items: center; gap: 9px; min-height: 39px; padding: 0 12px; border-radius: 8px; color: #d5e0e2; text-decoration: none; white-space: nowrap; font-size: 12px; font-weight: 650; transition: background .16s ease,color .16s ease; }
+    .site-nav a:hover { color: #fff; background: rgba(255,255,255,.09); }
+    .site-nav a.active { color: #fff; background: rgba(26,165,141,.18); box-shadow: inset 0 -2px 0 var(--teal); }
+    .site-nav .site-nav-contact { margin-left: 8px; color: var(--navy); background: #d8efe7; font-weight: 750; }
+    .site-nav .site-nav-contact:hover { color: var(--navy); background: #fff; }
+    .header-profile { display: block; flex: 0 0 34px; width: 34px; height: 34px; overflow: hidden; margin: 0 3px 0 5px; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; background: #d9eae1; }
+    .profile-photo { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .main { min-height: calc(100vh - 82px); }
+    .topbar { height: 61px; display: flex; align-items: center; justify-content: space-between; padding: 0 max(24px, calc((100vw - 1160px) / 2)); background: rgba(255,254,250,.76); border-bottom: 1px solid var(--line); }
+    .crumb { color: #829096; font-size: 11px; }
+    .crumb a { color: #657981; text-decoration: none; }
+    .crumb b { color: #304a54; font-weight: 700; }
+    .page-state { display: inline-flex; align-items: center; gap: 8px; color: #63777d; font-size: 11px; font-weight: 650; }
+    .state-dot { width: 7px; height: 7px; border-radius: 50%; background: #d39b55; }
+    .content { width: min(1160px, calc(100% - 48px)); margin: 0 auto; padding: 43px 0 65px; }
+    .intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 25px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--clay); font-size: 9px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 20px; height: 1px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 700px; margin: 13px 0 10px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(34px,4.5vw,52px); font-weight: 500; letter-spacing: -.045em; line-height: 1.04; }
+    .intro-copy p { max-width: 620px; margin-bottom: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+    .intro-tag { flex: none; margin-bottom: 3px; padding: 9px 12px; color: #176c5e; background: var(--teal-soft); border: 1px solid #d1e8de; border-radius: 999px; font-size: 10px; font-weight: 750; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .form-card { padding: 22px 24px 20px; }
+    .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 19px; }
+    .card-heading h2 { margin: 0; font-size: 14px; letter-spacing: -.015em; }
+    .card-heading p { margin: 6px 0 0; color: #7d8a8c; font-size: 11px; line-height: 1.5; }
+    .step-note { color: #96a09d; font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
+    .form-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr) auto; gap: 14px; align-items: end; }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 7px; color: #435b61; font-size: 10px; font-weight: 750; }
+    .field input { width: 100%; height: 43px; padding: 0 12px; color: #24404a; background: #fff; border: 1px solid #dbe3de; border-radius: 8px; outline: none; transition: border .16s ease,box-shadow .16s ease; }
+    .field input::placeholder { color: #a1aaa6; }
+    .field input:focus, .filter-select:focus, .filter-input:focus { border-color: #57b7a0; box-shadow: 0 0 0 3px rgba(26,165,141,.12); }
+    .field-hint { display: block; margin-top: 6px; color: #929d99; font-size: 9px; line-height: 1.4; }
+    .primary-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-width: 164px; height: 43px; padding: 0 15px; border: 0; border-radius: 8px; color: #102c3a; background: #a8ddc9; font-size: 11px; font-weight: 850; cursor: pointer; transition: transform .16s ease,background .16s ease; }
+    .primary-button:hover { transform: translateY(-1px); background: #c2ebda; }
+    .primary-button:focus-visible, .copy-button:focus-visible, .export-button:focus-visible { outline: 3px solid rgba(26,165,141,.35); outline-offset: 2px; }
+    .primary-button svg { width: 15px; height: 15px; }
+    .data-note { display: flex; align-items: flex-start; gap: 10px; margin-top: 17px; padding: 12px 13px; color: #63767a; background: #f4f6f2; border: 1px solid #e8ece5; border-radius: 8px; font-size: 10px; line-height: 1.55; }
+    .note-mark { flex: none; display: grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; color: #176c5e; background: #dceee5; font-family: Georgia,serif; font-size: 12px; font-weight: 700; }
+    .data-note strong { color: #405a5e; }
+    .results-area { display: none; margin-top: 23px; }
+    .results-area.show { display: block; }
+    .metric-row { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 14px; }
+    .metric { min-height: 81px; padding: 14px 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+    .metric-label { color: #798a8c; font-size: 9px; font-weight: 700; letter-spacing: .04em; }
+    .metric-value { margin-top: 7px; color: #1b3944; font-family: Georgia,"Times New Roman",serif; font-size: 24px; line-height: 1; }
+    .results-layout { display: grid; grid-template-columns: minmax(0,1fr) 256px; gap: 14px; align-items: start; }
+    .results-card { overflow: hidden; }
+    .results-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 17px 19px; border-bottom: 1px solid #edf0ea; }
+    .results-head h2 { margin: 0; font-size: 13px; }
+    .results-head p { margin: 5px 0 0; color: #84908e; font-size: 10px; }
+    .export-button { display: inline-flex; align-items: center; gap: 7px; min-height: 33px; padding: 0 10px; color: #425f65; background: #fff; border: 1px solid #dce5df; border-radius: 7px; font-size: 10px; font-weight: 750; cursor: pointer; }
+    .export-button:disabled { color: #a9b2ad; cursor: not-allowed; background: #f8f9f6; }
+    .export-button svg { width: 14px; height: 14px; }
+    .result-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; padding: 12px 19px; background: #fafbf8; border-bottom: 1px solid #edf0ea; }
+    .result-count { margin-right: auto; color: #758581; font-size: 10px; }
+    .result-count strong { color: #3d5559; }
+    .filter-input, .filter-select { height: 32px; padding: 0 9px; color: #405960; background: #fff; border: 1px solid #dfe6df; border-radius: 7px; outline: none; font-size: 10px; }
+    .filter-input { width: min(190px,100%); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; min-width: 610px; border-collapse: collapse; text-align: left; }
+    th { padding: 11px 16px; color: #87938e; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    td { padding: 11px 16px; color: #566b6c; border-top: 1px solid #eff1ec; font-size: 10px; vertical-align: middle; }
+    tbody tr:hover { background: #fafbf8; }
+    .keyword-cell { color: #223f48; font-size: 11px; font-weight: 700; }
+    .seed-label { display: block; margin-top: 4px; color: #96a09c; font-size: 9px; font-weight: 500; }
+    .intent-chip { display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; color: #526c6e; background: #f0f3ef; border-radius: 999px; font-size: 8px; font-weight: 750; white-space: nowrap; }
+    .intent-chip.local { color: #176c5e; background: #e4f2ed; }
+    .intent-chip.commercial { color: #865934; background: #f6eee2; }
+    .intent-chip.pricing { color: #7b5f8d; background: #f0eaf3; }
+    .intent-chip.informational { color: #49697f; background: #eaf0f4; }
+    .copy-button { min-height: 29px; padding: 0 9px; color: #317b6c; background: transparent; border: 1px solid #d5e8de; border-radius: 6px; font-size: 9px; font-weight: 750; cursor: pointer; }
+    .copy-button:hover { background: #edf7f1; }
+    .empty-state { padding: 44px 22px; color: #81908b; text-align: center; font-size: 11px; line-height: 1.6; }
+    .empty-state strong { display: block; margin-bottom: 5px; color: #4a6265; font-size: 12px; }
+    .side-card { padding: 18px; }
+    .side-card h3 { margin: 0; color: #29444d; font-family: Georgia,"Times New Roman",serif; font-size: 17px; font-weight: 500; }
+    .side-card > p { margin: 7px 0 15px; color: #7c8b89; font-size: 10px; line-height: 1.6; }
+    .idea-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .idea-list li { display: grid; grid-template-columns: 24px 1fr; gap: 9px; color: #657778; font-size: 9px; line-height: 1.5; }
+    .idea-number { display: grid; width: 22px; height: 22px; place-items: center; color: #176c5e; background: #e4f2ed; border-radius: 7px; font-size: 9px; font-weight: 800; }
+    .side-divider { height: 1px; margin: 16px 0; background: #ebeee8; }
+    .side-note { color: #89948f; font-size: 9px; line-height: 1.55; }
+    .toast { position: fixed; right: 22px; bottom: 20px; z-index: 5; padding: 10px 13px; color: #f7fbf8; background: #173946; border-radius: 7px; box-shadow: 0 8px 22px rgba(16,44,58,.16); font-size: 10px; opacity: 0; transform: translateY(7px); pointer-events: none; transition: opacity .18s ease,transform .18s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .site-footer { color: #ecf2ef; background: var(--navy); }
+    .footer-inner { width: min(1160px,calc(100% - 48px)); margin: 0 auto; padding: 33px 0 15px; }
+    .footer-main { display: grid; grid-template-columns: minmax(260px,.9fr) minmax(350px,1.1fr); gap: 55px; padding-bottom: 25px; }
+    .footer-brand { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; }
+    .footer-brand img { width: 142px; height: 50px; object-fit: contain; }
+    .footer-brand span { padding-left: 10px; border-left: 1px solid rgba(255,255,255,.22); color: #b8c9cd; font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+    .footer-description { max-width: 410px; margin: 12px 0; color: #c0ced0; font-size: 11px; line-height: 1.7; }
+    .footer-website { color: #a8ddc9; font-size: 11px; font-weight: 750; text-decoration: none; }
+    .footer-kicker { color: #a7b9bd; font-size: 9px; font-weight: 850; letter-spacing: .15em; text-transform: uppercase; }
+    .service-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px 22px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .service-list li { color: #e0e9e7; font-size: 10px; }
+    .service-list li::before { content: "/"; margin-right: 8px; color: #4bc2a6; font-weight: 800; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 13px; border-top: 1px solid rgba(255,255,255,.14); color: #9eb0b4; font-size: 9px; }
+    .footer-heart { color: #f06a64; font-size: 13px; vertical-align: -1px; }
+    @media (max-width: 980px) {
+      .site-header-inner { flex-wrap: wrap; gap: 9px 15px; padding: 11px 22px 10px; }
+      .site-brand { min-width: 0; }
+      .site-brand img { width: 128px; height: 47px; }
+      .site-nav { width: 100%; overflow-x: auto; padding: 2px 0 3px; }
+      .site-nav a { min-height: 36px; padding: 0 10px; font-size: 10px; }
+      .site-nav .site-nav-contact { margin-left: auto; }
+      .topbar { padding: 0 24px; }
+      .results-layout { grid-template-columns: minmax(0,1fr) 225px; }
+    }
+    @media (max-width: 720px) {
+      .content, .footer-inner { width: calc(100% - 36px); }
+      .content { padding-top: 32px; }
+      .intro { align-items: flex-start; flex-direction: column; gap: 15px; }
+      .intro-tag { margin: 0; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+      .primary-button { grid-column: 1 / -1; width: 100%; }
+      .results-layout { grid-template-columns: 1fr; }
+      .side-card { display: none; }
+      .footer-main { grid-template-columns: 1fr; gap: 24px; }
+    }
+    @media (max-width: 520px) {
+      .site-header-inner { padding-right: 16px; padding-left: 16px; }
+      .brand-caption { font-size: 7px; }
+      .site-nav { gap: 3px; }
+      .site-nav a { padding: 0 8px; font-size: 9px; }
+      .header-profile { flex-basis: 28px; width: 28px; height: 28px; margin-left: 2px; }
+      .topbar { height: 51px; padding: 0 18px; }
+      .page-state { font-size: 9px; }
+      .content, .footer-inner { width: calc(100% - 30px); }
+      h1 { font-size: 36px; }
+      .form-card { padding: 18px 15px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .primary-button { grid-column: auto; }
+      .metric-row { gap: 7px; }
+      .metric { min-height: 72px; padding: 11px 10px; }
+      .metric-label { font-size: 8px; }
+      .metric-value { font-size: 21px; }
+      .results-head { align-items: flex-start; padding: 15px; }
+      .result-controls { padding: 10px 14px; }
+      .result-count { width: 100%; }
+      .filter-input { flex: 1; width: 120px; }
+      th, td { padding-right: 12px; padding-left: 12px; }
+      .service-list { grid-template-columns: 1fr; gap: 8px; }
+      .footer-bottom { align-items: flex-start; flex-direction: column; gap: 7px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="/" aria-label="Trexivo Tools home"><img src="assets/trexivo-logo.png" alt="Trexivo"><span class="brand-caption">DIGITAL GROWTH TOOLS</span></a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">All tools</a>
+        <a href="/local-seo-tracker">Local SEO Tracker</a>
+        <a href="/seo-audit">SEO Audit &amp; PageSpeed</a>
+        <a class="active" aria-current="page" href="/keyword-research">Keyword Research</a>
+        <span class="header-profile" aria-label="Ankit Taak"><img class="profile-photo" src="assets/ankit-taak-imgg.png" alt="Ankit Taak"></span>
+        <a class="site-nav-contact" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">Trexivo website <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumb"><a href="/">All tools</a> <span aria-hidden="true">/</span> <b>Keyword Research</b></div>
+      <div class="page-state"><span class="state-dot"></span><span>Local keyword ideas</span></div>
+    </div>
+
+    <div class="content">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <div class="eyebrow">Understand what customers search</div>
+          <h1 id="page-title">Start with the words your customers use.</h1>
+          <p>Build a useful first list of service, local, pricing, and comparison searches for your business. Enter a few topics and the area you serve.</p>
+        </div>
+        <span class="intro-tag">For local and growing businesses</span>
+      </section>
+
+      <section class="card form-card" aria-labelledby="form-title">
+        <div class="card-heading">
+          <div><h2 id="form-title">Describe what you offer</h2><p>Enter up to five products or services. Separate multiple topics with commas.</p></div>
+          <span class="step-note">Idea builder · 01</span>
+        </div>
+        <form id="keyword-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="seed-input">Products or services</label>
+              <input id="seed-input" name="seeds" type="text" maxlength="180" placeholder="e.g. family dentist, teeth whitening" autocomplete="off" required>
+              <span class="field-hint">Use the service or product a customer might type into search.</span>
+            </div>
+            <div class="field">
+              <label for="location-input">City or service area <span style="font-weight:500;color:#899693">(optional)</span></label>
+              <input id="location-input" name="location" type="text" maxlength="80" placeholder="e.g. Pune, Maharashtra" autocomplete="address-level2">
+              <span class="field-hint">Add a location to create place-specific ideas.</span>
+            </div>
+            <button class="primary-button" type="submit">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2M8 10.8h5.6M10.8 8v5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Build keyword ideas
+            </button>
+          </div>
+        </form>
+        <div class="data-note" role="note">
+          <span class="note-mark" aria-hidden="true">i</span>
+          <span><strong>About these results:</strong> this first version creates useful search phrase ideas from your inputs. It does not yet show Google search volume, SEO difficulty, advertising competition, or CPC. Those metrics need a connected keyword data source.</span>
+        </div>
+      </section>
+
+      <section class="results-area" id="results-area" aria-labelledby="results-title" aria-live="polite">
+        <div class="metric-row" aria-label="Idea summary">
+          <article class="metric"><div class="metric-label">Keyword ideas</div><div class="metric-value" id="ideas-count">0</div></article>
+          <article class="metric"><div class="metric-label">Local search phrases</div><div class="metric-value" id="local-count">0</div></article>
+          <article class="metric"><div class="metric-label">Commercial intent</div><div class="metric-value" id="commercial-count">0</div></article>
+        </div>
+
+        <div class="results-layout">
+          <section class="card results-card">
+            <div class="results-head">
+              <div><h2 id="results-title">Your keyword ideas</h2><p id="results-caption">Review, filter, copy, or export your list.</p></div>
+              <button class="export-button" id="export-button" type="button" disabled>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Export CSV
+              </button>
+            </div>
+            <div class="result-controls">
+              <span class="result-count" id="result-count">No ideas yet</span>
+              <input class="filter-input" id="search-filter" type="search" placeholder="Filter ideas…" aria-label="Filter keyword ideas">
+              <select class="filter-select" id="intent-filter" aria-label="Filter by search intent">
+                <option value="all">All intents</option>
+                <option value="Local">Local</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Pricing">Pricing</option>
+                <option value="Informational">Informational</option>
+              </select>
+              <select class="filter-select" id="sort-select" aria-label="Sort keyword ideas">
+                <option value="recommended">Recommended</option>
+                <option value="alphabetical">A to Z</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Keyword idea</th><th scope="col">Idea type</th><th scope="col">Search intent</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+                <tbody id="keyword-rows"></tbody>
+              </table>
+              <div class="empty-state" id="empty-state"><strong>Your list will appear here.</strong>Enter one or more services above, then build your first set of ideas.</div>
+            </div>
+          </section>
+
+          <aside class="card side-card" aria-labelledby="tips-title">
+            <h3 id="tips-title">Make the list useful</h3>
+            <p>Start with a real customer need, then make the idea more specific.</p>
+            <ol class="idea-list">
+              <li><span class="idea-number">1</span><span>Try a service, product, or problem your business solves.</span></li>
+              <li><span class="idea-number">2</span><span>Add the city or area where you want to attract customers.</span></li>
+              <li><span class="idea-number">3</span><span>Use the ideas as starting points, then check them against customer questions and your website.</span></li>
+            </ol>
+            <div class="side-divider"></div>
+            <div class="side-note">Intent labels describe the wording pattern. They are suggestions, not a ranking score or measured search demand.</div>
+          </aside>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" aria-label="Trexivo services and contact">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div>
+          <a class="footer-brand" href="/" aria-label="Trexivo Tools home"><img src="assets/trexivo-logo.png" alt="Trexivo"><span>TOOLS</span></a>
+          <p class="footer-description">Trexivo helps businesses grow through full-service digital marketing, from building a clear online presence to reaching the right customers.</p>
+          <a class="footer-website" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">www.trexivosolution.com ↗</a>
+        </div>
+        <div>
+          <span class="footer-kicker">Digital marketing services</span>
+          <ul class="service-list">
+            <li>SEO &amp; Local SEO</li><li>Website design &amp; development</li><li>Social media marketing</li><li>Google Ads &amp; paid media</li><li>Content marketing</li><li>Branding &amp; creative</li><li>Analytics &amp; reporting</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 Trexivo Tools</span><span>Built with love <span class="footer-heart" aria-label="red heart">❤️</span> by Ankit Taak</span></div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("keyword-form");
+      const seedsInput = document.getElementById("seed-input");
+      const locationInput = document.getElementById("location-input");
+      const resultsArea = document.getElementById("results-area");
+      const rows = document.getElementById("keyword-rows");
+      const emptyState = document.getElementById("empty-state");
+      const searchFilter = document.getElementById("search-filter");
+      const intentFilter = document.getElementById("intent-filter");
+      const sortSelect = document.getElementById("sort-select");
+      const exportButton = document.getElementById("export-button");
+      const toast = document.getElementById("toast");
+      let ideas = [];
+      let toastTimer;
+
+      function clean(value) {
+        return String(value || "").trim().replace(/\s+/g, " ").replace(/[,.]+$/, "");
+      }
+
+      function createIdeas(seeds, location) {
+        const output = [];
+        const seen = new Set();
+        seeds.forEach(function (seed) {
+          const place = location ? " in " + location : "";
+          const localSuffix = location ? " " + location : "";
+          const templates = [
+            { keyword: seed + localSuffix, type: location ? "Service in area" : "Core service", intent: location ? "Local" : "Commercial" },
+            { keyword: "best " + seed + place, type: "Compare providers", intent: "Commercial" },
+            { keyword: seed + " near me", type: "Nearby search", intent: "Local" },
+            { keyword: seed + " company" + place, type: "Find a provider", intent: "Commercial" },
+            { keyword: "affordable " + seed + place, type: "Compare prices", intent: "Pricing" },
+            { keyword: seed + " cost" + place, type: "Pricing search", intent: "Pricing" },
+            { keyword: "how to choose " + seed + place, type: "Customer question", intent: "Informational" },
+            { keyword: seed + " reviews" + localSuffix, type: "Review search", intent: location ? "Local" : "Commercial" }
+          ];
+          templates.forEach(function (item) {
+            const keyword = clean(item.keyword);
+            const key = keyword.toLowerCase();
+            if (!keyword || seen.has(key)) return;
+            seen.add(key);
+            output.push({ seed: seed, keyword: keyword, type: item.type, intent: item.intent });
+          });
+        });
+        return output;
+      }
+
+      function currentIdeas() {
+        const query = clean(searchFilter.value).toLowerCase();
+        const selectedIntent = intentFilter.value;
+        let visible = ideas.filter(function (item) {
+          const matchesQuery = !query || item.keyword.toLowerCase().includes(query) || item.seed.toLowerCase().includes(query);
+          const matchesIntent = selectedIntent === "all" || item.intent === selectedIntent;
+          return matchesQuery && matchesIntent;
+        });
+        if (sortSelect.value === "alphabetical") {
+          visible = visible.slice().sort(function (a, b) { return a.keyword.localeCompare(b.keyword); });
+        }
+        return visible;
+      }
+
+      function render() {
+        const visible = currentIdeas();
+        rows.replaceChildren();
+        visible.forEach(function (item) {
+          const row = document.createElement("tr");
+          const keywordCell = document.createElement("td");
+          const keyword = document.createElement("span");
+          keyword.className = "keyword-cell";
+          keyword.textContent = item.keyword;
+          const seed = document.createElement("span");
+          seed.className = "seed-label";
+          seed.textContent = "From: " + item.seed;
+          keywordCell.append(keyword, seed);
+
+          const typeCell = document.createElement("td");
+          typeCell.textContent = item.type;
+
+          const intentCell = document.createElement("td");
+          const intent = document.createElement("span");
+          intent.className = "intent-chip " + item.intent.toLowerCase();
+          intent.textContent = item.intent;
+          intentCell.appendChild(intent);
+
+          const actionCell = document.createElement("td");
+          const copy = document.createElement("button");
+          copy.className = "copy-button";
+          copy.type = "button";
+          copy.textContent = "Copy";
+          copy.setAttribute("aria-label", "Copy keyword: " + item.keyword);
+          copy.addEventListener("click", function () { copyKeyword(item.keyword); });
+          actionCell.appendChild(copy);
+          row.append(keywordCell, typeCell, intentCell, actionCell);
+          rows.appendChild(row);
+        });
+
+        emptyState.hidden = visible.length > 0;
+        emptyState.innerHTML = ideas.length
+          ? "<strong>No ideas match these filters.</strong>Try another word or choose a different intent."
+          : "<strong>Your list will appear here.</strong>Enter one or more services above, then build your first set of ideas.";
+        document.getElementById("result-count").innerHTML = "Showing <strong>" + visible.length + "</strong> of <strong>" + ideas.length + "</strong> ideas";
+        exportButton.disabled = ideas.length === 0;
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function () { toast.classList.remove("show"); }, 2200);
+      }
+
+      async function copyKeyword(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+          showToast("Keyword copied");
+        } catch (_) {
+          const helper = document.createElement("textarea");
+          helper.value = value;
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+          document.body.appendChild(helper);
+          helper.select();
+          const copied = document.execCommand("copy");
+          helper.remove();
+          showToast(copied ? "Keyword copied" : "Copy this keyword: " + value);
+        }
+      }
+
+      function exportCsv() {
+        if (!ideas.length) return;
+        const rows = [["Seed", "Keyword idea", "Idea type", "Search intent"]].concat(ideas.map(function (item) {
+          return [item.seed, item.keyword, item.type, item.intent];
+        }));
+        const csv = rows.map(function (row) {
+          return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(",");
+        }).join("\r\n");
+        const file = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+        const objectUrl = URL.createObjectURL(file);
+        const link = document.createElement("a");
+        link.href = objectUrl;
+        link.download = "trexivo-keyword-ideas.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(objectUrl);
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const seeds = seedsInput.value.split(",").map(clean).filter(Boolean);
+        const uniqueSeeds = Array.from(new Map(seeds.map(function (seed) { return [seed.toLowerCase(), seed]; })).values()).slice(0, 5);
+        if (!uniqueSeeds.length) return;
+        if (seeds.length > 5) showToast("Using the first five topics");
+        const location = clean(locationInput.value);
+        ideas = createIdeas(uniqueSeeds, location);
+        document.getElementById("ideas-count").textContent = String(ideas.length);
+        document.getElementById("local-count").textContent = String(ideas.filter(function (item) { return item.intent === "Local"; }).length);
+        document.getElementById("commercial-count").textContent = String(ideas.filter(function (item) { return item.intent === "Commercial"; }).length);
+        document.getElementById("results-caption").textContent = location
+          ? "Ideas for " + uniqueSeeds.join(", ") + " in " + location + "."
+          : "Ideas for " + uniqueSeeds.join(", ") + ". Add a location to make them locally focused.";
+        resultsArea.classList.add("show");
+        render();
+        resultsArea.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      searchFilter.addEventListener("input", render);
+      intentFilter.addEventListener("change", render);
+      sortSelect.addEventListener("change", render);
+      exportButton.addEventListener("click", exportCsv);
+    })();
+  </script>
+</body>
+</html>
+
