@@ -58,14 +58,26 @@
     .card-heading h2 { margin: 0; font-size: 14px; letter-spacing: -.015em; }
     .card-heading p { margin: 6px 0 0; color: #7d8a8c; font-size: 11px; line-height: 1.5; }
     .step-note { color: #96a09d; font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; white-space: nowrap; }
-    .form-grid { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr) auto; gap: 14px; align-items: end; }
+    .form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px 14px; align-items: start; }
     .field { min-width: 0; }
     .field label { display: block; margin-bottom: 7px; color: #435b61; font-size: 10px; font-weight: 750; }
     .field input { width: 100%; height: 43px; padding: 0 12px; color: #24404a; background: #fff; border: 1px solid #dbe3de; border-radius: 8px; outline: none; transition: border .16s ease,box-shadow .16s ease; }
     .field input::placeholder { color: #a1aaa6; }
     .field input:focus, .filter-select:focus, .filter-input:focus { border-color: #57b7a0; box-shadow: 0 0 0 3px rgba(26,165,141,.12); }
     .field-hint { display: block; margin-top: 6px; color: #929d99; font-size: 9px; line-height: 1.4; }
-    .primary-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-width: 164px; height: 43px; padding: 0 15px; border: 0; border-radius: 8px; color: #102c3a; background: #a8ddc9; font-size: 11px; font-weight: 850; cursor: pointer; transition: transform .16s ease,background .16s ease; }
+    .limit-field { grid-column: 1 / -1; min-width: 0; }
+    .limit-label { display: block; margin: 0 0 8px; color: #435b61; font-size: 10px; font-weight: 750; }
+    .limit-options { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; }
+    .limit-option { position: relative; display: block; min-width: 0; cursor: pointer; }
+    .limit-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .limit-option-card { display: flex; min-height: 48px; align-items: center; gap: 9px; padding: 8px 11px; color: #63777a; background: #fff; border: 1px solid #dfe6df; border-radius: 8px; transition: background .16s ease,border .16s ease,box-shadow .16s ease; }
+    .limit-option-card::before { content: ""; width: 13px; height: 13px; flex: none; border: 1px solid #b8c7bf; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 3px #fff; }
+    .limit-option input:checked + .limit-option-card { color: #176c5e; background: #f1f8f3; border-color: #78bda6; box-shadow: 0 0 0 2px rgba(26,165,141,.08); }
+    .limit-option input:checked + .limit-option-card::before { border-color: #16866f; background: #16866f; }
+    .limit-option input:focus-visible + .limit-option-card { outline: 3px solid rgba(26,165,141,.3); outline-offset: 2px; }
+    .limit-option-card strong { display: block; color: #294b52; font-size: 11px; line-height: 1.1; }
+    .limit-option-card small { display: block; margin-top: 3px; color: #85928e; font-size: 8px; }
+    .primary-button { grid-column: 1 / -1; display: inline-flex; justify-content: center; align-items: center; gap: 8px; width: fit-content; min-width: 184px; height: 43px; margin-top: 1px; padding: 0 15px; border: 0; border-radius: 8px; color: #102c3a; background: #a8ddc9; font-size: 11px; font-weight: 850; cursor: pointer; transition: transform .16s ease,background .16s ease; }
     .primary-button:hover { transform: translateY(-1px); background: #c2ebda; }
     .primary-button:focus-visible, .copy-button:focus-visible, .export-button:focus-visible { outline: 3px solid rgba(26,165,141,.35); outline-offset: 2px; }
     .primary-button svg { width: 15px; height: 15px; }
@@ -92,7 +104,7 @@
     .filter-input, .filter-select { height: 32px; padding: 0 9px; color: #405960; background: #fff; border: 1px solid #dfe6df; border-radius: 7px; outline: none; font-size: 10px; }
     .filter-input { width: min(190px,100%); }
     .table-wrap { overflow-x: auto; }
-    table { width: 100%; min-width: 610px; border-collapse: collapse; text-align: left; }
+    table { width: 100%; min-width: 880px; border-collapse: collapse; text-align: left; }
     th { padding: 11px 16px; color: #87938e; font-size: 8px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
     td { padding: 11px 16px; color: #566b6c; border-top: 1px solid #eff1ec; font-size: 10px; vertical-align: middle; }
     tbody tr:hover { background: #fafbf8; }
@@ -103,6 +115,9 @@
     .intent-chip.commercial { color: #865934; background: #f6eee2; }
     .intent-chip.pricing { color: #7b5f8d; background: #f0eaf3; }
     .intent-chip.informational { color: #49697f; background: #eaf0f4; }
+    .intent-chip.branded { color: #855e38; background: #f7eee3; }
+    .metric-placeholder { display: block; color: #788b89; font-size: 9px; white-space: nowrap; }
+    .metric-placeholder small { display: block; margin-top: 3px; color: #a0aaa4; font-size: 8px; }
     .copy-button { min-height: 29px; padding: 0 9px; color: #317b6c; background: transparent; border: 1px solid #d5e8de; border-radius: 6px; font-size: 9px; font-weight: 750; cursor: pointer; }
     .copy-button:hover { background: #edf7f1; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -165,7 +180,9 @@
       h1 { font-size: 36px; }
       .form-card { padding: 18px 15px; }
       .form-grid { grid-template-columns: 1fr; }
-      .primary-button { grid-column: auto; }
+      .limit-field, .primary-button { grid-column: auto; }
+      .primary-button { width: 100%; }
+      .limit-options { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .metric-row { gap: 7px; }
       .metric { min-height: 72px; padding: 11px 10px; }
       .metric-label { font-size: 8px; }
@@ -214,30 +231,45 @@
 
       <section class="card form-card" aria-labelledby="form-title">
         <div class="card-heading">
-          <div><h2 id="form-title">Describe what you offer</h2><p>Enter up to five products or services. Separate multiple topics with commas.</p></div>
+          <div><h2 id="form-title">Tell us about the business</h2><p>We’ll use the business, its services, and service area to shape relevant keyword ideas.</p></div>
           <span class="step-note">Idea builder · 01</span>
         </div>
         <form id="keyword-form">
           <div class="form-grid">
             <div class="field">
-              <label for="seed-input">Products or services</label>
+              <label for="business-input">Business name <span aria-hidden="true" style="color:#b56c51">*</span></label>
+              <input id="business-input" name="business" type="text" maxlength="100" placeholder="e.g. Ankit Dental Care" autocomplete="organization" required>
+              <span class="field-hint">Used to suggest branded searches, such as reviews or services.</span>
+            </div>
+            <div class="field">
+              <label for="seed-input">Services or products <span aria-hidden="true" style="color:#b56c51">*</span></label>
               <input id="seed-input" name="seeds" type="text" maxlength="180" placeholder="e.g. family dentist, teeth whitening" autocomplete="off" required>
-              <span class="field-hint">Use the service or product a customer might type into search.</span>
+              <span class="field-hint">Enter up to five; separate each with a comma.</span>
             </div>
             <div class="field">
               <label for="location-input">City or service area <span style="font-weight:500;color:#899693">(optional)</span></label>
               <input id="location-input" name="location" type="text" maxlength="80" placeholder="e.g. Pune, Maharashtra" autocomplete="address-level2">
               <span class="field-hint">Add a location to create place-specific ideas.</span>
             </div>
+            <fieldset class="limit-field" style="border:0;padding:0;margin:0">
+              <legend class="limit-label">How many keyword ideas do you want?</legend>
+              <div class="limit-options">
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="50" checked><span class="limit-option-card"><span><strong>1–50</strong><small>keywords</small></span></span></label>
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="100"><span class="limit-option-card"><span><strong>51–100</strong><small>keywords</small></span></span></label>
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="200"><span class="limit-option-card"><span><strong>101–200</strong><small>keywords</small></span></span></label>
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="500"><span class="limit-option-card"><span><strong>201–500</strong><small>keywords</small></span></span></label>
+              </div>
+              <span class="field-hint">This is the maximum result cap. Until a keyword data source is connected, this first version may return fewer ideas.</span>
+            </fieldset>
             <button class="primary-button" type="submit">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2M8 10.8h5.6M10.8 8v5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              Build keyword ideas
+              Find keyword ideas
             </button>
           </div>
         </form>
         <div class="data-note" role="note">
           <span class="note-mark" aria-hidden="true">i</span>
-          <span><strong>About these results:</strong> this first version creates useful search phrase ideas from your inputs. It does not yet show Google search volume, SEO difficulty, advertising competition, or CPC. Those metrics need a connected keyword data source.</span>
+          <span><strong>Metric status:</strong> this version builds phrase ideas from your inputs. Google Ads can later supply average monthly searches, ad competition, and CPC. CTR is not a general keyword metric; it requires actual ad or Search Console performance data for the account.</span>
         </div>
       </section>
 
@@ -245,7 +277,7 @@
         <div class="metric-row" aria-label="Idea summary">
           <article class="metric"><div class="metric-label">Keyword ideas</div><div class="metric-value" id="ideas-count">0</div></article>
           <article class="metric"><div class="metric-label">Local search phrases</div><div class="metric-value" id="local-count">0</div></article>
-          <article class="metric"><div class="metric-label">Commercial intent</div><div class="metric-value" id="commercial-count">0</div></article>
+          <article class="metric"><div class="metric-label">Branded ideas</div><div class="metric-value" id="branded-count">0</div></article>
         </div>
 
         <div class="results-layout">
@@ -266,6 +298,7 @@
                 <option value="Commercial">Commercial</option>
                 <option value="Pricing">Pricing</option>
                 <option value="Informational">Informational</option>
+                <option value="Branded">Branded</option>
               </select>
               <select class="filter-select" id="sort-select" aria-label="Sort keyword ideas">
                 <option value="recommended">Recommended</option>
@@ -274,7 +307,7 @@
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th scope="col">Keyword idea</th><th scope="col">Idea type</th><th scope="col">Search intent</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+                <thead><tr><th scope="col">Keyword idea</th><th scope="col">Idea type</th><th scope="col">Search intent</th><th scope="col">Avg. monthly searches</th><th scope="col">CTR</th><th scope="col">Avg. CPC</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
                 <tbody id="keyword-rows"></tbody>
               </table>
               <div class="empty-state" id="empty-state"><strong>Your list will appear here.</strong>Enter one or more services above, then build your first set of ideas.</div>
@@ -290,7 +323,7 @@
               <li><span class="idea-number">3</span><span>Use the ideas as starting points, then check them against customer questions and your website.</span></li>
             </ol>
             <div class="side-divider"></div>
-            <div class="side-note">Intent labels describe the wording pattern. They are suggestions, not a ranking score or measured search demand.</div>
+            <div class="side-note">Intent labels describe the wording pattern, not measured demand. Search volume and CPC will need Google Ads data. CTR can only be shown from connected campaign or Search Console performance, where available.</div>
           </aside>
         </div>
       </section>
@@ -321,6 +354,7 @@
   <script>
     (function () {
       const form = document.getElementById("keyword-form");
+      const businessInput = document.getElementById("business-input");
       const seedsInput = document.getElementById("seed-input");
       const locationInput = document.getElementById("location-input");
       const resultsArea = document.getElementById("results-area");
@@ -338,7 +372,7 @@
         return String(value || "").trim().replace(/\s+/g, " ").replace(/[,.]+$/, "");
       }
 
-      function createIdeas(seeds, location) {
+      function createIdeas(businessName, seeds, location, limit) {
         const output = [];
         const seen = new Set();
         seeds.forEach(function (seed) {
@@ -354,15 +388,19 @@
             { keyword: "how to choose " + seed + place, type: "Customer question", intent: "Informational" },
             { keyword: seed + " reviews" + localSuffix, type: "Review search", intent: location ? "Local" : "Commercial" }
           ];
+          if (businessName) {
+            templates.unshift({ keyword: businessName + " " + seed, type: "Business + service", intent: "Branded" });
+            templates.push({ keyword: businessName + " reviews", type: "Business review search", intent: "Branded" });
+          }
           templates.forEach(function (item) {
             const keyword = clean(item.keyword);
             const key = keyword.toLowerCase();
-            if (!keyword || seen.has(key)) return;
+            if (!keyword || seen.has(key) || output.length >= limit) return;
             seen.add(key);
-            output.push({ seed: seed, keyword: keyword, type: item.type, intent: item.intent });
+            output.push({ business: businessName, location: location, seed: seed, keyword: keyword, type: item.type, intent: item.intent });
           });
         });
-        return output;
+        return output.slice(0, limit);
       }
 
       function currentIdeas() {
@@ -402,6 +440,21 @@
           intent.textContent = item.intent;
           intentCell.appendChild(intent);
 
+          function metricCell(value, detail) {
+            const cell = document.createElement("td");
+            const display = document.createElement("span");
+            display.className = "metric-placeholder";
+            display.textContent = value;
+            const note = document.createElement("small");
+            note.textContent = detail;
+            display.appendChild(note);
+            cell.appendChild(display);
+            return cell;
+          }
+          const volumeCell = metricCell("Not connected", "Google Ads data needed");
+          const ctrCell = metricCell("Not available", "Needs account history");
+          const cpcCell = metricCell("Not connected", "Google Ads data needed");
+
           const actionCell = document.createElement("td");
           const copy = document.createElement("button");
           copy.className = "copy-button";
@@ -410,7 +463,7 @@
           copy.setAttribute("aria-label", "Copy keyword: " + item.keyword);
           copy.addEventListener("click", function () { copyKeyword(item.keyword); });
           actionCell.appendChild(copy);
-          row.append(keywordCell, typeCell, intentCell, actionCell);
+          row.append(keywordCell, typeCell, intentCell, volumeCell, ctrCell, cpcCell, actionCell);
           rows.appendChild(row);
         });
 
@@ -448,8 +501,8 @@
 
       function exportCsv() {
         if (!ideas.length) return;
-        const rows = [["Seed", "Keyword idea", "Idea type", "Search intent"]].concat(ideas.map(function (item) {
-          return [item.seed, item.keyword, item.type, item.intent];
+        const rows = [["Business", "Service or product", "Location", "Keyword idea", "Idea type", "Search intent", "Avg. monthly searches", "CTR", "Avg. CPC"]].concat(ideas.map(function (item) {
+          return [item.business, item.seed, item.location, item.keyword, item.type, item.intent, "Not connected", "Requires account history", "Not connected"];
         }));
         const csv = rows.map(function (row) {
           return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(",");
@@ -467,18 +520,20 @@
 
       form.addEventListener("submit", function (event) {
         event.preventDefault();
+        const businessName = clean(businessInput.value);
         const seeds = seedsInput.value.split(",").map(clean).filter(Boolean);
         const uniqueSeeds = Array.from(new Map(seeds.map(function (seed) { return [seed.toLowerCase(), seed]; })).values()).slice(0, 5);
         if (!uniqueSeeds.length) return;
         if (seeds.length > 5) showToast("Using the first five topics");
         const location = clean(locationInput.value);
-        ideas = createIdeas(uniqueSeeds, location);
+        const resultLimit = Number(form.querySelector('input[name="keyword-limit"]:checked').value) || 50;
+        ideas = createIdeas(businessName, uniqueSeeds, location, resultLimit);
         document.getElementById("ideas-count").textContent = String(ideas.length);
         document.getElementById("local-count").textContent = String(ideas.filter(function (item) { return item.intent === "Local"; }).length);
-        document.getElementById("commercial-count").textContent = String(ideas.filter(function (item) { return item.intent === "Commercial"; }).length);
+        document.getElementById("branded-count").textContent = String(ideas.filter(function (item) { return item.intent === "Branded"; }).length);
         document.getElementById("results-caption").textContent = location
-          ? "Ideas for " + uniqueSeeds.join(", ") + " in " + location + "."
-          : "Ideas for " + uniqueSeeds.join(", ") + ". Add a location to make them locally focused.";
+          ? "Ideas for " + businessName + " · " + uniqueSeeds.join(", ") + " · " + location + " · maximum " + resultLimit + "."
+          : "Ideas for " + businessName + " · " + uniqueSeeds.join(", ") + " · maximum " + resultLimit + ". Add a location for local phrases.";
         resultsArea.classList.add("show");
         render();
         resultsArea.scrollIntoView({ behavior: "smooth", block: "start" });
