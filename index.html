@@ -49,7 +49,7 @@
     .section-head .eyebrow { color:var(--clay); }
     .section-head h2 { margin:11px 0 0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(29px,4vw,43px); font-weight:500; letter-spacing:-.04em; }
     .section-note { max-width:280px; margin:0 0 4px; color:var(--muted); font-size:12px; line-height:1.65; }
-    .tool-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    .tool-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
     .tool-card { position:relative; display:flex; min-height:310px; flex-direction:column; padding:23px; border:1px solid var(--line); border-radius:12px; background:var(--paper); transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
     .tool-card:hover { transform:translateY(-3px); border-color:#a8c9bd; box-shadow:var(--shadow); }
     .card-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
@@ -96,7 +96,7 @@
       .hero-index { padding:20px 0 0; border-left:0; border-top:1px solid rgba(255,255,255,.23); }
       .hero-index .index-row { padding:15px 0; }
       .tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-      .tool-card-next { grid-column:1 / -1; min-height:215px; }
+      .tool-card-next { grid-column:auto; min-height:310px; }
     }
     @media (max-width:780px) {
       .site-header-inner { flex-wrap:wrap; gap:9px 15px; padding:11px 20px 10px; }
@@ -136,6 +136,7 @@
     <a class="active" aria-current="page" href="/">All tools</a>
     <a class=""  href="/local-seo-tracker">Local SEO Tracker</a>
     <a class=""  href="/seo-audit">SEO Audit &amp; PageSpeed</a>
+    <a class=""  href="/keyword-research">Keyword Research</a>
     <span class="header-profile" aria-label="Ankit Taak"><img class="profile-photo" src="assets/ankit-taak-imgg.png" alt="Ankit Taak"></span>
     <a class="site-nav-contact" href="https://www.trexivosolution.com" target="_blank" rel="noopener noreferrer">Trexivo website <span aria-hidden="true">↗</span></a>
   </nav>
@@ -155,6 +156,7 @@
         <div class="index-kicker">Inside this workspace</div>
         <div class="index-row"><span class="index-number">01</span><span><strong>Local visibility</strong><span>Track Google Business Profile rankings across locations.</span></span></div>
         <div class="index-row"><span class="index-number">02</span><span><strong>Website health</strong><span>Audit technical SEO and check page performance.</span></span></div>
+        <div class="index-row"><span class="index-number">03</span><span><strong>Keyword opportunities</strong><span>Explore service and local search phrase ideas.</span></span></div>
         
       </aside>
     </section>
@@ -178,8 +180,15 @@
           <p>Scan one page or crawl a group of pages for technical SEO issues, then review a Google PageSpeed report.</p>
           <a class="card-link" href="/seo-audit">Open SEO Audit <span aria-hidden="true">↗</span></a>
         </article>
+        <article class="tool-card">
+          <div class="card-top"><span class="tool-category">Keyword planning</span><span class="tool-number">03</span></div>
+          <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.7" cy="10.7" r="6.6" stroke="currentColor" stroke-width="1.7"/><path d="m15.7 15.7 4.2 4.2M8.1 10.7h5.2M10.7 8.1v5.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
+          <h3>Keyword Research</h3>
+          <p>Build local and service keyword ideas from the products you offer and the places you serve.</p>
+          <a class="card-link" href="/keyword-research">Open Keyword Research <span aria-hidden="true">↗</span></a>
+        </article>
         <article class="tool-card tool-card-next">
-          <div class="card-top"><span class="next-label">Coming soon</span><span class="tool-number">03</span></div>
+          <div class="card-top"><span class="next-label">Coming soon</span><span class="tool-number">04</span></div>
           <div class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></div>
           <h3>New tools coming soon</h3>
           <p>We are preparing more practical tools to support your digital growth. Check back soon for what is next.</p>
