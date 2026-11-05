@@ -18,6 +18,11 @@
       "source": "/seo-audit.html",
       "destination": "/seo-audit",
       "permanent": true
+    },
+    {
+      "source": "/keyword-research.html",
+      "destination": "/keyword-research",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -28,6 +33,10 @@
     {
       "source": "/seo-audit",
       "destination": "/seo-audit.html"
+    },
+    {
+      "source": "/keyword-research",
+      "destination": "/keyword-research.html"
     }
   ]
 }
