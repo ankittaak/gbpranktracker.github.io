@@ -6,6 +6,9 @@
     },
     "api/page-speed.js": {
       "maxDuration": 60
+    },
+    "api/keyword-research.js": {
+      "maxDuration": 60
     }
   },
   "redirects": [
