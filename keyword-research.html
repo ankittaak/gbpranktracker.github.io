@@ -220,7 +220,7 @@
   <main class="main">
     <div class="topbar">
       <div class="crumb"><a href="/">All tools</a> <span aria-hidden="true">/</span> <b>Keyword Research</b></div>
-      <div class="page-state"><span class="state-dot"></span><span>Local keyword ideas</span></div>
+      <div class="page-state"><span class="state-dot"></span><span>SEO keyword ideas</span></div>
     </div>
 
     <div class="content">
@@ -248,73 +248,33 @@
             <div class="field">
               <label for="seed-input">Services or products <span aria-hidden="true" style="color:#b56c51">*</span></label>
               <input id="seed-input" name="seeds" type="text" maxlength="180" placeholder="e.g. family dentist, teeth whitening" autocomplete="off" required>
-              <span class="field-hint">Enter up to five; separate each with a comma.</span>
+              <span class="field-hint">Add up to five services or products, separated by commas. More topics usually create a broader list.</span>
             </div>
             <div class="field">
               <label for="location-input">City or service area <span style="font-weight:500;color:#899693">(optional)</span></label>
               <input id="location-input" name="location" type="text" maxlength="80" placeholder="e.g. Pune, Maharashtra" autocomplete="address-level2">
               <span class="field-hint">Add a location to create place-specific ideas.</span>
             </div>
-            <div class="field">
-              <label for="country-code">Target country</label>
-              <select id="country-code" name="countryCode">
-                <option value="IN" selected>India</option>
-                <option value="US">United States</option>
-                <option value="GB">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <option value="AU">Australia</option>
-                <option value="AE">United Arab Emirates</option>
-                <option value="SG">Singapore</option>
-                <option value="BD">Bangladesh</option>
-                <option value="NZ">New Zealand</option>
-                <option value="ZA">South Africa</option>
-                <option value="IE">Ireland</option>
-                <option value="DE">Germany</option>
-                <option value="FR">France</option>
-                <option value="ES">Spain</option>
-                <option value="BR">Brazil</option>
-                <option value="">All countries</option>
-              </select>
-              <span class="field-hint">Google Ads will target this country or the city above.</span>
-            </div>
-            <div class="field">
-              <label for="language-code">Keyword language</label>
-              <select id="language-code" name="language">
-                <option value="languageConstants/1000" selected>English</option>
-                <option value="languageConstants/1023">Hindi</option>
-                <option value="languageConstants/1056">Bengali</option>
-                <option value="languageConstants/1072">Gujarati</option>
-                <option value="languageConstants/1101">Marathi</option>
-                <option value="languageConstants/1130">Tamil</option>
-                <option value="languageConstants/1131">Telugu</option>
-                <option value="languageConstants/1041">Urdu</option>
-                <option value="languageConstants/1019">Arabic</option>
-                <option value="languageConstants/1003">Spanish</option>
-                <option value="languageConstants/1002">French</option>
-                <option value="languageConstants/1001">German</option>
-              </select>
-              <span class="field-hint">Choose the language customers use when searching.</span>
-            </div>
             <fieldset class="limit-field" style="border:0;padding:0;margin:0">
               <legend class="limit-label">How many keyword ideas do you want?</legend>
               <div class="limit-options">
                 <label class="limit-option"><input type="radio" name="keyword-limit" value="50" checked><span class="limit-option-card"><span><strong>1–50</strong><small>keywords</small></span></span></label>
                 <label class="limit-option"><input type="radio" name="keyword-limit" value="100"><span class="limit-option-card"><span><strong>51–100</strong><small>keywords</small></span></span></label>
-                <label class="limit-option"><input type="radio" name="keyword-limit" value="200"><span class="limit-option-card"><span><strong>101–200</strong><small>keywords</small></span></span></label>
-                <label class="limit-option"><input type="radio" name="keyword-limit" value="500"><span class="limit-option-card"><span><strong>201–500</strong><small>keywords</small></span></span></label>
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="150"><span class="limit-option-card"><span><strong>101–150</strong><small>keywords</small></span></span></label>
+                <label class="limit-option"><input type="radio" name="keyword-limit" value="200"><span class="limit-option-card"><span><strong>151–200</strong><small>keywords</small></span></span></label>
               </div>
-              <span class="field-hint">This is the maximum result cap. Until a keyword data source is connected, this first version may return fewer ideas.</span>
+              <span class="field-hint">Choose the maximum number to show. Your list may be shorter if your inputs produce fewer unique ideas.</span>
             </fieldset>
             <button class="primary-button" type="submit">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2M8 10.8h5.6M10.8 8v5.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-              <span id="submit-label">Find keyword ideas</span>
+              <span id="submit-label">Build keyword list</span>
             </button>
           </div>
         </form>
         <div class="error-box" id="error-box" role="alert"></div>
         <div class="data-note" role="note">
           <span class="note-mark" aria-hidden="true">i</span>
-          <span><strong>Metric status:</strong> the page is ready to request Google Ads keyword ideas. The API can provide average monthly searches, ad competition, and CPC. CTR is not a general keyword metric; it requires actual ad account performance data.</span>
+          <span><strong>About these ideas:</strong> suggestions are shaped by your business, services, and location to help plan service pages, local pages, pricing content, and FAQs. They are not measured search volume, CPC, or rankings.</span>
         </div>
       </section>
 
@@ -328,7 +288,7 @@
         <div class="results-layout">
           <section class="card results-card">
             <div class="results-head">
-              <div><h2 id="results-title">Your keyword ideas <span class="source-pill" id="source-pill">Preview only</span></h2><p id="results-caption">Review, filter, copy, or export your list.</p></div>
+              <div><h2 id="results-title">Your keyword ideas <span class="source-pill" id="source-pill">Generated SEO ideas</span></h2><p id="results-caption">Review, filter, copy, or export your list.</p></div>
               <button class="export-button" id="export-button" type="button" disabled>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Export CSV
@@ -347,13 +307,12 @@
               </select>
               <select class="filter-select" id="sort-select" aria-label="Sort keyword ideas">
                 <option value="recommended">Recommended</option>
-                <option value="volume">Highest volume</option>
                 <option value="alphabetical">A to Z</option>
               </select>
             </div>
             <div class="table-wrap">
               <table>
-                <thead><tr><th scope="col">Keyword idea</th><th scope="col">Idea type</th><th scope="col">Search intent</th><th scope="col">Avg. monthly searches</th><th scope="col">Ad competition</th><th scope="col">CTR</th><th scope="col">Avg. CPC</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
+                <thead><tr><th scope="col">Keyword idea</th><th scope="col">Idea type</th><th scope="col">Search intent</th><th scope="col">Suggested SEO use</th><th scope="col"><span class="sr-only">Action</span></th></tr></thead>
                 <tbody id="keyword-rows"></tbody>
               </table>
               <div class="empty-state" id="empty-state"><strong>Your list will appear here.</strong>Enter one or more services above, then build your first set of ideas.</div>
@@ -369,7 +328,7 @@
               <li><span class="idea-number">3</span><span>Use the ideas as starting points, then check them against customer questions and your website.</span></li>
             </ol>
             <div class="side-divider"></div>
-            <div class="side-note">Intent labels describe the wording pattern, not measured demand. Search volume and CPC will need Google Ads data. CTR can only be shown from connected campaign or Search Console performance, where available.</div>
+            <div class="side-note">Use local and service ideas for landing pages, pricing ideas for service or pricing pages, and informational ideas for blogs or FAQs. Check customer language and Search Console data before prioritizing topics.</div>
           </aside>
         </div>
       </section>
@@ -403,8 +362,6 @@
       const businessInput = document.getElementById("business-input");
       const seedsInput = document.getElementById("seed-input");
       const locationInput = document.getElementById("location-input");
-      const countrySelect = document.getElementById("country-code");
-      const languageSelect = document.getElementById("language-code");
       const resultsArea = document.getElementById("results-area");
       const rows = document.getElementById("keyword-rows");
       const emptyState = document.getElementById("empty-state");
@@ -417,7 +374,6 @@
       const submitButton = form.querySelector('button[type="submit"]');
       const toast = document.getElementById("toast");
       let ideas = [];
-      let sourceMode = "preview";
       let toastTimer;
 
       function clean(value) {
@@ -425,99 +381,114 @@
       }
 
       function createIdeas(businessName, seeds, location, limit) {
-        const output = [];
-        const seen = new Set();
-        seeds.forEach(function (seed) {
-          const place = location ? " in " + location : "";
-          const localSuffix = location ? " " + location : "";
-          const templates = [
-            { keyword: seed + localSuffix, type: location ? "Service in area" : "Core service", intent: location ? "Local" : "Commercial" },
-            { keyword: "best " + seed + place, type: "Compare providers", intent: "Commercial" },
-            { keyword: seed + " near me", type: "Nearby search", intent: "Local" },
-            { keyword: seed + " company" + place, type: "Find a provider", intent: "Commercial" },
-            { keyword: "affordable " + seed + place, type: "Compare prices", intent: "Pricing" },
-            { keyword: seed + " cost" + place, type: "Pricing search", intent: "Pricing" },
-            { keyword: "how to choose " + seed + place, type: "Customer question", intent: "Informational" },
-            { keyword: seed + " reviews" + localSuffix, type: "Review search", intent: location ? "Local" : "Commercial" }
-          ];
-          if (businessName) {
-            templates.unshift({ keyword: businessName + " " + seed, type: "Business + service", intent: "Branded" });
-            templates.push({ keyword: businessName + " reviews", type: "Business review search", intent: "Branded" });
-          }
-          templates.forEach(function (item) {
-            const keyword = clean(item.keyword);
-            const key = keyword.toLowerCase();
-            if (!keyword || seen.has(key) || output.length >= limit) return;
+        const byService = [];
+        const area = clean(location);
+        const brand = clean(businessName);
+
+        function seoUse(intent) {
+          if (intent === "Local") return "Local service page";
+          if (intent === "Pricing") return "Pricing page";
+          if (intent === "Informational") return "Blog post or FAQ";
+          if (intent === "Branded") return "Brand or review page";
+          return "Service page";
+        }
+
+        seeds.forEach(function (rawSeed) {
+          const seed = clean(rawSeed);
+          if (!seed) return;
+          const list = [];
+          const seen = new Set();
+          function add(keyword, type, intent) {
+            const value = clean(keyword);
+            const key = value.toLowerCase();
+            if (!value || seen.has(key)) return;
             seen.add(key);
-            output.push({ business: businessName, location: location, seed: seed, keyword: keyword, type: item.type, intent: item.intent, source: "preview" });
+            list.push({ business: brand, location: area, seed: seed, keyword: value, type: type, intent: intent, seoUse: seoUse(intent), source: "generated" });
+          }
+
+          [
+            [seed, "Core service", "Commercial"],
+            [seed + " services", "Service category", "Commercial"],
+            [seed + " company", "Find a provider", "Commercial"],
+            [seed + " provider", "Find a provider", "Commercial"],
+            [seed + " specialist", "Specialist search", "Commercial"],
+            ["best " + seed, "Provider comparison", "Commercial"],
+            ["top rated " + seed, "Provider comparison", "Commercial"],
+            ["trusted " + seed, "Provider comparison", "Commercial"],
+            ["professional " + seed, "Provider search", "Commercial"],
+            ["affordable " + seed, "Price comparison", "Pricing"],
+            ["local " + seed, "Local service", "Local"],
+            [seed + " near me", "Nearby search", "Local"],
+            ["hire " + seed, "Hire a provider", "Commercial"],
+            ["book " + seed, "Booking search", "Commercial"],
+            ["schedule " + seed, "Booking search", "Commercial"],
+            [seed + " cost", "Cost research", "Pricing"],
+            ["cost of " + seed, "Cost research", "Pricing"],
+            [seed + " pricing", "Pricing research", "Pricing"],
+            [seed + " prices", "Pricing research", "Pricing"],
+            ["get a quote for " + seed, "Quote search", "Pricing"],
+            [seed + " reviews", "Review research", "Commercial"],
+            [seed + " testimonials", "Review research", "Commercial"],
+            ["how to choose " + seed, "Buying guide", "Informational"],
+            ["how much does " + seed + " cost", "Cost question", "Informational"],
+            ["what to look for in " + seed, "Customer question", "Informational"],
+            ["benefits of " + seed, "Customer question", "Informational"],
+            ["questions to ask before hiring " + seed, "Customer question", "Informational"],
+            ["when to hire " + seed, "Customer question", "Informational"],
+            ["types of " + seed, "Topic idea", "Informational"],
+            ["guide to " + seed, "Topic idea", "Informational"]
+          ].forEach(function (item) { add(item[0], item[1], item[2]); });
+
+          if (area) {
+            [
+              [seed + " in " + area, "Service in area", "Local"],
+              [area + " " + seed + " services", "Area service search", "Local"],
+              ["best " + seed + " in " + area, "Provider comparison", "Local"],
+              ["top rated " + seed + " in " + area, "Provider comparison", "Local"],
+              ["trusted " + seed + " in " + area, "Provider comparison", "Local"],
+              ["affordable " + seed + " in " + area, "Local price search", "Pricing"],
+              [seed + " company in " + area, "Find a local provider", "Local"],
+              [seed + " provider in " + area, "Find a local provider", "Local"],
+              [seed + " near " + area, "Nearby search", "Local"],
+              ["hire " + seed + " in " + area, "Hire locally", "Local"],
+              ["book " + seed + " in " + area, "Book locally", "Local"],
+              [seed + " cost in " + area, "Local cost research", "Pricing"],
+              [seed + " pricing in " + area, "Local pricing research", "Pricing"],
+              [seed + " quotes in " + area, "Local quote search", "Pricing"],
+              [seed + " reviews in " + area, "Local review research", "Local"],
+              ["how to choose a " + seed + " in " + area, "Local buying guide", "Informational"]
+            ].forEach(function (item) { add(item[0], item[1], item[2]); });
+          }
+
+          if (brand) {
+            [
+              [brand + " " + seed, "Business + service", "Branded"],
+              [brand + " " + seed + (area ? " in " + area : ""), "Business + service", "Branded"],
+              [brand + " services", "Business service search", "Branded"],
+              [brand + " reviews", "Business review search", "Branded"],
+              [brand + " testimonials", "Business review search", "Branded"]
+            ].forEach(function (item) { add(item[0], item[1], item[2]); });
+          }
+          byService.push(list);
+        });
+
+        const output = [];
+        const seenAll = new Set();
+        for (let index = 0; output.length < limit; index += 1) {
+          let foundAtIndex = false;
+          byService.forEach(function (list) {
+            const item = list[index];
+            if (!item) return;
+            foundAtIndex = true;
+            const key = item.keyword.toLowerCase();
+            if (!seenAll.has(key) && output.length < limit) {
+              seenAll.add(key);
+              output.push(item);
+            }
           });
-        });
-        return output.slice(0, limit);
-      }
-
-      function inferIntent(keyword, businessName) {
-        const value = keyword.toLowerCase();
-        if (businessName && value.includes(businessName.toLowerCase())) return "Branded";
-        if (/near me|\bin\b|\bopen now\b|\breviews\b/.test(value)) return "Local";
-        if (/cost|price|pricing|affordable|cheap|best|top rated|compare/.test(value)) return "Pricing";
-        if (/how to|what is|guide|tips|why /.test(value)) return "Informational";
-        return "Commercial";
-      }
-
-      async function fetchGoogleIdeas(payload) {
-        const response = await fetch("/api/keyword-research", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        let data;
-        try { data = await response.json(); }
-        catch (_) { throw new Error("Google Ads returned an unreadable response."); }
-        if (!response.ok) {
-          const error = new Error(data.error || "Google Ads keyword research failed.");
-          error.code = data.code || "API_ERROR";
-          throw error;
+          if (!foundAtIndex) break;
         }
-        return data;
-      }
-
-      function mapGoogleIdeas(data, businessName) {
-        return (data.ideas || []).map(function (item) {
-          const intent = inferIntent(item.keyword || "", businessName);
-          return {
-            business: businessName,
-            location: data.location || "",
-            seed: "Google Ads Keyword Planner",
-            keyword: item.keyword || "",
-            type: intent === "Branded" ? "Brand-related idea" : intent === "Local" ? "Local keyword idea" : "Keyword idea",
-            intent: intent,
-            source: "google",
-            avgMonthlySearches: item.avgMonthlySearches,
-            competition: item.competition,
-            competitionIndex: item.competitionIndex,
-            averageCpcMicros: item.averageCpcMicros,
-            lowTopOfPageBidMicros: item.lowTopOfPageBidMicros,
-            highTopOfPageBidMicros: item.highTopOfPageBidMicros,
-            currencyCode: item.currencyCode || data.currencyCode
-          };
-        }).filter(function (item) { return item.keyword; });
-      }
-
-      function formatVolume(value) {
-        const number = Number(value);
-        return value == null || !Number.isFinite(number) ? "No data" : new Intl.NumberFormat().format(number);
-      }
-
-      function formatCurrencyMicros(value, currencyCode) {
-        const number = Number(value);
-        if (value == null || !Number.isFinite(number)) return "No data";
-        const amount = number / 1000000;
-        if (!currencyCode) return amount.toFixed(2) + " account currency";
-        try {
-          return new Intl.NumberFormat(undefined, { style: "currency", currency: currencyCode, maximumFractionDigits: 2 }).format(amount);
-        } catch (_) {
-          return amount.toFixed(2) + " " + currencyCode;
-        }
+        return output;
       }
 
       function showError(message) {
@@ -540,10 +511,6 @@
         });
         if (sortSelect.value === "alphabetical") {
           visible = visible.slice().sort(function (a, b) { return a.keyword.localeCompare(b.keyword); });
-        } else if (sortSelect.value === "volume" && sourceMode === "google") {
-          visible = visible.slice().sort(function (a, b) {
-            return (Number(b.avgMonthlySearches) || 0) - (Number(a.avgMonthlySearches) || 0);
-          });
         }
         return visible;
       }
@@ -559,7 +526,7 @@
           keyword.textContent = item.keyword;
           const seed = document.createElement("span");
           seed.className = "seed-label";
-          seed.textContent = item.source === "google" ? "Google Ads Keyword Planner" : "Preview pattern · " + item.seed;
+          seed.textContent = "Related to: " + item.seed;
           keywordCell.append(keyword, seed);
 
           const typeCell = document.createElement("td");
@@ -571,31 +538,8 @@
           intent.textContent = item.intent;
           intentCell.appendChild(intent);
 
-          function metricCell(value, detail) {
-            const cell = document.createElement("td");
-            const display = document.createElement("span");
-            display.className = "metric-placeholder";
-            display.textContent = value;
-            const note = document.createElement("small");
-            note.textContent = detail;
-            display.appendChild(note);
-            cell.appendChild(display);
-            return cell;
-          }
-          const volumeCell = item.source === "google"
-            ? metricCell(formatVolume(item.avgMonthlySearches), "Average monthly searches")
-            : metricCell("Not connected", "Google Ads data needed");
-          const competitionCell = item.source === "google"
-            ? metricCell(item.competition ? item.competition.toLowerCase().replace(/^./, function (letter) { return letter.toUpperCase(); }) : "No data",
-              item.competitionIndex == null ? "Google Ads competition" : "Ad index " + item.competitionIndex + " / 100")
-            : metricCell("Not connected", "Google Ads data needed");
-          const ctrCell = metricCell("Not available", "Needs campaign data");
-          const cpcDetail = item.source === "google" && item.lowTopOfPageBidMicros != null && item.highTopOfPageBidMicros != null
-            ? "Top-page bid range " + formatCurrencyMicros(item.lowTopOfPageBidMicros, item.currencyCode) + "–" + formatCurrencyMicros(item.highTopOfPageBidMicros, item.currencyCode)
-            : item.source === "google" ? "Average CPC" : "Google Ads data needed";
-          const cpcCell = item.source === "google"
-            ? metricCell(formatCurrencyMicros(item.averageCpcMicros, item.currencyCode), cpcDetail)
-            : metricCell("Not connected", cpcDetail);
+          const seoUseCell = document.createElement("td");
+          seoUseCell.textContent = item.seoUse;
 
           const actionCell = document.createElement("td");
           const copy = document.createElement("button");
@@ -605,7 +549,7 @@
           copy.setAttribute("aria-label", "Copy keyword: " + item.keyword);
           copy.addEventListener("click", function () { copyKeyword(item.keyword); });
           actionCell.appendChild(copy);
-          row.append(keywordCell, typeCell, intentCell, volumeCell, competitionCell, ctrCell, cpcCell, actionCell);
+          row.append(keywordCell, typeCell, intentCell, seoUseCell, actionCell);
           rows.appendChild(row);
         });
 
@@ -615,8 +559,8 @@
           : "<strong>Your list will appear here.</strong>Enter one or more services above, then build your first set of ideas.";
         document.getElementById("result-count").innerHTML = "Showing <strong>" + visible.length + "</strong> of <strong>" + ideas.length + "</strong> ideas";
         const sourcePill = document.getElementById("source-pill");
-        sourcePill.textContent = sourceMode === "google" ? "Google Ads data" : "Preview only";
-        sourcePill.classList.toggle("google", sourceMode === "google");
+        sourcePill.textContent = "Generated SEO ideas";
+        sourcePill.classList.remove("google");
         exportButton.disabled = ideas.length === 0;
       }
 
@@ -646,12 +590,8 @@
 
       function exportCsv() {
         if (!ideas.length) return;
-        const rows = [["Business", "Service or product", "Location", "Keyword idea", "Idea type", "Search intent", "Avg. monthly searches", "Ad competition", "CTR", "Avg. CPC"]].concat(ideas.map(function (item) {
-          return [item.business, item.seed, item.location, item.keyword, item.type, item.intent,
-            item.source === "google" ? item.avgMonthlySearches ?? "" : "Not connected",
-            item.source === "google" ? item.competition || "" : "Not connected",
-            "Not available from keyword ideas",
-            item.source === "google" ? formatCurrencyMicros(item.averageCpcMicros, item.currencyCode) : "Not connected"];
+        const rows = [["Business", "Service or product", "Location", "Keyword idea", "Idea type", "Search intent", "Suggested SEO use"]].concat(ideas.map(function (item) {
+          return [item.business, item.seed, item.location, item.keyword, item.type, item.intent, item.seoUse];
         }));
         const csv = rows.map(function (row) {
           return row.map(function (value) { return '"' + String(value).replace(/"/g, '""') + '"'; }).join(",");
@@ -667,7 +607,7 @@
         URL.revokeObjectURL(objectUrl);
       }
 
-      form.addEventListener("submit", async function (event) {
+      form.addEventListener("submit", function (event) {
         event.preventDefault();
         clearError();
         const businessName = clean(businessInput.value);
@@ -676,42 +616,9 @@
         if (!uniqueSeeds.length) return;
         if (seeds.length > 5) showToast("Using the first five topics");
         const location = clean(locationInput.value);
-        const countryCode = countrySelect.value;
-        const language = languageSelect.value;
         const resultLimit = Number(form.querySelector('input[name="keyword-limit"]:checked').value) || 50;
-        submitButton.disabled = true;
-        submitLabel.textContent = "Checking Google Ads…";
-        try {
-          const data = await fetchGoogleIdeas({
-            businessName: businessName,
-            services: uniqueSeeds,
-            location: location,
-            countryCode: countryCode,
-            language: language,
-            limit: resultLimit
-          });
-          sourceMode = "google";
-          ideas = mapGoogleIdeas(data, businessName);
-          document.getElementById("results-caption").textContent = ideas.length
-            ? "Google Ads Keyword Planner · " + ideas.length + " ideas · " + data.location + " · up to " + resultLimit + " requested."
-            : "Google Ads returned no keyword ideas. Try a broader service or another location.";
-        } catch (error) {
-          if (error.code === "NOT_CONFIGURED") {
-            sourceMode = "preview";
-            ideas = createIdeas(businessName, uniqueSeeds, location, resultLimit);
-            showError("Google Ads is not connected yet. Showing phrase-pattern preview ideas only; volume, competition, and CPC are not real data. Add the Google Ads OAuth settings in Vercel to enable measured results.");
-            document.getElementById("results-caption").textContent = "Preview ideas for " + businessName + " · selected cap up to " + resultLimit + ". Metrics are not connected.";
-          } else {
-            ideas = [];
-            resultsArea.classList.remove("show");
-            showError(error.message || "Google Ads keyword research failed. Please try again.");
-            return;
-          }
-        } finally {
-          submitButton.disabled = false;
-          submitLabel.textContent = "Find keyword ideas";
-        }
-
+        ideas = createIdeas(businessName, uniqueSeeds, location, resultLimit);
+        document.getElementById("results-caption").textContent = "SEO idea list for " + businessName + " · " + ideas.length + " ideas shown (maximum " + resultLimit + "). These are generated suggestions, not measured search data.";
         document.getElementById("ideas-count").textContent = String(ideas.length);
         document.getElementById("local-count").textContent = String(ideas.filter(function (item) { return item.intent === "Local"; }).length);
         document.getElementById("branded-count").textContent = String(ideas.filter(function (item) { return item.intent === "Branded"; }).length);
